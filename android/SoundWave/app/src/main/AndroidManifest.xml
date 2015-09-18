@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="edu.nighthawks.soundwave.soundwave" >
+
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme"
+        android:name="edu.nighthawks.soundwave.app.SoundWaveApplication">
+        <activity
+            android:name="edu.nighthawks.soundwave.display.SoundWaveMainActivity"
+            android:label="@string/title_activity_main" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name="edu.nighthawks.soundwave.display.ContactActivity"
+            android:label="@string/title_activity_contact" >
+            <action android:name="android.intent.action.MAIN" />
+    </activity>
+    </application>
+
+</manifest>
