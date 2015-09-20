@@ -17,21 +17,25 @@
 
 <?php
 
-if(isset($_POST['do-upload']) AND $_POST['do-upload'] === "yes") {
-
-   $yesupload = $_POST['do-upload'];
-   preg_match("/yes/", "".$yesupload."");
+//if(isset($_POST['do-upload']) AND $_POST['do-upload'] === "yes") {
+if($_SERVER['REQUEST_METHOD'] == 'POST') {
+   
+   //$yesupload = $_POST['do-upload'];
+   //preg_match("/yes/", "".$yesupload."");
 
    $file_name = $_FILES['userfile']['name'];
    
    $gs_name = $_FILES['userfile']['tmp_name'];
    move_uploaded_file($gs_name, 'gs://androidsoundappproject.appspot.com/' . $file_name.''); // may need to rename file with unique name 
-
+   
+   if ($_FILES['userfile']['error'] !== UPLOAD_ERR_OK) {
+      die("Upload failed with error code " . $_FILES['userfile']['error']);
+   }
 
    echo "<div>";
    
-   echo "File uploaded: ".$yesupload."</p>";
-   echo "File name: " . $filename."</p>";
+   //echo "File uploaded: ".$yesupload."</p>";
+   echo "File name: " . $file_name."</p>";
    
    echo "<pre>";
     
