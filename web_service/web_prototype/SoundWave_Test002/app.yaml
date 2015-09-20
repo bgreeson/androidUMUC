@@ -14,5 +14,5 @@ handlers:
 - url: /
   script: index.php
 
-- url: /upload
-  script: upload.php
+- url: /server
+  script: server.php
