@@ -123,7 +123,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
    <p>Files to upload: </p>
    <input type="hidden" name="do-upload" value="yes">
    <input type="file" name="userfile" >
-   <input type="submit" value="Upload">
+   <input type="submit" value="UploadFile">
 </form>
 
 </div>
