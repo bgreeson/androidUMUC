@@ -1,13 +1,5 @@
 package edu.nighthawks.soundwave.file;
 
-import android.util.Log;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.InputStreamEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,37 +7,15 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 
-public class PostFile 
+public class PostFile
 {
-  public static void uploadFile1(String fileName) throws Exception 
-  {
-    String url = "http://98.231.242.168:8080/upload.php";
-    File file = new File(fileName);
-    
-    try 
-    {
-        HttpClient httpclient = new DefaultHttpClient();
-        HttpPost httppost = new HttpPost(url);
 
-        InputStreamEntity reqEntity = new InputStreamEntity(new FileInputStream(file), -1);
-        reqEntity.setContentType("binary/octet-stream");
-        reqEntity.setChunked(true); // Send in multiple parts if needed
-        httppost.setEntity(reqEntity);
-        HttpResponse response = httpclient.execute(httppost);
-        Log.i("TAG", response.getLocale().toString());
-        //Do something with response...
 
-    } 
-    catch (Exception e) 
-    {
-        // show error
-    }
-  }
-  
   public static boolean  uploadFile(String fileName)
   {
-	    String urlstr = "http://98.231.242.168:8080/upload.php";
-	    
+
+
+      String urlstr = "http://androidsoundappproject.appspot.com/server";
 	  HttpURLConnection conn = null;
 	    DataOutputStream os = null;
 	    String lineEnd = "\r\n";
@@ -102,10 +72,10 @@ public class PostFile
 	        conn.setConnectTimeout(2000); // allow 2 seconds timeout.
 	        int rcode = conn.getResponseCode();
 	        if (rcode == 200)
-	        { 
-	        	
+	        {
+
 	        }
-	        else 
+	        else
 	        { // fail
 	        }
 	        //String rmsg = conn.getResponseMessage();
