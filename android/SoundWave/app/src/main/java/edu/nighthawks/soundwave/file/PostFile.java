@@ -9,85 +9,82 @@ import java.net.URL;
 
 public class PostFile
 {
+	public static int uploadFile(String sourceFileUri)
+	{
+		HttpURLConnection conn = null;
+		DataOutputStream dos = null;
+		String lineEnd = "\r\n";
+		String twoHyphens = "--";
+		String boundary = "*****";
+		int bytesRead, bytesAvailable, bufferSize;
+		byte[] buffer;
+		int maxBufferSize = 1 * 1024 * 1024;
+		File sourceFile = new File(sourceFileUri);
+		int serverResponseCode = 0;
+		String serverResponseMessage = "";
+
+		try
+		{
+			FileInputStream fileInputStream = new FileInputStream(sourceFile);
+			URL url = new URL("http://androidsoundappproject.appspot.com/upload");
+
+			conn = (HttpURLConnection) url.openConnection();
+			conn.setDoInput(true); // allow Inputs
+			conn.setDoOutput(true); // allow Outputs
+			conn.setUseCaches(false); // don't use cached copy
+			conn.setRequestMethod("POST");
+			conn.setRequestProperty("Connection", "Keep-Alive");
+			conn.setRequestProperty("ENCTYPE", "multipart/form-data");
+			conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
+			conn.setRequestProperty("soundFile", sourceFile.getAbsolutePath());
+
+			dos = new DataOutputStream(conn.getOutputStream());
+			dos.writeBytes(twoHyphens + boundary + lineEnd);
+			dos.writeBytes("Content-Disposition: form-data; name=soundFile; filename=" + sourceFile.getAbsolutePath() + "" + lineEnd);
+			dos.writeBytes(lineEnd);
+
+			// create a buffer of  maximum size
+			bytesAvailable = fileInputStream.available();
+
+			bufferSize = Math.min(bytesAvailable, maxBufferSize);
+			buffer = new byte[bufferSize];
+
+			// read file and write it into form
+			bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+			while (bytesRead > 0)
+			{
+				dos.write(buffer, 0, bufferSize);
+				bytesAvailable = fileInputStream.available();
+				bufferSize = Math.min(bytesAvailable, maxBufferSize);
+				bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+			}
+
+			// send multi-part form data necessary after file data
+			dos.writeBytes(lineEnd);
+			dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
+
+			// Responses from the server (code and message)
+			serverResponseCode = conn.getResponseCode();
+			serverResponseMessage = conn.getResponseMessage();
+
+			if (serverResponseCode == 200)
+			{
+
+			}
+
+			// close the streams
+			fileInputStream.close();
+			dos.flush();
+			dos.close();
 
 
-  public static boolean  uploadFile(String fileName)
-  {
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 
 
-      String urlstr = "http://androidsoundappproject.appspot.com/server";
-	  HttpURLConnection conn = null;
-	    DataOutputStream os = null;
-	    String lineEnd = "\r\n";
-	    String twoHyphens = "--";
-	    String boundary =  "*****";
-	    int bytesRead, bytesAvailable, bufferSize, bytesUploaded = 0;
-	    byte[] buffer;
-	    int maxBufferSize = 2*1024*1024;
-
-	    try
-	    {
-	        FileInputStream fis = new FileInputStream(new File(fileName) );
-
-	        URL url = new URL(urlstr);
-	        conn = (HttpURLConnection) url.openConnection();
-	        conn.setChunkedStreamingMode(maxBufferSize);
-
-	        // POST settings.
-	        conn.setDoInput(true);
-	        conn.setDoOutput(true);
-	        conn.setUseCaches(false);
-	        conn.setRequestMethod("POST");
-	        conn.setRequestProperty("Connection", "Keep-Alive");
-	        conn.setRequestProperty("Content-Type", "multipart/form-data; boundary="+boundary);
-
-	        os = new DataOutputStream(conn.getOutputStream());
-	        os.writeBytes(twoHyphens + boundary + lineEnd);
-	        os.writeBytes("Content-Disposition: form-data; name=\"uploadedfile\";filename=\"" + "file.amr" +"\"" + lineEnd);
-	        os.writeBytes(lineEnd);
-
-	        bytesAvailable = fis.available();
-	        System.out.println("available: " + String.valueOf(bytesAvailable));
-	        bufferSize = Math.min(bytesAvailable, maxBufferSize);
-	        buffer = new byte[bufferSize];
-
-	        int prog = 0;
-	        bytesRead = fis.read(buffer, 0, bufferSize);
-	        bytesUploaded += bytesRead;
-	        while (bytesRead > 0)
-	        {
-	            prog = bytesUploaded/bytesAvailable;
-	            os.write(buffer, 0, bufferSize);
-	            bytesAvailable = fis.available();
-	            bufferSize = Math.min(bytesAvailable, maxBufferSize);
-	            buffer = new byte[bufferSize];
-	            bytesRead = fis.read(buffer, 0, bufferSize);
-	            bytesUploaded += bytesRead;
-	        }
-	        System.out.println("uploaded: "+String.valueOf(bytesUploaded));
-	        os.writeBytes(lineEnd);
-	        os.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
-
-	        // Responses from the server (code and message)
-	        conn.setConnectTimeout(2000); // allow 2 seconds timeout.
-	        int rcode = conn.getResponseCode();
-	        if (rcode == 200)
-	        {
-
-	        }
-	        else
-	        { // fail
-	        }
-	        //String rmsg = conn.getResponseMessage();
-	        fis.close();
-	        os.flush();
-	        os.close();
-	        return rcode == 200;
-	    }
-	    catch (Exception ex)
-	    {
-	        ex.printStackTrace();
-	        return false;
-	    }
-  }
+		return serverResponseCode;
+	}
 }
