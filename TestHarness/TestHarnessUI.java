@@ -1,6 +1,7 @@
 package testharness;
 
 import java.awt.Color;
+import java.io.IOException;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -47,7 +48,7 @@ public class TestHarnessUI extends javax.swing.JFrame
         Input.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "SoundWave Test Harness", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.ABOVE_TOP, new java.awt.Font("Arial", 0, 18))); // NOI18N
         Input.setName("Input"); // NOI18N
 
-        filePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "FILE CONTROLS", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
+        filePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "STORAGE CONTROLS", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
 
         fileNameField.setForeground(new java.awt.Color(153, 153, 153));
         fileNameField.setText("File Name...");
@@ -100,7 +101,7 @@ public class TestHarnessUI extends javax.swing.JFrame
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        userPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "USER / CONTACT CONTROLS", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
+        userPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "DATABASE CONTROLS", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
 
         jTextField1.setForeground(new java.awt.Color(153, 153, 153));
         jTextField1.setText("Name");
@@ -257,19 +258,41 @@ public class TestHarnessUI extends javax.swing.JFrame
             //String fileName = jFileChooser1.getSelectedFile().getName();
             String filePath = jFileChooser1.getSelectedFile().getPath();
             String fileName = jFileChooser1.getSelectedFile().getName();
-            jTextArea1.setText("Uploading File: " + fileName);
-            jTextArea1.append("\nPath: " + filePath);
+            jTextArea1.setText("Uploading File: " + fileName + "\n");
+            jTextArea1.append("Path: " + filePath + "\n");
             
+            StorageTool fileTool = new StorageTool();
             
-            PostFile file = new PostFile();
+            try
+            {
+                fileTool.uploadStream(fileName, filePath);             
+            }
+            catch (IOException e) 
+            {
+                System.err.println(e.getMessage());
+                System.exit(1);
+            }
+            catch (Throwable t)
+            {
+                t.printStackTrace();
+                System.exit(1);
+            }            
+            
+            /*
+            StorageTool fileTool = new StorageTool();
+            //PostFile file = new PostFile();
             //boolean success = file.webUpload(filePath, fileName);
-            boolean success = file.uploadFile(filePath, fileName);
+            boolean success = fileTool.uploadFile2(filePath, fileName);
+            //int success = file.uploadFile2(filePath);
+            
+            jTextArea1.append("Server response: " + success);            
+            
             if (success)
             {
                 jTextArea1.append("\n" + fileName + " uploaded successfully!");
             }
             else jTextArea1.append("\n" + fileName + " upload FAILED!");
-            
+            */
         }        
     }                                        
 
@@ -425,4 +448,3 @@ public class TestHarnessUI extends javax.swing.JFrame
     private javax.swing.JButton userSrchBtn;
     // End of variables declaration                   
 }
-
