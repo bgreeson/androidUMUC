@@ -35,6 +35,26 @@ public class StorageTool
     //Global instance of the JSON factory
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
     
+    private static Storage client;
+    
+    public StorageTool()
+    {
+        try
+        {
+            client = getService();
+        }
+        catch (IOException e) 
+        {
+            System.err.println("ERROR: " + e.getMessage() + "...\n");
+            //System.exit(1);
+        }
+        catch (Throwable t)
+        {
+            t.printStackTrace();
+            System.exit(1);
+        }            
+    }    
+    
     /***** [START get_service] *****/
     private static Storage storageService;
     
@@ -59,13 +79,45 @@ public class StorageTool
     }
     /***** [END get_service] *****/
     
+    /***** [START search_bucket] *****/
+    public static String searchBucket(String fileName) throws IOException, GeneralSecurityException
+    {
+        //Storage client = getService();
+        Storage.Objects.List listRequest = client.objects().list(bucketName);
+
+        List<StorageObject> bucketContents = new ArrayList<>();
+        Objects objects;
+
+        // Iterate through each page of results, and add them to our results list.
+        do 
+        {
+            objects = listRequest.execute();
+            // Add the items in this page of results to the list we'll return.
+            bucketContents.addAll(objects.getItems());
+
+            // Get the next page, in the next iteration of this loop.
+            listRequest.setPageToken(objects.getNextPageToken());
+        } 
+        while (null != objects.getNextPageToken());
+        
+        for (StorageObject storObject : bucketContents) 
+        {
+            if (fileName.equals(storObject.getName()))
+            {
+                return "FOUND: " + storObject.getName() + " (" + storObject.getSize() + " bytes)";
+            }
+        }
+        return "File not found!";
+    }
+    /***** [END search_bucket] *****/
+    
     /***** [START list_bucket] *****/
     //Fetch a list of the objects within the given bucket.
     //@param bucketName the name of the bucket to list.
     //@return a list of the contents of the specified bucket.
     public static List<StorageObject> listBucket() throws IOException, GeneralSecurityException 
     {
-        Storage client = getService();
+        //Storage client = getService();
         Storage.Objects.List listRequest = client.objects().list(bucketName);
 
         List<StorageObject> results = new ArrayList<>();
@@ -91,14 +143,25 @@ public class StorageTool
     //Fetches the metadata for the given bucket.
     //@param bucketName the name of the bucket to get metadata about.
     //@return a Bucket containing the bucket's metadata.
-    public static Bucket getBucket() throws IOException, GeneralSecurityException 
+    public static String getBucket() throws IOException, GeneralSecurityException 
     {
-        Storage client = getService();
-
+        //Storage client = getService();
         Storage.Buckets.Get bucketRequest = client.buckets().get(bucketName);
+        
         // Fetch the full set of the bucket's properties (e.g. include the ACLs in the response)
         bucketRequest.setProjection("full");
-        return bucketRequest.execute();
+        
+        Bucket bucket = bucketRequest.execute();
+        
+        String bucketMeta = "Name: " + bucketName + "\n" + "Location: " + bucket.getLocation() + "\n"
+                + "Time Created: " + bucket.getTimeCreated() + "\n" + "Owner: " + bucket.getOwner() + "\n";
+        
+        //Console output
+        //System.out.println("name: " + bucketName);
+        //System.out.println("location: " + bucket.getLocation());
+        //System.out.println("timeCreated: " + bucket.getTimeCreated());
+        //System.out.println("owner: " + bucket.getOwner());
+        return bucketMeta;
     }
     /***** [END get_bucket] *****/
     
@@ -109,7 +172,7 @@ public class StorageTool
     //@param stream the data - for instance, you can use a FileInputStream to upload a file.
     //@param bucketName the name of the bucket to create the object in.
     //public static void uploadStream(String name, String contentType, InputStream stream)
-    public static void uploadStream(String fileName, String filePath)
+    public static String uploadStream(String fileName, String filePath)
             throws IOException, GeneralSecurityException 
     {
         String contentType = "text/plain";
@@ -122,10 +185,12 @@ public class StorageTool
                 .setAcl(Arrays.asList(new ObjectAccessControl().setEntity("allUsers").setRole("READER")));
         
         // Do the insert
-        Storage client = getService();
+        //Storage client = getService();
         Storage.Objects.Insert insertRequest = client.objects().insert(bucketName, objectMetadata, contentStream);
 
         insertRequest.execute();
+        
+        return insertRequest.getLastStatusCode() + ": " + insertRequest.getLastStatusMessage();
     }
     /***** [END upload_stream] *****/
 
@@ -133,10 +198,20 @@ public class StorageTool
     //Deletes an object in a bucket.
     //@param path the path to the object to delete.
     //@param bucketName the bucket the object is contained in.
-    public static void deleteObject(String path, String bucketName) throws IOException, GeneralSecurityException 
+    public static String deleteObject(String fileName) throws IOException, GeneralSecurityException 
     {
-        Storage client = getService();
-        client.objects().delete(bucketName, path).execute();
+        //Storage client = getService();
+        //client.objects().delete(bucketName, fileName).execute();
+        
+        Storage.Objects.Delete deleteRequest = client.objects().delete(bucketName, fileName);
+        
+        deleteRequest.execute();
+        
+        if (deleteRequest.getLastStatusCode() == 204)
+        {
+            return "204: File deleted...";
+        }
+        return deleteRequest.getLastStatusCode() + ": " + deleteRequest.getLastStatusMessage();
     }
     /***** [END delete_object] *****/
 }
