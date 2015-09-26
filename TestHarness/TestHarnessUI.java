@@ -1,12 +1,16 @@
 package testharness;
 
+import com.google.api.services.storage.model.StorageObject;
+
 import java.awt.Color;
 import java.io.IOException;
+import java.util.List;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class TestHarnessUI extends javax.swing.JFrame
 {
+    private StorageTool fileTool = new StorageTool();
 
     /**
      * Creates new form TestHarnessUI
@@ -31,6 +35,9 @@ public class TestHarnessUI extends javax.swing.JFrame
         fileNameField = new javax.swing.JTextField();
         fileUpldBtn = new javax.swing.JButton();
         fileSrchBtn = new javax.swing.JButton();
+        fileDeltBtn = new javax.swing.JButton();
+        fileContBtn = new javax.swing.JButton();
+        fileMetaBtn = new javax.swing.JButton();
         userPanel = new javax.swing.JPanel();
         jTextField1 = new javax.swing.JTextField();
         jTextField2 = new javax.swing.JTextField();
@@ -79,15 +86,45 @@ public class TestHarnessUI extends javax.swing.JFrame
             }
         });
 
+        fileDeltBtn.setText("DELETE");
+        fileDeltBtn.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
+                fileDeltBtnMouseClicked(evt);
+            }
+        });
+
+        fileContBtn.setText("CONTENTS");
+        fileContBtn.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
+                fileContBtnMouseClicked(evt);
+            }
+        });
+
+        fileMetaBtn.setText("METADATA");
+        fileMetaBtn.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
+                fileMetaBtnMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout filePanelLayout = new javax.swing.GroupLayout(filePanel);
         filePanel.setLayout(filePanelLayout);
         filePanelLayout.setHorizontalGroup(
             filePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(fileNameField)
             .addGroup(filePanelLayout.createSequentialGroup()
-                .addGroup(filePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(fileUpldBtn)
-                    .addComponent(fileSrchBtn))
+                .addGroup(filePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(fileContBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(fileDeltBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(fileUpldBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(fileSrchBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(fileMetaBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(0, 234, Short.MAX_VALUE))
         );
         filePanelLayout.setVerticalGroup(
@@ -98,7 +135,12 @@ public class TestHarnessUI extends javax.swing.JFrame
                 .addComponent(fileSrchBtn)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(fileUpldBtn)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(fileDeltBtn)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(fileContBtn)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(fileMetaBtn))
         );
 
         userPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "DATABASE CONTROLS", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
@@ -261,16 +303,16 @@ public class TestHarnessUI extends javax.swing.JFrame
             jTextArea1.setText("Uploading File: " + fileName + "\n");
             jTextArea1.append("Path: " + filePath + "\n");
             
-            StorageTool fileTool = new StorageTool();
-            
             try
             {
-                fileTool.uploadStream(fileName, filePath);             
+                //fileTool.uploadStream(fileName, filePath);
+                jTextArea1.append(fileTool.uploadStream(fileName, filePath) + "...\n");
             }
             catch (IOException e) 
             {
-                System.err.println(e.getMessage());
-                System.exit(1);
+                jTextArea1.append("ERROR: " + e.getMessage() + "...\n");
+                //System.err.println(e.getMessage());
+                //System.exit(1);
             }
             catch (Throwable t)
             {
@@ -335,9 +377,22 @@ public class TestHarnessUI extends javax.swing.JFrame
             jTextArea1.setText("No file name given.  Please enter a file name and try your search again.");
         }
         else
-        {
-            jTextArea1.setText("Searching for " + fileName + "...\n");
-            //Start search....
+        {            
+            jTextArea1.setText("Searching for " + fileName + "...\n\n");
+            try
+            {
+                jTextArea1.append(fileTool.searchBucket(fileName) + "\n");
+            }
+            catch (IOException e) 
+            {
+                jTextArea1.append("ERROR: " + e.getMessage() + "...\n");
+                //System.exit(1);
+            }
+            catch (Throwable t)
+            {
+                t.printStackTrace();
+                System.exit(1);
+            }           
         }
     }                                        
 
@@ -383,6 +438,85 @@ public class TestHarnessUI extends javax.swing.JFrame
             jTextArea1.setText("Searching...\n");
             //Start search....
         }
+    }                                        
+
+    private void fileDeltBtnMouseClicked(java.awt.event.MouseEvent evt)                                         
+    {                                             
+        // TODO add your handling code here:
+        String fileName = fileNameField.getText();
+        
+        if (fileName.isEmpty() || fileName.equals("File Name..."))
+        {
+            jTextArea1.setText("No file name given.  Please enter a file name and try again.");
+        }
+        else
+        {
+            jTextArea1.setText("Deleting " + fileName + "...\n\n");
+            try
+            {
+                //fileTool.deleteObject(fileName);
+                jTextArea1.append(fileTool.deleteObject(fileName) + "...\n");
+            }
+            catch (IOException e) 
+            {
+                jTextArea1.append("ERROR: " + e.getMessage() + "...\n");
+                //System.exit(1);
+            }
+            catch (Throwable t)
+            {
+                t.printStackTrace();
+                System.exit(1);
+            }             
+        }
+    }                                        
+
+    private void fileContBtnMouseClicked(java.awt.event.MouseEvent evt)                                         
+    {                                             
+        // List the contents of the bucket.
+        jTextArea1.setText("Retrieving contents of storage...\n\n");
+        try
+        {
+            List<StorageObject> bucketContents = fileTool.listBucket();
+            if (null == bucketContents) 
+            {
+                jTextArea1.append("There were no objects in the given bucket.");
+            }
+            for (StorageObject object : bucketContents) 
+            {
+                jTextArea1.append(object.getName() + " (" + object.getSize() + " bytes)\n");
+            }          
+        }
+        catch (IOException e) 
+        {
+            jTextArea1.append("ERROR: " + e.getMessage() + "...\n");
+            //System.exit(1);
+        }
+        catch (Throwable t)
+        {
+            t.printStackTrace();
+            System.exit(1);
+        }    
+            
+    }                                        
+
+    private void fileMetaBtnMouseClicked(java.awt.event.MouseEvent evt)                                         
+    {                                             
+        // TODO add your handling code here:
+        jTextArea1.setText("Retrieving storage metadata information...\n\n");
+        try
+        {
+             jTextArea1.append(fileTool.getBucket());
+        }
+        catch (IOException e) 
+        {
+            jTextArea1.append("ERROR: " + e.getMessage() + "...\n");
+            //System.exit(1);
+        }
+        catch (Throwable t)
+        {
+            t.printStackTrace();
+            System.exit(1);
+        }    
     }                                        
 
     /**
@@ -432,6 +566,9 @@ public class TestHarnessUI extends javax.swing.JFrame
     // Variables declaration - do not modify                     
     private javax.swing.JPanel Input;
     private javax.swing.JPanel Output;
+    private javax.swing.JButton fileContBtn;
+    private javax.swing.JButton fileDeltBtn;
+    private javax.swing.JButton fileMetaBtn;
     private javax.swing.JTextField fileNameField;
     private javax.swing.JPanel filePanel;
     private javax.swing.JButton fileSrchBtn;
