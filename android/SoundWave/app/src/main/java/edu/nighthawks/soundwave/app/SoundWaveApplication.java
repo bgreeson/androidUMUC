@@ -13,7 +13,8 @@ public class SoundWaveApplication extends Application
 
 	
 	public SoundWaveController soundWaveController;
-	
+	public SoundWaveConfig soundWaveConfig;
+
 	@Override
 	public void onCreate()
 	{
@@ -25,6 +26,8 @@ public class SoundWaveApplication extends Application
 	{
 		sApp = this;
 		soundWaveController = new SoundWaveController();
+		soundWaveConfig = new SoundWaveConfig();
+		soundWaveConfig.initFromSettings();
 	}
 
 }

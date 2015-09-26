@@ -1,5 +1,9 @@
 package edu.nighthawks.soundwave.app;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import edu.nighthawks.soundwave.file.FileRecorder;
 import edu.nighthawks.soundwave.file.FileUploader;
 
@@ -16,7 +20,7 @@ public class SoundWaveController
 		if (m_bTransmit == true)
 		{
 			recorder = new FileRecorder();
-			recorder.startRecording();
+			recorder.startRecording(generateNextFileName());
 		}
 		else
 		{
@@ -48,6 +52,20 @@ public class SoundWaveController
 		// send the recorded file
 		uploader = new FileUploader();
 		uploader.upload(recorder.getRecordedFileName());
+	}
+
+	private String generateNextFileName()
+	{
+		String fileName;
+		DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+		Date date = new Date();
+		System.out.println(dateFormat.format(date));
+
+		fileName = String.format("%s-%s",
+				SoundWaveApplication.getApplicationObject().soundWaveConfig.getUserName(),
+				dateFormat.format(date));
+
+		return fileName;
 	}
 
 }

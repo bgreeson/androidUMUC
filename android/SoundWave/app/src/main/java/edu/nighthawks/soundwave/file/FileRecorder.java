@@ -24,12 +24,12 @@ public class FileRecorder
     }
 
 
-    public void startRecording()
+    public void startRecording(String fileName)
     {
         recordedFile = new File(tempFileName);
 
         tempFileName = Environment.getExternalStorageDirectory().getAbsolutePath();
-        tempFileName += "/message.amr";
+        tempFileName += "/" + fileName;
 
         mRecorder = new MediaRecorder();
         mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
