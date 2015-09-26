@@ -25,6 +25,8 @@ public class PostFile
 
 		try
 		{
+/*			// Use this for standard PHP server with upload.php in web prototype
+			//
 			FileInputStream fileInputStream = new FileInputStream(sourceFile);
 			URL url = new URL("http://androidsoundappproject.appspot.com/upload");
 
@@ -41,6 +43,25 @@ public class PostFile
 			dos = new DataOutputStream(conn.getOutputStream());
 			dos.writeBytes(twoHyphens + boundary + lineEnd);
 			dos.writeBytes("Content-Disposition: form-data; name=soundFile; filename=" + sourceFile.getAbsolutePath() + "" + lineEnd);
+			dos.writeBytes(lineEnd);*/
+
+			// Use this for Google cloud hosted change ($upload_url = CloudStorageTools::createUploadUrl('/server?action=upload_file', $options)
+			FileInputStream fileInputStream = new FileInputStream(sourceFile);
+			URL url = new URL("http://androidsoundappproject.appspot.com/server?action=upload_file");
+
+			conn = (HttpURLConnection) url.openConnection();
+			conn.setDoInput(true); // allow Inputs
+			conn.setDoOutput(true); // allow Outputs
+			conn.setUseCaches(false); // don't use cached copy
+			conn.setRequestMethod("POST");
+			conn.setRequestProperty("Connection", "Keep-Alive");
+			conn.setRequestProperty("ENCTYPE", "multipart/form-data");
+			conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
+			conn.setRequestProperty("userfile", sourceFile.getAbsolutePath());
+
+			dos = new DataOutputStream(conn.getOutputStream());
+			dos.writeBytes(twoHyphens + boundary + lineEnd);
+			dos.writeBytes("Content-Disposition: form-data; name=userfile; filename=" + sourceFile.getAbsolutePath() + "" + lineEnd);
 			dos.writeBytes(lineEnd);
 
 			// create a buffer of  maximum size
