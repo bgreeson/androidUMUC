@@ -1,0 +1,18 @@
+application: androidsoundappproject
+version: alpha002
+runtime: php55
+api_version: 1
+threadsafe: yes
+
+handlers:
+- url: /favicon\.ico
+  static_files: favicon.ico
+  upload: favicon\.ico
+- url: /inc
+  static_dir: inc
+
+- url: /
+  script: index.php
+
+- url: /server
+  script: server.php

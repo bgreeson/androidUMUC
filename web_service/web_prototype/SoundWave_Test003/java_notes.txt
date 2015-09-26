@@ -1,0 +1,28 @@
+String uploadUrl = blobstoreService.createUploadUrl("/upload", UploadOptions.Builder.withGoogleStorageBucketName("my_bucket"));
+
+Source: https://cloud.google.com/appengine/docs/java/blobstore/#Java_Uploading_a_blob
+
+<form action="<%= blobstoreService.createUploadUrl("/upload") %>" method="post" enctype="multipart/form-data">
+    <input type="file" name="myFile">
+    <input type="submit" value="Submit">
+</form>
+
+-------------------------------------------------
+
+I uploaded a new version of the PHP that should now properly handle the file upload:
+
+Tt uses a variable for 'action' to define what function you want within the request method.
+The URL format to POST is: http://androidsoundappproject.appspot.com/server?action=upload_file
+
+In PHP I have to gernerate the upload url with the following:
+$upload_url = CloudStorageTools::createUploadUrl('/server?action=upload_file', $options)
+
+
+From what I have found you would create the upload url in JAVA like this:
+ 
+<form action="<%= blobstoreService.createUploadUrl("/server?action=upload_file") %>" method="post" enctype="multipart/form-data">
+    <input type="file" name="userfile">
+    <input type="submit" value="Submit">
+</form>
+
+Right now this is set up to upload the userfile to the /message folder in cloud storage.
