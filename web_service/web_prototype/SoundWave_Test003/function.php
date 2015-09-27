@@ -1,57 +1,50 @@
-<!doctype html>
-<html>
-<body>
+<?PHP
 
-<?php
+// database connection handling
+function dbConn() {
 
-require_once 'google/appengine/api/cloud_storage/CloudStorageTools.php';
-use google\appengine\api\cloud_storage\CloudStorageTools;
+$dbh = null;
+  if (isset($_SERVER['SERVER_SOFTWARE']) &&
+  strpos($_SERVER['SERVER_SOFTWARE'],'Google App Engine') !== false) {
+    // Connect from App Engine.
+    try{
+       $dbh = new pdo('mysql:unix_socket=/cloudsql/androidsoundappproject:soundwave;dbname=soundwave', 'root', '50undW4v3');
+    }catch(PDOException $ex){
+        die(json_encode(
+            array('App Engine: outcome' => false, 'message' => 'Unable to connect.')
+            )
+        );
+    }
+  } else {
+    // Connect from a development environment.
+    try{
+       $dbh = new pdo('mysql:host=[2001:4860:4864:1:a286:9550:afb7:fc24]:3306;dbname=soundwave', 'sw_admin', '50undW4v3');
+    }catch(PDOException $ex){
+        die(json_encode(
+            array('Dev Env: outcome' => false, 'message' => 'Unable to connect')
+            )
+        );
+    }
+  }
+  return ($dbh);
+}
 
-$options = [ 'gs_bucket_name' => 'androidsoundappproject.appspot.com' ];
-$upload_url = CloudStorageTools::createUploadUrl('/server?action=upload_file', $options)
 
-?>
-<div>
-<!--?php echo $upload_url?-->
-<?php //echo __dir__ . '\user_docs\\';
-  echo $upload_url . '?action=upload_file'
-//$url = 'http://localhost:14080'
-//$url = 'androidsoundappproject.appspot.com';
-?>
+function dbClose($dbh) {
+    if ($dbh)
+        $dbh = null;
+}
 
-<form action="<?php echo $upload_url ?>" enctype="multipart/form-data" method="post">
-   <p>Files to upload: </p>
-   <input type="file" name="userfile" >
-   <input type="submit" value="Upload">
-</form>
-</div>
 
-<br><br>
+function tableSpew() {
 
-<div>
-<form action="/server?action=create_user" method="post">
-   disp_nme: <input type="text" name="disp_nme" ><br>
-   email_addr: <input type="text" name="email_addr"><br>
-   user_pw: <input type="text" name="user_pw"><br>
-   <input type="submit" value="Create User">
-</form>
-</div>
+    $dbh = dbConn();
 
-<br><br>
-
-<?php
-
-include 'connection.php';
-
-function tSpew() {
-
-    $conn = dbConn();
-
-    $sql = "SELECT * FROM USER";
+    $sql = "SELECT * FROM USER" ;
     echo $sql . "<br><br>";
     
     //if (!$link = mysql_connect('mysql_host', 'mysql_user', 'mysql_password')) {
-    if (!$link = $conn) {
+    if (!$link = $dbh) {
         echo 'Could not connect to mysql';
         exit;
     }
@@ -67,7 +60,7 @@ function tSpew() {
       
       //return($array);
       
-      $sth = $conn->prepare($sql);
+      $sth = $dbh->prepare($sql);
       $sth->execute();
 
       /* Fetch all of the remaining rows in the result set */
@@ -136,17 +129,13 @@ function tSpew() {
      //}
      //echo "</div>";
   } catch (PDOException $ex) {
-    echo "An error occurred in reading or writing to guestbook.";
+    echo "An error occurred.";
   }
-  $db = null;
  
-}   
-  
-dbClose($conn);
+  dbClose($dbh);
+ 
+} 
+
+
 
 ?>
-
-<?PHP tSpew(); ?>
-
-</html>
-</body>

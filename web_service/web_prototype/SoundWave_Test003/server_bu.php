@@ -1,7 +1,5 @@
 <?php
 
-include 'function.php';
-
 if(isset($_GET["action"])){
 
   switch($_GET["action"]){
@@ -24,17 +22,12 @@ if(isset($_GET["action"])){
       
       case "upload_file":
         $value = upload_file();
-        break;
-      case "create_user":
-        $value = create_user();
-        //$value = array("chad","z.ccalkins@gmail.com");
         break; 
-        
    }
  
  }
 
-$value = create_user();
+
 exit(json_encode($value));
 
 
@@ -143,61 +136,5 @@ function upload_file(){
    }
 
 }
-
-function create_user(){
-   
-  $dbh = dbConn();
-   
-  // test variables
-  //$frst_nme = "frst004";                  
-  //$last_nme = "last004";                  
-  //$email_addr = "example004@domain.com";  
-  //$user_pw = "password004";               
-  
-  $disp_nme = $_POST['disp_nme'];                  
-  $email_addr = $_POST['email_addr'];  
-  $user_pw = $_POST['user_pw']; 
-    
-  $user_type = "basic";
-  
-  // date creation
-  $date = date_create();
-  $tz = $date -> getTimezone();
-  $timestamp = date_format($date, 'Y-m-d H:i:s');
-  $timezone = $tz -> getName();
-  
-  // load date variables
-  $date_effective = $timestamp;
-  $date_modified = $timestamp;
-  $date_expired = '9999-12-31T23:59:59';
-   
-  // sql statement
-  //$sql = "INSERT INTO USER (FRST_NME, LAST_NME, EMAIL_ADDR, USER_PW, USER_TYPE, DATE_EFFECTIVE, DATE_MODIFIED, DATE_EXPIRED) 
-  //                  VALUES (:FRST_NME, :LAST_NME, :EMAIL_ADDR, :USER_PW, :USER_TYPE, :DATE_EFFECTIVE, :DATE_MODIFIED, :DATE_EXPIRED)";
-  
-  $sql = "INSERT INTO USER (FRST_NME, EMAIL_ADDR, USER_PW, USER_TYPE, DATE_EFFECTIVE, DATE_MODIFIED, DATE_EXPIRED) 
-                    VALUES (:FRST_NME, :EMAIL_ADDR, :USER_PW, :USER_TYPE, :DATE_EFFECTIVE, :DATE_MODIFIED, :DATE_EXPIRED)";
-  
-  $q = $dbh->prepare($sql);
-    
-  $new_user = array(':FRST_NME'=>$disp_nme,
-                   //':LAST_NME'=>$last_nme,
-                   ':EMAIL_ADDR'=>$email_addr,
-                   ':USER_PW'=>$user_pw,
-                   ':USER_TYPE'=>$user_type,
-                   ':DATE_EFFECTIVE'=>$date_effective,
-                   ':DATE_MODIFIED'=>$date_modified,
-                   ':DATE_EXPIRED'=>$date_expired);
-   
-  $q->execute($new_user);
-  
-  dbClose($dbh);
-    
-  //$foo = $new_user;
-  //$foo = array("chad","z.ccalkins@gmail.com");
-  return $new_user;
-
-}
-
 
 ?>
