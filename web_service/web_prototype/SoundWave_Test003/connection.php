@@ -17,7 +17,7 @@ $db = null;
   } else {
     // Connect from a development environment.
     try{
-       $db = new pdo('mysql:host=127.0.0.1:3306;dbname=soundwave', 'root', '');
+       $db = new pdo('mysql:host=[2001:4860:4864:1:a286:9550:afb7:fc24]:3306;dbname=soundwave', 'sw_admin', '50undW4v3');
     }catch(PDOException $ex){
         die(json_encode(
             array('Dev Env: outcome' => false, 'message' => 'Unable to connect')
