@@ -7,6 +7,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public class TestHarnessUI extends javax.swing.JFrame
 {
     private StorageTool fileTool = new StorageTool();
+    private DatabaseTool userTool = new DatabaseTool();
 
     /**
      * Creates new form TestHarnessUI
@@ -38,9 +39,7 @@ public class TestHarnessUI extends javax.swing.JFrame
         jTextField1 = new javax.swing.JTextField();
         jTextField2 = new javax.swing.JTextField();
         jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
-        userRgtrBtn = new javax.swing.JButton();
-        userSrchBtn = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
         Output = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
@@ -64,6 +63,7 @@ public class TestHarnessUI extends javax.swing.JFrame
             }
         });
 
+        fileSrchBtn.setForeground(new java.awt.Color(153, 153, 153));
         fileSrchBtn.setText("SEARCH");
         fileSrchBtn.addMouseListener(new java.awt.event.MouseAdapter()
         {
@@ -82,6 +82,7 @@ public class TestHarnessUI extends javax.swing.JFrame
             }
         });
 
+        fileDeltBtn.setForeground(new java.awt.Color(153, 153, 153));
         fileDeltBtn.setText("DELETE");
         fileDeltBtn.addMouseListener(new java.awt.event.MouseAdapter()
         {
@@ -91,6 +92,7 @@ public class TestHarnessUI extends javax.swing.JFrame
             }
         });
 
+        fileContBtn.setForeground(new java.awt.Color(153, 153, 153));
         fileContBtn.setText("CONTENTS");
         fileContBtn.addMouseListener(new java.awt.event.MouseAdapter()
         {
@@ -100,6 +102,7 @@ public class TestHarnessUI extends javax.swing.JFrame
             }
         });
 
+        fileMetaBtn.setForeground(new java.awt.Color(153, 153, 153));
         fileMetaBtn.setText("METADATA");
         fileMetaBtn.addMouseListener(new java.awt.event.MouseAdapter()
         {
@@ -117,10 +120,10 @@ public class TestHarnessUI extends javax.swing.JFrame
             .addGroup(storagePanelLayout.createSequentialGroup()
                 .addGroup(storagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(fileContBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(fileUpldBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(fileSrchBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(fileMetaBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(fileDeltBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(fileDeltBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(fileUpldBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(0, 234, Short.MAX_VALUE))
         );
         storagePanelLayout.setVerticalGroup(
@@ -142,7 +145,7 @@ public class TestHarnessUI extends javax.swing.JFrame
         databasePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "DATABASE CONTROLS", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
 
         jTextField1.setForeground(new java.awt.Color(153, 153, 153));
-        jTextField1.setText("Name");
+        jTextField1.setText("Username...");
         jTextField1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jTextField1.addMouseListener(new java.awt.event.MouseAdapter()
         {
@@ -153,7 +156,7 @@ public class TestHarnessUI extends javax.swing.JFrame
         });
 
         jTextField2.setForeground(new java.awt.Color(153, 153, 153));
-        jTextField2.setText("Phone");
+        jTextField2.setText("eMail...");
         jTextField2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jTextField2.addMouseListener(new java.awt.event.MouseAdapter()
         {
@@ -164,7 +167,7 @@ public class TestHarnessUI extends javax.swing.JFrame
         });
 
         jTextField3.setForeground(new java.awt.Color(153, 153, 153));
-        jTextField3.setText("eMail");
+        jTextField3.setText("Password...");
         jTextField3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jTextField3.addMouseListener(new java.awt.event.MouseAdapter()
         {
@@ -174,32 +177,12 @@ public class TestHarnessUI extends javax.swing.JFrame
             }
         });
 
-        jTextField4.setForeground(new java.awt.Color(153, 153, 153));
-        jTextField4.setText("Address");
-        jTextField4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        jTextField4.addMouseListener(new java.awt.event.MouseAdapter()
+        jButton1.setText("REGISTER");
+        jButton1.addMouseListener(new java.awt.event.MouseAdapter()
         {
             public void mouseClicked(java.awt.event.MouseEvent evt)
             {
-                jTextField4MouseClicked(evt);
-            }
-        });
-
-        userRgtrBtn.setText("REGISTER");
-        userRgtrBtn.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
-                userRgtrBtnMouseClicked(evt);
-            }
-        });
-
-        userSrchBtn.setText("SEARCH");
-        userSrchBtn.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
-                userSrchBtnMouseClicked(evt);
+                jButton1MouseClicked(evt);
             }
         });
 
@@ -207,15 +190,12 @@ public class TestHarnessUI extends javax.swing.JFrame
         databasePanel.setLayout(databasePanelLayout);
         databasePanelLayout.setHorizontalGroup(
             databasePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTextField1)
+            .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 327, Short.MAX_VALUE)
             .addComponent(jTextField2, javax.swing.GroupLayout.Alignment.TRAILING)
-            .addComponent(jTextField3)
-            .addComponent(jTextField4, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addComponent(jTextField3, javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(databasePanelLayout.createSequentialGroup()
-                .addGroup(databasePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(userRgtrBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(userSrchBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(0, 246, Short.MAX_VALUE))
+                .addComponent(jButton1)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         databasePanelLayout.setVerticalGroup(
             databasePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -226,12 +206,8 @@ public class TestHarnessUI extends javax.swing.JFrame
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(11, 11, 11)
-                .addComponent(userRgtrBtn)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(userSrchBtn)
-                .addGap(0, 11, Short.MAX_VALUE))
+                .addComponent(jButton1)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout InputLayout = new javax.swing.GroupLayout(Input);
@@ -332,18 +308,6 @@ public class TestHarnessUI extends javax.swing.JFrame
         jTextField2.setForeground(Color.BLACK);
     }                                        
 
-    private void jTextField3MouseClicked(java.awt.event.MouseEvent evt)                                         
-    {                                             
-        jTextField3.setText("");
-        jTextField3.setForeground(Color.BLACK);
-    }                                        
-
-    private void jTextField4MouseClicked(java.awt.event.MouseEvent evt)                                         
-    {                                             
-        jTextField4.setText("");
-        jTextField4.setForeground(Color.BLACK);
-    }                                        
-
     private void fileSrchBtnMouseClicked(java.awt.event.MouseEvent evt)                                         
     {                                             
         String fileName = fileNameField.getText();
@@ -356,50 +320,6 @@ public class TestHarnessUI extends javax.swing.JFrame
         {            
             jTextArea1.setText("Searching for " + fileName + "...\n\n");
             //Start search....       
-        }
-    }                                        
-
-    private void userRgtrBtnMouseClicked(java.awt.event.MouseEvent evt)                                         
-    {                                             
-        // TODO add your handling code here:
-        String name = jTextField1.getText();
-        String phon = jTextField2.getText();
-        String mail = jTextField3.getText();
-        String addr = jTextField4.getText();
-        
-        if ((name.isEmpty() || name.equals("Name"))
-                || (phon.isEmpty() || phon.equals("Phone"))
-                || (mail.isEmpty() || mail.equals("eMail"))
-                || (addr.isEmpty() || addr.equals("Address")))
-        {
-            jTextArea1.setText("All user fields must be filled out for registration to occur.  Please try again.");
-        }
-        else
-        {
-            jTextArea1.setText("Registering " + name + " (" + phon + ", " + mail +")\n");
-            jTextArea1.append("Address: " + addr + "...\n");
-            //Start registration....
-        }
-
-        
-    }                                        
-
-    private void userSrchBtnMouseClicked(java.awt.event.MouseEvent evt)                                         
-    {                                             
-        // TODO add your handling code here:
-        String name = jTextField1.getText();
-        String phon = jTextField2.getText();
-        String mail = jTextField3.getText();
-        String addr = jTextField4.getText();
-        
-        if ((mail.isEmpty() || mail.equals("eMail")))
-        {
-            jTextArea1.setText("The user's eMail is required for search.  Please try again.");
-        }
-        else
-        {
-            jTextArea1.setText("Searching...\n");
-            //Start search....
         }
     }                                        
 
@@ -433,6 +353,34 @@ public class TestHarnessUI extends javax.swing.JFrame
         jTextArea1.setText("Retrieving storage metadata information...\n\n");
         //Get metadata of storage...   
     }                                        
+
+    private void jTextField3MouseClicked(java.awt.event.MouseEvent evt)                                         
+    {                                             
+        jTextField3.setText("");
+        jTextField3.setForeground(Color.BLACK);
+    }                                        
+
+    private void jButton1MouseClicked(java.awt.event.MouseEvent evt)                                      
+    {                                          
+        // TODO add your handling code here:
+        String userName = jTextField1.getText();
+        String mailAddr = jTextField2.getText();
+        String password = jTextField3.getText();
+        
+        if (userName.isEmpty() || userName.equals("Username...") ||
+                mailAddr.isEmpty() || mailAddr.equals("eMail...") ||
+                password.isEmpty() || password.equals("Password..."))
+        {
+            jTextArea1.setText("Please make an entry for EACH field and try to register again.");
+        }
+        else
+        {            
+            jTextArea1.setText("Registering user " + userName + "...\n\n");
+            String response = userTool.registerUser(userName, mailAddr, password);
+            
+            jTextArea1.append("Server response: " + response);                   
+        }
+    }                                     
 
     /**
      * @param args the command line arguments
@@ -488,15 +436,13 @@ public class TestHarnessUI extends javax.swing.JFrame
     private javax.swing.JTextField fileNameField;
     private javax.swing.JButton fileSrchBtn;
     private javax.swing.JButton fileUpldBtn;
+    private javax.swing.JButton jButton1;
     private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
     private javax.swing.JPanel storagePanel;
-    private javax.swing.JButton userRgtrBtn;
-    private javax.swing.JButton userSrchBtn;
     // End of variables declaration                   
 }
