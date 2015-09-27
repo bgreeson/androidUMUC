@@ -8,7 +8,7 @@ public class Contact
     private String _name, _email;
 
 
-    public Contact(String name, String phone, String email, String address)
+    public Contact(String name, String email)
     {
         _name = name;
         _email = email;

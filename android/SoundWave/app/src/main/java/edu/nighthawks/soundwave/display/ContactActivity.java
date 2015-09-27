@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.nighthawks.soundwave.app.Contact;
+import edu.nighthawks.soundwave.app.SoundWaveApplication;
 import edu.nighthawks.soundwave.soundwave.R;
 
 public class ContactActivity extends AppCompatActivity
@@ -60,7 +61,7 @@ public class ContactActivity extends AppCompatActivity
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addContact(nameTxt.getText().toString(), phoneTxt.getText().toString(), emailTxt.getText().toString(), addressTxt.getText().toString());
+                addContact(nameTxt.getText().toString(), emailTxt.getText().toString());
                 populateList();
                 Toast.makeText(getApplicationContext(), nameTxt.getText().toString() + " has been added to your contacts!", Toast.LENGTH_SHORT). show();
             }
@@ -113,9 +114,10 @@ public class ContactActivity extends AppCompatActivity
         contactListView.setAdapter(adapter);
     }
 
-    private void  addContact(String name, String phone, String email, String address)
+    private void  addContact(String name, String email)
     {
-        Contacts.add(new Contact(name, phone, email, address));
+        Contacts.add(new Contact(name, email));
+        SoundWaveApplication.getApplicationObject().soundWaveController.createContact(name, "Password123", email);
     }
 
     private class ContactListAdapter extends ArrayAdapter<Contact>

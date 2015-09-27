@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import edu.nighthawks.soundwave.file.AccountCreator;
 import edu.nighthawks.soundwave.file.FileRecorder;
 import edu.nighthawks.soundwave.file.FileUploader;
 
@@ -12,6 +13,7 @@ public class SoundWaveController
 	private boolean m_bTransmit = false;
 	private FileRecorder recorder;
 	private FileUploader uploader;
+	private AccountCreator contactCreator;
 	
 	public void setTransmit(boolean bTransmit)
 	{
@@ -66,6 +68,12 @@ public class SoundWaveController
 				dateFormat.format(date));
 
 		return fileName;
+	}
+
+	public void createContact(String dispName, String password, String emailAddress)
+	{
+		contactCreator = new AccountCreator();
+		contactCreator.createContact(dispName, password, emailAddress);
 	}
 
 }
