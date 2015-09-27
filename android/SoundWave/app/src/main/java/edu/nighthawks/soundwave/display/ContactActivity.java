@@ -37,9 +37,7 @@ public class ContactActivity extends AppCompatActivity
         setContentView(R.layout.activity_contact);
 
         nameTxt = (EditText) findViewById(R.id.txtName);
-        phoneTxt = (EditText) findViewById(R.id.txtPhone);
         emailTxt = (EditText) findViewById(R.id.txtEmail);
-        addressTxt = (EditText) findViewById(R.id.txtAddress);
         contactListView = (ListView) findViewById(R.id.listView);
         contactImageimgView = (ImageView) findViewById(R.id.imgContactView);
 
@@ -137,12 +135,8 @@ public class ContactActivity extends AppCompatActivity
 
             TextView name = (TextView) view.findViewById(R.id.contactName);
             name.setText(currentContact.getName());
-            TextView phone = (TextView) view.findViewById(R.id.phoneNumber);
-            phone.setText(currentContact.getPhone());
             TextView email = (TextView) view.findViewById(R.id.emailAddress);
             email.setText(currentContact.getEmail());
-            TextView address = (TextView) view.findViewById(R.id.cAddress);
-            address.setText(currentContact.getAddress());
 
             return view;
         }

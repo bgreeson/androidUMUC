@@ -5,15 +5,13 @@ package edu.nighthawks.soundwave.app;
  */
 public class Contact
 {
-    private String _name, _phone, _email, _address;
+    private String _name, _email;
 
 
     public Contact(String name, String phone, String email, String address)
     {
         _name = name;
-        _phone = phone;
         _email = email;
-        _address = address;
     }
 
     public String getName()
@@ -21,18 +19,9 @@ public class Contact
         return _name;
     }
 
-    public String getPhone()
-    {
-        return _phone;
-    }
-
     public String getEmail()
     {
         return _email;
     }
 
-    public String getAddress()
-    {
-        return _address;
-    }
 }
