@@ -1,5 +1,6 @@
 package edu.nighthawks.soundwave.display;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
@@ -25,6 +27,7 @@ import edu.nighthawks.soundwave.soundwave.R;
 public class ContactActivity extends AppCompatActivity
 {
     EditText nameTxt, phoneTxt, emailTxt, addressTxt;
+    ImageView contactImageimgView;
     List<Contact> Contacts = new ArrayList<Contact>();
     ListView contactListView;
 
@@ -38,18 +41,20 @@ public class ContactActivity extends AppCompatActivity
         emailTxt = (EditText) findViewById(R.id.txtEmail);
         addressTxt = (EditText) findViewById(R.id.txtAddress);
         contactListView = (ListView) findViewById(R.id.listView);
+        contactImageimgView = (ImageView) findViewById(R.id.imgContactView);
+
         TabHost tabHost = (TabHost) findViewById(R.id.tabHost);
 
 
         tabHost.setup();
 
         TabHost.TabSpec tabSpec = tabHost.newTabSpec("creator");
-        tabSpec.setContent(R.id.tabCreator);
+        tabSpec.setContent(R.id.Creator);
         tabSpec.setIndicator("Creator");
         tabHost.addTab(tabSpec);
 
         tabSpec = tabHost.newTabSpec("storage");
-        tabSpec.setContent(R.id.tabStorage);
+        tabSpec.setContent(R.id.Storage);
         tabSpec.setIndicator("Storage");
         tabHost.addTab(tabSpec);
 
@@ -70,7 +75,8 @@ public class ContactActivity extends AppCompatActivity
             }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            public void onTextChanged(CharSequence s, int start, int before, int count)
+            {
                 addBtn.setEnabled(!nameTxt.getText().toString().trim().isEmpty());
             }
 
@@ -79,6 +85,28 @@ public class ContactActivity extends AppCompatActivity
 
             }
         });
+
+        contactImageimgView.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent, "Select Contact Image"), 1);
+            }
+        });
+
+    }
+
+    public void onActivityResult(int reqCode, int resCode, Intent data)
+    {
+       if (resCode == RESULT_OK)
+       {
+           if (reqCode == 1)
+               contactImageimgView.setImageURI(data.getData());
+       }
     }
 
     private void populateList()

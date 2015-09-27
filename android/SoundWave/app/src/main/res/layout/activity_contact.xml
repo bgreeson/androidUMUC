@@ -27,7 +27,7 @@
                 android:layout_height="match_parent">
 
                 <LinearLayout
-                    android:id="@+id/tabCreator"
+                    android:id="@+id/Creator"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
@@ -40,6 +40,14 @@
                         android:id="@+id/IblCreatorTitle"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="10dp" />
+
+                    <ImageView
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:id="@+id/imgContactView"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="10dp"
+                        android:src="@drawable/no_user_logo" />
 
                     <EditText
                         android:layout_width="fill_parent"
@@ -91,7 +99,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/tabStorage"
+                    android:id="@+id/Storage"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
