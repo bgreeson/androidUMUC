@@ -7,6 +7,10 @@ import android.util.Log;
 import java.io.File;
 import java.io.IOException;
 
+/***
+ * This class encapsulates all file recoding
+ *
+ */
 public class FileRecorder
 {
     private boolean bRecording = false;

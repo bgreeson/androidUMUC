@@ -8,6 +8,10 @@ import edu.nighthawks.soundwave.file.AccountCreator;
 import edu.nighthawks.soundwave.file.FileRecorder;
 import edu.nighthawks.soundwave.file.FileUploader;
 
+/**
+ * The purpose of this class is to act as the controller for the main SoundWave features
+ * such as recording sound files, playing back sound files, and tranmistting them to the server.
+ */
 public class SoundWaveController
 {
 	private boolean m_bTransmit = false;

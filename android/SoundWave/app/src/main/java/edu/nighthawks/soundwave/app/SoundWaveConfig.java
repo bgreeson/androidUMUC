@@ -2,6 +2,8 @@ package edu.nighthawks.soundwave.app;
 
 /**
  * Created by joe.keefe on 9/26/2015.
+ *
+ * This class holds all soundWave configuration and settings.
  */
 public class SoundWaveConfig
 {

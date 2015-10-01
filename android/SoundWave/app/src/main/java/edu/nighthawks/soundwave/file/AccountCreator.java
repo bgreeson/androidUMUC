@@ -1,5 +1,8 @@
 package edu.nighthawks.soundwave.file;
 
+/**
+ * This class encapsulates account creation (registration)
+ */
 public class AccountCreator extends Thread
 {
     private String DispName;

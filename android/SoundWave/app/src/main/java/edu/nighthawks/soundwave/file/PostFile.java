@@ -6,7 +6,9 @@ import java.io.FileInputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-
+/**
+ * This is a simple static utility class for HTTP POST actions such as uploadFile.
+ */
 public class PostFile
 {
 	public static int uploadFile(String sourceFileUri)

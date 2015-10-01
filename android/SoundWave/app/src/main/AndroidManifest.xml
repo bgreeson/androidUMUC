@@ -13,19 +13,13 @@
         android:theme="@style/AppTheme"
         android:name="edu.nighthawks.soundwave.app.SoundWaveApplication">
         <activity
-            android:name="edu.nighthawks.soundwave.display.SoundWaveMainActivity"
+            android:name="edu.nighthawks.soundwave.display.SwMainActivity"
             android:label="@string/title_activity_main" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <activity
-            android:name="edu.nighthawks.soundwave.display.ContactActivity"
-            android:label="@string/title_activity_contact" >
-            <action android:name="android.intent.action.MAIN" />
         </activity>
 
     </application>
