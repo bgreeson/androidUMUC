@@ -4,7 +4,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import edu.nighthawks.soundwave.file.AccountCreator;
+import edu.nighthawks.soundwave.contacts.ContactCreator;
+import edu.nighthawks.soundwave.contacts.ContactsRetriever;
+import edu.nighthawks.soundwave.registration.AccountCreator;
 import edu.nighthawks.soundwave.file.FileRecorder;
 import edu.nighthawks.soundwave.file.FileUploader;
 
@@ -17,8 +19,14 @@ public class SoundWaveController
 	private boolean m_bTransmit = false;
 	private FileRecorder recorder;
 	private FileUploader uploader;
-	private AccountCreator contactCreator;
-	
+	private AccountCreator accountCreator;
+	private ContactCreator contactCreator;
+	private ContactsRetriever contactsRetriever;
+
+	/***
+	 * Set transmit state which drives file recording (start and stop)
+	 * @param bTransmit
+	 */
 	public void setTransmit(boolean bTransmit)
 	{
 		m_bTransmit = bTransmit;
@@ -47,18 +55,26 @@ public class SoundWaveController
 		else
 			return "not transmitting";
 	}
-	
+
+	/***
+	 * Get transmit status
+	 * @return
+	 */
 	public boolean getTransmit()
 	{
 		return m_bTransmit;		
 	}
-	
+
+	/**
+	 * Upload file to server
+	 */
 	public void send()
 	{
 		// send the recorded file
 		uploader = new FileUploader();
 		uploader.upload(recorder.getRecordedFileName());
 	}
+
 
 	private String generateNextFileName()
 	{
@@ -74,10 +90,56 @@ public class SoundWaveController
 		return fileName;
 	}
 
-	public void createContact(String dispName, String password, String emailAddress)
+	/**
+	 * Create a new account
+	 * @param dispName
+	 * @param password
+	 * @param emailAddress
+	 */
+	public void createAccount(String dispName, String password, String emailAddress)
 	{
-		contactCreator = new AccountCreator();
-		contactCreator.createContact(dispName, password, emailAddress);
+		accountCreator = new AccountCreator();
+		accountCreator.createAccount(dispName, password, emailAddress);
+	}
+
+	/**
+	 * Create a new contact
+	 */
+	public void createContact(String userIdOwner, String userIdMember)
+	{
+		contactCreator = new ContactCreator();
+		contactCreator.createContact(userIdOwner, userIdMember);
+
+	}
+
+
+	/**
+	 * Create a new contact
+	 */
+	public void retrieveContactsStart(String userIdOwner)
+	{
+		contactsRetriever = new ContactsRetriever();
+		contactsRetriever.retrieveContacts(userIdOwner);
+	}
+
+	public String retrieveContactsAfterStart()
+	{
+		if (contactsRetriever != null)
+		{
+			if (contactsRetriever.isDone())
+			{
+				return contactsRetriever.getRawContactsString();
+			}
+			else
+			{
+				return "";
+			}
+		}
+		else
+		{
+			return "";
+		}
+
 	}
 
 }

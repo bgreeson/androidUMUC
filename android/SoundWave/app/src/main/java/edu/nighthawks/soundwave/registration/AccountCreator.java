@@ -1,4 +1,4 @@
-package edu.nighthawks.soundwave.file;
+package edu.nighthawks.soundwave.registration;
 
 /**
  * This class encapsulates account creation (registration)
@@ -11,7 +11,7 @@ public class AccountCreator extends Thread
 
 
 
-    public void createContact(String dispName, String password, String emailAddress)
+    public void createAccount(String dispName, String password, String emailAddress)
     {
         DispName = dispName;
         Password = password;

@@ -43,6 +43,18 @@ public class SwMainActivity extends AppCompatActivity
     ListView contactListView;
 
     @Override
+    protected void onResume()
+    {
+        super.onResume();
+        String rawList = SoundWaveApplication.getApplicationObject().soundWaveController.retrieveContactsAfterStart();
+
+        if (rawList.contentEquals(""))
+            SoundWaveApplication.getApplicationObject().soundWaveController.retrieveContactsStart(SoundWaveApplication.getApplicationObject().soundWaveConfig.getUserEmail());
+        else
+            this.addContact(rawList, rawList);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -209,12 +221,12 @@ public class SwMainActivity extends AppCompatActivity
     private void  addContact(String name, String email)
     {
         Contacts.add(new Contact(name, email));
-        SoundWaveApplication.getApplicationObject().soundWaveController.createContact(name, "Password123", email);
+        SoundWaveApplication.getApplicationObject().soundWaveController.createContact(email, email);
     }
 
     private void registerAccount(String displayName, String accountEmail, String password)
     {
-        SoundWaveApplication.getApplicationObject().soundWaveController.createContact(displayName, password, accountEmail);
+        SoundWaveApplication.getApplicationObject().soundWaveController.createAccount(displayName, password, accountEmail);
     }
 
     private class ContactListAdapter extends ArrayAdapter<Contact>

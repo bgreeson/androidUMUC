@@ -9,6 +9,7 @@ public class SoundWaveConfig
 {
     private String UserName;
     private String UserEmail;
+    private String RawContactsString;
 
     /**
      * This method must deserialize settings from (server/local shared prefs) and load them
@@ -37,5 +38,15 @@ public class SoundWaveConfig
     public void setUserEmail(String userEmail)
     {
         UserEmail = userEmail;
+    }
+
+    public String getRawContactsString()
+    {
+        return RawContactsString;
+    }
+
+    public void setRawContactsString(String rawContactsString)
+    {
+        RawContactsString = rawContactsString;
     }
 }
