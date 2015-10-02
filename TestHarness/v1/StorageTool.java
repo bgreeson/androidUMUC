@@ -1,5 +1,11 @@
 package testharness;
 
+/*
+ * FILE: StorageTool.java
+ * Creates a storage tool object which can be used to 
+ * perform actions on the SoundWave server cloud storage.
+ */
+
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -8,6 +14,60 @@ import java.net.URL;
 
 public class StorageTool
 {
+    public static String createMsg(String userID, String targetUserID, String sourceFileUri)
+    {
+        int serverResponseCode = 0;
+        String serverResponseMessage = "";
+        
+        
+        return serverResponseCode + " = " + serverResponseMessage + "\n";
+    }
+    
+    public static String deleteMsg(String targetUserID, String msgID)
+    {
+        int serverResponseCode = 0;
+        String serverResponseMessage = "";
+        
+        
+        return serverResponseCode + " = " + serverResponseMessage + "\n";
+    }
+    
+    public static String getMsgCount(String targetUserID)
+    {
+        int serverResponseCode = 0;
+        String serverResponseMessage = "";
+        
+        
+        return serverResponseCode + " = " + serverResponseMessage + "\n";
+    }
+    
+    public static String getRcvdMsgList(String targetUserID)
+    {
+        int serverResponseCode = 0;
+        String serverResponseMessage = "";
+        
+        
+        return serverResponseCode + " = " + serverResponseMessage + "\n";
+    }
+    
+    public static String getSentMsgList(String userID)
+    {
+        int serverResponseCode = 0;
+        String serverResponseMessage = "";
+        
+        
+        return serverResponseCode + " = " + serverResponseMessage + "\n";
+    }
+    
+    public static String getMsgInfo(String msgID)
+    {
+        int serverResponseCode = 0;
+        String serverResponseMessage = "";
+        
+        
+        return serverResponseCode + " = " + serverResponseMessage + "\n";
+    }
+    
     public static String uploadFile(String sourceFileUri)
     {
         HttpURLConnection conn = null;
