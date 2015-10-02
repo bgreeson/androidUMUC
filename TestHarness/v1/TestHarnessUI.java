@@ -6,8 +6,16 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class TestHarnessUI extends javax.swing.JFrame
 {
-    private StorageTool fileTool = new StorageTool();
+    //Create a database tool object and a storage tool object    
     private DatabaseTool userTool = new DatabaseTool();
+    private StorageTool fileTool = new StorageTool();
+    
+    //Set defaults for each of the text fields
+    private String defaultUserIDTxt = "User ID...";
+    private String defaultTrgtIDTxt = "New / Target User ID...";
+    private String defaultMailIDTxt = "eMail Address...";
+    private String defaultPasswdTxt = "Password...";
+    private String defaultMesgIDTxt = "File Name or Message ID...";
 
     /**
      * Creates new form TestHarnessUI
@@ -28,18 +36,26 @@ public class TestHarnessUI extends javax.swing.JFrame
 
         jFileChooser1 = new javax.swing.JFileChooser();
         Input = new javax.swing.JPanel();
-        storagePanel = new javax.swing.JPanel();
-        fileNameField = new javax.swing.JTextField();
-        fileSrchBtn = new javax.swing.JButton();
-        fileUpldBtn = new javax.swing.JButton();
-        fileDeltBtn = new javax.swing.JButton();
-        fileContBtn = new javax.swing.JButton();
-        fileMetaBtn = new javax.swing.JButton();
+        txtField_userID = new javax.swing.JTextField();
+        txtField_trgtID = new javax.swing.JTextField();
+        txtField_mailID = new javax.swing.JTextField();
+        txtField_passwd = new javax.swing.JTextField();
+        txtField_mesgID = new javax.swing.JTextField();
         databasePanel = new javax.swing.JPanel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        dBaseBtn_regUser = new javax.swing.JButton();
+        dBaseBtn_edtUser = new javax.swing.JButton();
+        dBaseBtn_disUser = new javax.swing.JButton();
+        dBaseBtn_delUser = new javax.swing.JButton();
+        dBaseBtn_getUser = new javax.swing.JButton();
+        dBaseBtn_addCont = new javax.swing.JButton();
+        dBaseBtn_delCont = new javax.swing.JButton();
+        storagePanel = new javax.swing.JPanel();
+        storBtn_upload = new javax.swing.JButton();
+        storBtn_delete = new javax.swing.JButton();
+        storBtn_msgInfo = new javax.swing.JButton();
+        storBtn_msgCnt = new javax.swing.JButton();
+        storBtn_rxMsgs = new javax.swing.JButton();
+        storBtn_txMsgs = new javax.swing.JButton();
         Output = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
@@ -47,142 +63,153 @@ public class TestHarnessUI extends javax.swing.JFrame
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
 
-        Input.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "SoundWave Test Harness v1.0", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.ABOVE_TOP, new java.awt.Font("Arial", 0, 18))); // NOI18N
+        Input.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "SoundWave Test Harness v1.1", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.ABOVE_TOP, new java.awt.Font("Arial", 0, 18))); // NOI18N
         Input.setName("Input"); // NOI18N
 
-        storagePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "STORAGE CONTROLS", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
-
-        fileNameField.setForeground(new java.awt.Color(153, 153, 153));
-        fileNameField.setText("File Name...");
-        fileNameField.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        fileNameField.addMouseListener(new java.awt.event.MouseAdapter()
+        txtField_userID.setForeground(new java.awt.Color(192, 192, 192));
+        txtField_userID.setText(defaultUserIDTxt);
+        txtField_userID.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        txtField_userID.addFocusListener(new java.awt.event.FocusAdapter()
         {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
+            public void focusGained(java.awt.event.FocusEvent evt)
             {
-                fileNameFieldMouseClicked(evt);
+                txtField_userIDFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt)
+            {
+                txtField_userIDFocusLost(evt);
             }
         });
 
-        fileSrchBtn.setForeground(new java.awt.Color(153, 153, 153));
-        fileSrchBtn.setText("SEARCH");
-        fileSrchBtn.addMouseListener(new java.awt.event.MouseAdapter()
+        txtField_trgtID.setForeground(new java.awt.Color(192, 192, 192));
+        txtField_trgtID.setText(defaultTrgtIDTxt);
+        txtField_trgtID.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        txtField_trgtID.addFocusListener(new java.awt.event.FocusAdapter()
         {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
+            public void focusGained(java.awt.event.FocusEvent evt)
             {
-                fileSrchBtnMouseClicked(evt);
+                txtField_trgtIDFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt)
+            {
+                txtField_trgtIDFocusLost(evt);
             }
         });
 
-        fileUpldBtn.setText("UPLOAD");
-        fileUpldBtn.addMouseListener(new java.awt.event.MouseAdapter()
+        txtField_mailID.setForeground(new java.awt.Color(192, 192, 192));
+        txtField_mailID.setText(defaultMailIDTxt);
+        txtField_mailID.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        txtField_mailID.addMouseListener(new java.awt.event.MouseAdapter()
         {
             public void mouseClicked(java.awt.event.MouseEvent evt)
             {
-                fileUpldBtnMouseClicked(evt);
+                txtField_mailIDMouseClicked(evt);
             }
         });
-
-        fileDeltBtn.setForeground(new java.awt.Color(153, 153, 153));
-        fileDeltBtn.setText("DELETE");
-        fileDeltBtn.addMouseListener(new java.awt.event.MouseAdapter()
+        txtField_mailID.addFocusListener(new java.awt.event.FocusAdapter()
         {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
+            public void focusGained(java.awt.event.FocusEvent evt)
             {
-                fileDeltBtnMouseClicked(evt);
+                txtField_mailIDFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt)
+            {
+                txtField_mailIDFocusLost(evt);
             }
         });
 
-        fileContBtn.setForeground(new java.awt.Color(153, 153, 153));
-        fileContBtn.setText("CONTENTS");
-        fileContBtn.addMouseListener(new java.awt.event.MouseAdapter()
+        txtField_passwd.setForeground(new java.awt.Color(192, 192, 192));
+        txtField_passwd.setText(defaultPasswdTxt);
+        txtField_passwd.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        txtField_passwd.addFocusListener(new java.awt.event.FocusAdapter()
         {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
+            public void focusGained(java.awt.event.FocusEvent evt)
             {
-                fileContBtnMouseClicked(evt);
+                txtField_passwdFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt)
+            {
+                txtField_passwdFocusLost(evt);
             }
         });
 
-        fileMetaBtn.setForeground(new java.awt.Color(153, 153, 153));
-        fileMetaBtn.setText("METADATA");
-        fileMetaBtn.addMouseListener(new java.awt.event.MouseAdapter()
+        txtField_mesgID.setForeground(new java.awt.Color(192, 192, 192));
+        txtField_mesgID.setText(defaultMesgIDTxt);
+        txtField_mesgID.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        txtField_mesgID.addFocusListener(new java.awt.event.FocusAdapter()
         {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
+            public void focusGained(java.awt.event.FocusEvent evt)
             {
-                fileMetaBtnMouseClicked(evt);
+                txtField_mesgIDFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt)
+            {
+                txtField_mesgIDFocusLost(evt);
             }
         });
-
-        javax.swing.GroupLayout storagePanelLayout = new javax.swing.GroupLayout(storagePanel);
-        storagePanel.setLayout(storagePanelLayout);
-        storagePanelLayout.setHorizontalGroup(
-            storagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(fileNameField)
-            .addGroup(storagePanelLayout.createSequentialGroup()
-                .addGroup(storagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(fileContBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(fileSrchBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(fileMetaBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(fileDeltBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(fileUpldBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(0, 234, Short.MAX_VALUE))
-        );
-        storagePanelLayout.setVerticalGroup(
-            storagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(storagePanelLayout.createSequentialGroup()
-                .addComponent(fileNameField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(fileSrchBtn)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(fileDeltBtn)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(fileUpldBtn)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(fileContBtn)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
-                .addComponent(fileMetaBtn))
-        );
 
         databasePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "DATABASE CONTROLS", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
 
-        jTextField1.setForeground(new java.awt.Color(153, 153, 153));
-        jTextField1.setText("Username...");
-        jTextField1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        jTextField1.addMouseListener(new java.awt.event.MouseAdapter()
+        dBaseBtn_regUser.setText("REGISTER USER");
+        dBaseBtn_regUser.addMouseListener(new java.awt.event.MouseAdapter()
         {
             public void mouseClicked(java.awt.event.MouseEvent evt)
             {
-                jTextField1MouseClicked(evt);
+                dBaseBtn_regUserMouseClicked(evt);
             }
         });
 
-        jTextField2.setForeground(new java.awt.Color(153, 153, 153));
-        jTextField2.setText("eMail...");
-        jTextField2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        jTextField2.addMouseListener(new java.awt.event.MouseAdapter()
+        dBaseBtn_edtUser.setText("EDIT USER");
+        dBaseBtn_edtUser.addMouseListener(new java.awt.event.MouseAdapter()
         {
             public void mouseClicked(java.awt.event.MouseEvent evt)
             {
-                jTextField2MouseClicked(evt);
+                dBaseBtn_edtUserMouseClicked(evt);
             }
         });
 
-        jTextField3.setForeground(new java.awt.Color(153, 153, 153));
-        jTextField3.setText("Password...");
-        jTextField3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        jTextField3.addMouseListener(new java.awt.event.MouseAdapter()
+        dBaseBtn_disUser.setText("DISABLE USER");
+        dBaseBtn_disUser.addMouseListener(new java.awt.event.MouseAdapter()
         {
             public void mouseClicked(java.awt.event.MouseEvent evt)
             {
-                jTextField3MouseClicked(evt);
+                dBaseBtn_disUserMouseClicked(evt);
             }
         });
 
-        jButton1.setText("REGISTER");
-        jButton1.addMouseListener(new java.awt.event.MouseAdapter()
+        dBaseBtn_delUser.setText("DELETE USER");
+        dBaseBtn_delUser.addMouseListener(new java.awt.event.MouseAdapter()
         {
             public void mouseClicked(java.awt.event.MouseEvent evt)
             {
-                jButton1MouseClicked(evt);
+                dBaseBtn_delUserMouseClicked(evt);
+            }
+        });
+
+        dBaseBtn_getUser.setText("GET USER INFO");
+        dBaseBtn_getUser.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
+                dBaseBtn_getUserMouseClicked(evt);
+            }
+        });
+
+        dBaseBtn_addCont.setText("ADD CONTACT");
+        dBaseBtn_addCont.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
+                dBaseBtn_addContMouseClicked(evt);
+            }
+        });
+
+        dBaseBtn_delCont.setText("DEL CONTACT");
+        dBaseBtn_delCont.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
+                dBaseBtn_delContMouseClicked(evt);
             }
         });
 
@@ -190,39 +217,166 @@ public class TestHarnessUI extends javax.swing.JFrame
         databasePanel.setLayout(databasePanelLayout);
         databasePanelLayout.setHorizontalGroup(
             databasePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 327, Short.MAX_VALUE)
-            .addComponent(jTextField2, javax.swing.GroupLayout.Alignment.TRAILING)
-            .addComponent(jTextField3, javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(databasePanelLayout.createSequentialGroup()
-                .addComponent(jButton1)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGroup(databasePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(dBaseBtn_delUser, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(dBaseBtn_disUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(dBaseBtn_regUser, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
+                    .addComponent(dBaseBtn_edtUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(databasePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(dBaseBtn_getUser, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
+                    .addComponent(dBaseBtn_delCont, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(dBaseBtn_addCont, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
         databasePanelLayout.setVerticalGroup(
             databasePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(databasePanelLayout.createSequentialGroup()
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(databasePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(dBaseBtn_regUser)
+                    .addComponent(dBaseBtn_getUser))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(databasePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(dBaseBtn_edtUser)
+                    .addComponent(dBaseBtn_addCont))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(databasePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(dBaseBtn_disUser)
+                    .addComponent(dBaseBtn_delCont))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addComponent(dBaseBtn_delUser))
+        );
+
+        storagePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "STORAGE CONTROLS", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
+
+        storBtn_upload.setText("UPLOAD MESSAGE");
+        storBtn_upload.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
+                storBtn_uploadMouseClicked(evt);
+            }
+        });
+
+        storBtn_delete.setText("DELETE MESSAGE");
+        storBtn_delete.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
+                storBtn_deleteMouseClicked(evt);
+            }
+        });
+
+        storBtn_msgInfo.setText("MESSAGE INFO");
+        storBtn_msgInfo.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
+                storBtn_msgInfoMouseClicked(evt);
+            }
+        });
+
+        storBtn_msgCnt.setText("MESSAGE COUNT");
+        storBtn_msgCnt.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
+                storBtn_msgCntMouseClicked(evt);
+            }
+        });
+
+        storBtn_rxMsgs.setText("RX MESSAGE LIST");
+        storBtn_rxMsgs.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
+                storBtn_rxMsgsMouseClicked(evt);
+            }
+        });
+        storBtn_rxMsgs.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                storBtn_rxMsgsActionPerformed(evt);
+            }
+        });
+
+        storBtn_txMsgs.setText("TX MESSAGE LIST");
+        storBtn_txMsgs.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
+                storBtn_txMsgsMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout storagePanelLayout = new javax.swing.GroupLayout(storagePanel);
+        storagePanel.setLayout(storagePanelLayout);
+        storagePanelLayout.setHorizontalGroup(
+            storagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(storagePanelLayout.createSequentialGroup()
+                .addGroup(storagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(storBtn_upload, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(storBtn_delete, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(storBtn_msgCnt, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(storBtn_msgInfo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(storagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(storBtn_rxMsgs, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(storBtn_txMsgs, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        storagePanelLayout.setVerticalGroup(
+            storagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(storagePanelLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(storagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(storBtn_upload)
+                    .addComponent(storBtn_rxMsgs))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(storagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(storBtn_delete)
+                    .addComponent(storBtn_txMsgs))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(storBtn_msgInfo)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(storBtn_msgCnt))
         );
 
         javax.swing.GroupLayout InputLayout = new javax.swing.GroupLayout(Input);
         Input.setLayout(InputLayout);
         InputLayout.setHorizontalGroup(
             InputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(txtField_userID)
+            .addComponent(txtField_trgtID)
+            .addComponent(txtField_mailID)
+            .addComponent(txtField_passwd)
+            .addComponent(txtField_mesgID)
             .addGroup(InputLayout.createSequentialGroup()
+                .addComponent(databasePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(storagePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(databasePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         InputLayout.setVerticalGroup(
             InputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(databasePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(storagePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, InputLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(txtField_userID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtField_trgtID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtField_mailID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtField_passwd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txtField_mesgID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(InputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(databasePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(storagePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         Output.setName("Output"); // NOI18N
@@ -236,34 +390,49 @@ public class TestHarnessUI extends javax.swing.JFrame
         Output.setLayout(OutputLayout);
         OutputLayout.setHorizontalGroup(
             OutputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1)
+            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(OutputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(OutputLayout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 520, Short.MAX_VALUE)
+                    .addContainerGap()))
         );
         OutputLayout.setVerticalGroup(
             OutputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 252, Short.MAX_VALUE)
+            .addGap(0, 222, Short.MAX_VALUE)
+            .addGroup(OutputLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(OutputLayout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+                    .addContainerGap()))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(Input, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(Output, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(Input, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(Output, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(Input, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(Output, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(Output, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>                        
 
-    private void fileUpldBtnMouseClicked(java.awt.event.MouseEvent evt)                                         
-    {                                             
+    private void storBtn_uploadMouseClicked(java.awt.event.MouseEvent evt)                                            
+    {                                                
         //FileNameExtensionFilter filter = new FileNameExtensionFilter("Text files", "txt");
         //jFileChooser1.setFileFilter(filter);
         int returnVal = jFileChooser1.showOpenDialog(Input);
@@ -288,99 +457,297 @@ public class TestHarnessUI extends javax.swing.JFrame
             else jTextArea1.append("\n" + fileName + " upload FAILED!");
             */
         }        
-    }                                        
+    }                                           
 
-    private void fileNameFieldMouseClicked(java.awt.event.MouseEvent evt)                                           
-    {                                               
-        fileNameField.setText("");
-        fileNameField.setForeground(Color.BLACK);
-    }                                          
+    private void txtField_mailIDMouseClicked(java.awt.event.MouseEvent evt)                                             
+    {                                                 
+        txtField_mailID.setText("");
+        txtField_mailID.setForeground(Color.BLACK);
+    }                                            
 
-    private void jTextField1MouseClicked(java.awt.event.MouseEvent evt)                                         
-    {                                             
-        jTextField1.setText("");
-        jTextField1.setForeground(Color.BLACK);
-    }                                        
-
-    private void jTextField2MouseClicked(java.awt.event.MouseEvent evt)                                         
-    {                                             
-        jTextField2.setText("");
-        jTextField2.setForeground(Color.BLACK);
-    }                                        
-
-    private void fileSrchBtnMouseClicked(java.awt.event.MouseEvent evt)                                         
-    {                                             
-        String fileName = fileNameField.getText();
+    private void storBtn_deleteMouseClicked(java.awt.event.MouseEvent evt)                                            
+    {                                                
+        String fileName = txtField_mesgID.getText();
         
-        if (fileName.isEmpty() || fileName.equals("File Name..."))
+        if (fileName.isEmpty() || fileName.equals(defaultMesgIDTxt))
         {
-            jTextArea1.setText("No file name given.  Please enter a file name and try your search again.");
+            //jTextArea1.setText("No file name given.  Please enter a file name and try your search again.");
         }
         else
         {            
-            jTextArea1.setText("Searching for " + fileName + "...\n\n");
+            //jTextArea1.setText("Searching for " + fileName + "...\n\n");
             //Start search....       
         }
-    }                                        
+    }                                           
 
-    private void fileDeltBtnMouseClicked(java.awt.event.MouseEvent evt)                                         
-    {                                             
+    private void storBtn_msgCntMouseClicked(java.awt.event.MouseEvent evt)                                            
+    {                                                
         // TODO add your handling code here:
-        String fileName = fileNameField.getText();
+        String fileName = txtField_mesgID.getText();
         
-        if (fileName.isEmpty() || fileName.equals("File Name..."))
+        if (fileName.isEmpty() || fileName.equals(defaultMesgIDTxt))
         {
-            jTextArea1.setText("No file name given.  Please enter a file name and try again.");
+            //jTextArea1.setText("No file name given.  Please enter a file name and try again.");
         }
         else
         {
-            jTextArea1.setText("Deleting " + fileName + "...\n\n");
+            //jTextArea1.setText("Deleting " + fileName + "...\n\n");
             //Start storage file delete...            
         }
-    }                                        
+    }                                           
 
-    private void fileContBtnMouseClicked(java.awt.event.MouseEvent evt)                                         
-    {                                             
+    private void storBtn_rxMsgsMouseClicked(java.awt.event.MouseEvent evt)                                            
+    {                                                
         // List the contents of the bucket.
-        jTextArea1.setText("Retrieving contents of storage...\n\n");
+        //jTextArea1.setText("Retrieving contents of storage...\n\n");
         //Get contents of storage...    
             
-    }                                        
+    }                                           
 
-    private void fileMetaBtnMouseClicked(java.awt.event.MouseEvent evt)                                         
-    {                                             
+    private void storBtn_txMsgsMouseClicked(java.awt.event.MouseEvent evt)                                            
+    {                                                
         // TODO add your handling code here:
-        jTextArea1.setText("Retrieving storage metadata information...\n\n");
+        //jTextArea1.setText("Retrieving storage metadata information...\n\n");
         //Get metadata of storage...   
-    }                                        
+    }                                           
 
-    private void jTextField3MouseClicked(java.awt.event.MouseEvent evt)                                         
-    {                                             
-        jTextField3.setText("");
-        jTextField3.setForeground(Color.BLACK);
-    }                                        
-
-    private void jButton1MouseClicked(java.awt.event.MouseEvent evt)                                      
-    {                                          
+    private void dBaseBtn_regUserMouseClicked(java.awt.event.MouseEvent evt)                                              
+    {                                                  
         // TODO add your handling code here:
-        String userName = jTextField1.getText();
-        String mailAddr = jTextField2.getText();
-        String password = jTextField3.getText();
+        String userName = txtField_userID.getText();
+        String mailAddr = txtField_mailID.getText();
+        String password = txtField_passwd.getText();
         
-        if (userName.isEmpty() || userName.equals("Username...") ||
-                mailAddr.isEmpty() || mailAddr.equals("eMail...") ||
-                password.isEmpty() || password.equals("Password..."))
+        if (userName.isEmpty() || userName.equals(defaultUserIDTxt) ||
+                mailAddr.isEmpty() || mailAddr.equals(defaultMailIDTxt) ||
+                password.isEmpty() || password.equals(defaultPasswdTxt))
         {
-            jTextArea1.setText("Please make an entry for EACH field and try to register again.");
+            jTextArea1.setText("Please enter a User ID, eMail Address and Password and try again.");
         }
         else
         {            
             jTextArea1.setText("Registering user " + userName + "...\n\n");
-            String response = userTool.registerUser(userName, mailAddr, password);
+            String response = userTool.createUser(userName, mailAddr, password);
             
             jTextArea1.append("Server response: " + response);                   
         }
-    }                                     
+    }                                             
+
+    private void txtField_mesgIDFocusGained(java.awt.event.FocusEvent evt)                                            
+    {                                                
+        // TODO add your handling code here:
+        txtField_mesgID.setText("");
+        txtField_mesgID.setForeground(Color.BLACK);
+    }                                           
+
+    private void txtField_mesgIDFocusLost(java.awt.event.FocusEvent evt)                                          
+    {                                              
+        // TODO add your handling code here:
+        if (txtField_mesgID.getText().isEmpty())
+        {
+            txtField_mesgID.setForeground(Color.LIGHT_GRAY);
+            txtField_mesgID.setText(defaultMesgIDTxt);
+        }
+    }                                         
+
+    private void txtField_mailIDFocusGained(java.awt.event.FocusEvent evt)                                            
+    {                                                
+        // TODO add your handling code here:
+        txtField_mailID.setText("");
+        txtField_mailID.setForeground(Color.BLACK);
+    }                                           
+
+    private void txtField_mailIDFocusLost(java.awt.event.FocusEvent evt)                                          
+    {                                              
+        // TODO add your handling code here:
+        if (txtField_mailID.getText().isEmpty())
+        {
+            txtField_mailID.setForeground(Color.LIGHT_GRAY);
+            txtField_mailID.setText(defaultMailIDTxt);
+        }
+    }                                         
+
+    private void txtField_passwdFocusGained(java.awt.event.FocusEvent evt)                                            
+    {                                                
+        // TODO add your handling code here:
+        txtField_passwd.setText("");
+        txtField_passwd.setForeground(Color.BLACK);
+    }                                           
+
+    private void txtField_passwdFocusLost(java.awt.event.FocusEvent evt)                                          
+    {                                              
+        // TODO add your handling code here:
+        if (txtField_passwd.getText().isEmpty())
+        {
+            txtField_passwd.setForeground(Color.LIGHT_GRAY);
+            txtField_passwd.setText(defaultPasswdTxt);
+        }
+    }                                         
+
+    private void storBtn_msgInfoMouseClicked(java.awt.event.MouseEvent evt)                                             
+    {                                                 
+        // TODO add your handling code here:
+    }                                            
+
+    private void dBaseBtn_edtUserMouseClicked(java.awt.event.MouseEvent evt)                                              
+    {                                                  
+        // TODO add your handling code here:
+        String userName = txtField_userID.getText();
+        String newName = txtField_trgtID.getText();
+        String newMail = txtField_mailID.getText();
+        String newPass = txtField_passwd.getText();
+        
+        if ((userName.isEmpty() || userName.equals(defaultUserIDTxt)) && (
+                (newName.isEmpty() || newName.equals(defaultTrgtIDTxt)) ||
+                (newMail.isEmpty() || newMail.equals(defaultMailIDTxt)) ||
+                (newPass.isEmpty() || newPass.equals(defaultPasswdTxt))))
+        {
+            jTextArea1.setText("Please enter a User ID and a new User ID, eMail Address and/or Password and try again.");
+        }
+        else
+        {            
+            jTextArea1.setText("Editing user " + userName + "...\n\n");
+            if (newName.equals(defaultTrgtIDTxt)) newName = "";
+            if (newMail.equals(defaultMailIDTxt)) newMail = "";
+            if (newPass.equals(defaultPasswdTxt)) newPass = "";
+            String response = userTool.editUser(userName, newName, newMail, newPass);
+            
+            jTextArea1.append("Server response: " + response);                   
+        }
+    }                                             
+
+    private void dBaseBtn_disUserMouseClicked(java.awt.event.MouseEvent evt)                                              
+    {                                                  
+        // TODO add your handling code here:
+        String userName = txtField_userID.getText();
+        
+        if (userName.isEmpty() || userName.equals(defaultUserIDTxt))
+        {
+            jTextArea1.setText("Please enter a User ID and try again.");
+        }
+        else
+        {            
+            jTextArea1.setText("Disabling user " + userName + "...\n\n");
+            String response = userTool.disableUser(userName);
+            
+            jTextArea1.append("Server response: " + response);                   
+        }
+    }                                             
+
+    private void dBaseBtn_delUserMouseClicked(java.awt.event.MouseEvent evt)                                              
+    {                                                  
+        // TODO add your handling code here:
+        String userName = txtField_userID.getText();
+        
+        if (userName.isEmpty() || userName.equals(defaultUserIDTxt))
+        {
+            jTextArea1.setText("Please enter a User ID and try again.");
+        }
+        else
+        {            
+            jTextArea1.setText("Deleting user " + userName + "...\n\n");
+            String response = userTool.deleteUser(userName);
+            
+            jTextArea1.append("Server response: " + response);                   
+        }
+    }                                             
+
+    private void dBaseBtn_addContMouseClicked(java.awt.event.MouseEvent evt)                                              
+    {                                                  
+        // TODO add your handling code here:
+        String userName = txtField_userID.getText();
+        String memberName = txtField_trgtID.getText();
+        
+        if ((userName.isEmpty() || userName.equals(defaultUserIDTxt)) && (
+                (memberName.isEmpty() || memberName.equals(defaultTrgtIDTxt))))
+        {
+            jTextArea1.setText("Please enter a User ID and a Member User ID and try again.");
+        }
+        else
+        {            
+            jTextArea1.setText("Creating contact " + memberName + " for " + userName + "...\n\n");
+            String response = userTool.createContact(userName, memberName);
+            
+            jTextArea1.append("Server response: " + response);                   
+        }
+    }                                             
+
+    private void dBaseBtn_getUserMouseClicked(java.awt.event.MouseEvent evt)                                              
+    {                                                  
+        // TODO add your handling code here:
+        String userName = txtField_userID.getText();
+        
+        if (userName.isEmpty() || userName.equals(defaultUserIDTxt))
+        {
+            jTextArea1.setText("Please enter a User ID and try again.");
+        }
+        else
+        {            
+            jTextArea1.setText("Getting user " + userName + "...\n\n");
+            String response = userTool.getUserInfo(userName);
+            
+            jTextArea1.append("Server response: " + response);                   
+        }
+    }                                             
+
+    private void dBaseBtn_delContMouseClicked(java.awt.event.MouseEvent evt)                                              
+    {                                                  
+        // TODO add your handling code here:
+        String userName = txtField_userID.getText();
+        String contactName = txtField_trgtID.getText();
+        
+        if ((userName.isEmpty() || userName.equals(defaultUserIDTxt)) && (
+                (contactName.isEmpty() || contactName.equals(defaultTrgtIDTxt))))
+        {
+            jTextArea1.setText("Please enter a User ID and a Contact User ID and try again.");
+        }
+        else
+        {            
+            jTextArea1.setText("Deleting contact " + contactName + " for " + userName + "...\n\n");
+            String response = userTool.createContact(userName, contactName);
+            
+            jTextArea1.append("Server response: " + response);                   
+        }
+    }                                             
+
+    private void storBtn_rxMsgsActionPerformed(java.awt.event.ActionEvent evt)                                               
+    {                                                   
+        // TODO add your handling code here:
+    }                                              
+
+    private void txtField_userIDFocusGained(java.awt.event.FocusEvent evt)                                            
+    {                                                
+        // TODO add your handling code here:
+        txtField_userID.setText("");
+        txtField_userID.setForeground(Color.BLACK);
+    }                                           
+
+    private void txtField_userIDFocusLost(java.awt.event.FocusEvent evt)                                          
+    {                                              
+        // TODO add your handling code here:
+        if (txtField_userID.getText().isEmpty())
+        {
+            txtField_userID.setForeground(Color.LIGHT_GRAY);
+            txtField_userID.setText(defaultUserIDTxt);
+        }
+    }                                         
+
+    private void txtField_trgtIDFocusGained(java.awt.event.FocusEvent evt)                                            
+    {                                                
+        // TODO add your handling code here:
+        txtField_trgtID.setText("");
+        txtField_trgtID.setForeground(Color.BLACK);
+    }                                           
+
+    private void txtField_trgtIDFocusLost(java.awt.event.FocusEvent evt)                                          
+    {                                              
+        // TODO add your handling code here:
+        if (txtField_trgtID.getText().isEmpty())
+        {
+            txtField_trgtID.setForeground(Color.LIGHT_GRAY);
+            txtField_trgtID.setText(defaultTrgtIDTxt);
+        }
+    }                                         
 
     /**
      * @param args the command line arguments
@@ -429,20 +796,28 @@ public class TestHarnessUI extends javax.swing.JFrame
     // Variables declaration - do not modify                     
     private javax.swing.JPanel Input;
     private javax.swing.JPanel Output;
+    private javax.swing.JButton dBaseBtn_addCont;
+    private javax.swing.JButton dBaseBtn_delCont;
+    private javax.swing.JButton dBaseBtn_delUser;
+    private javax.swing.JButton dBaseBtn_disUser;
+    private javax.swing.JButton dBaseBtn_edtUser;
+    private javax.swing.JButton dBaseBtn_getUser;
+    private javax.swing.JButton dBaseBtn_regUser;
     private javax.swing.JPanel databasePanel;
-    private javax.swing.JButton fileContBtn;
-    private javax.swing.JButton fileDeltBtn;
-    private javax.swing.JButton fileMetaBtn;
-    private javax.swing.JTextField fileNameField;
-    private javax.swing.JButton fileSrchBtn;
-    private javax.swing.JButton fileUpldBtn;
-    private javax.swing.JButton jButton1;
     private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
+    private javax.swing.JButton storBtn_delete;
+    private javax.swing.JButton storBtn_msgCnt;
+    private javax.swing.JButton storBtn_msgInfo;
+    private javax.swing.JButton storBtn_rxMsgs;
+    private javax.swing.JButton storBtn_txMsgs;
+    private javax.swing.JButton storBtn_upload;
     private javax.swing.JPanel storagePanel;
+    private javax.swing.JTextField txtField_mailID;
+    private javax.swing.JTextField txtField_mesgID;
+    private javax.swing.JTextField txtField_passwd;
+    private javax.swing.JTextField txtField_trgtID;
+    private javax.swing.JTextField txtField_userID;
     // End of variables declaration                   
 }
