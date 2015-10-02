@@ -1,6 +1,9 @@
 package edu.nighthawks.soundwave.registration;
 
+import org.apache.commons.io.IOUtils;
+
 import java.io.DataOutputStream;
+import java.io.InputStream;
 import java.io.PrintStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -39,6 +42,11 @@ public class CreateAccount
             serverResponseCode = conn.getResponseCode();
             serverResponseMessage = conn.getResponseMessage();
 
+            InputStream is = conn.getInputStream();
+            String encoding = conn.getContentEncoding();
+            String responseString = IOUtils.toString(is, encoding);
+
+            is.close();
             ps.close();
 
         }
