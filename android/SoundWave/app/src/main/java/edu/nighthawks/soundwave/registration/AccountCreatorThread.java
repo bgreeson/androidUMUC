@@ -3,7 +3,7 @@ package edu.nighthawks.soundwave.registration;
 /**
  * This class encapsulates account creation (registration)
  */
-public class AccountCreator extends Thread
+public class AccountCreatorThread extends Thread
 {
     private String DispName;
     private String Password;
@@ -24,7 +24,7 @@ public class AccountCreator extends Thread
     {
         try
         {
-            CreateAccount.createAccount(DispName, Password, EmailAddress);
+            AccountCreatorHttp.createAccount(DispName, Password, EmailAddress);
         }
         catch (Exception e)
         {

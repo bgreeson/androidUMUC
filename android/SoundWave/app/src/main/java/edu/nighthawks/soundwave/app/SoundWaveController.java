@@ -4,11 +4,11 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import edu.nighthawks.soundwave.contacts.ContactCreator;
-import edu.nighthawks.soundwave.contacts.ContactsRetriever;
-import edu.nighthawks.soundwave.registration.AccountCreator;
+import edu.nighthawks.soundwave.contacts.ContactCreatorThread;
+import edu.nighthawks.soundwave.contacts.ContactsRetrieverThread;
+import edu.nighthawks.soundwave.registration.AccountCreatorThread;
 import edu.nighthawks.soundwave.file.FileRecorder;
-import edu.nighthawks.soundwave.file.FileUploader;
+import edu.nighthawks.soundwave.file.FileUploaderThread;
 
 /**
  * The purpose of this class is to act as the controller for the main SoundWave features
@@ -18,10 +18,10 @@ public class SoundWaveController
 {
 	private boolean m_bTransmit = false;
 	private FileRecorder recorder;
-	private FileUploader uploader;
-	private AccountCreator accountCreator;
-	private ContactCreator contactCreator;
-	private ContactsRetriever contactsRetriever;
+	private FileUploaderThread uploader;
+	private AccountCreatorThread accountCreator;
+	private ContactCreatorThread contactCreator;
+	private ContactsRetrieverThread contactsRetriever;
 
 	/***
 	 * Set transmit state which drives file recording (start and stop)
@@ -71,7 +71,7 @@ public class SoundWaveController
 	public void send()
 	{
 		// send the recorded file
-		uploader = new FileUploader();
+		uploader = new FileUploaderThread();
 		uploader.upload(recorder.getRecordedFileName());
 	}
 
@@ -98,7 +98,7 @@ public class SoundWaveController
 	 */
 	public void createAccount(String dispName, String password, String emailAddress)
 	{
-		accountCreator = new AccountCreator();
+		accountCreator = new AccountCreatorThread();
 		accountCreator.createAccount(dispName, password, emailAddress);
 	}
 
@@ -107,7 +107,7 @@ public class SoundWaveController
 	 */
 	public void createContact(String userIdOwner, String userIdMember)
 	{
-		contactCreator = new ContactCreator();
+		contactCreator = new ContactCreatorThread();
 		contactCreator.createContact(userIdOwner, userIdMember);
 
 	}
@@ -118,7 +118,7 @@ public class SoundWaveController
 	 */
 	public void retrieveContactsStart(String userIdOwner)
 	{
-		contactsRetriever = new ContactsRetriever();
+		contactsRetriever = new ContactsRetrieverThread();
 		contactsRetriever.retrieveContacts(userIdOwner);
 	}
 

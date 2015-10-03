@@ -11,7 +11,7 @@ import java.net.URL;
 /**
  * Created by joe.keefe on 9/27/2015.
  */
-public class CreateContact
+public class ContactCreatorHttp
 {
 
     public static int createContact(String userIdOwner, String userIdMember)

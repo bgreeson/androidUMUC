@@ -3,7 +3,7 @@ package edu.nighthawks.soundwave.contacts;
 /**
  * Created by joe.keefe on 9/30/2015.
  */
-public class ContactsRetriever extends Thread
+public class ContactsRetrieverThread extends Thread
 {
     private String mUserIdOwner;
     private String rawContactsString;
@@ -23,7 +23,7 @@ public class ContactsRetriever extends Thread
     {
         try
         {
-            rawContactsString = RetrieveContacts.retrieveContacts(mUserIdOwner);
+            rawContactsString = ContactsRetreiverThread.retrieveContacts(mUserIdOwner);
         }
         catch (Exception e)
         {
