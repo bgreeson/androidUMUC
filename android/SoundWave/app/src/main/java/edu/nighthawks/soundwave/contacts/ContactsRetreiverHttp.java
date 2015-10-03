@@ -11,7 +11,7 @@ import java.net.URL;
 /**
  * Created by joe.keefe on 9/30/2015.
  */
-public class ContactsRetreiverThread
+public class ContactsRetreiverHttp
 {
 
     public static String retrieveContacts(String userIdOwner)

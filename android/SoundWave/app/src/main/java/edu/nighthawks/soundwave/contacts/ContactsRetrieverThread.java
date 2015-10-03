@@ -23,7 +23,7 @@ public class ContactsRetrieverThread extends Thread
     {
         try
         {
-            rawContactsString = ContactsRetreiverThread.retrieveContacts(mUserIdOwner);
+            rawContactsString = ContactsRetreiverHttp.retrieveContacts(mUserIdOwner);
         }
         catch (Exception e)
         {
