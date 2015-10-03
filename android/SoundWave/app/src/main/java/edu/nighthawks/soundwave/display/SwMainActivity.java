@@ -24,7 +24,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.nighthawks.soundwave.app.Contact;
+import edu.nighthawks.soundwave.Contact;
 import edu.nighthawks.soundwave.app.SoundWaveApplication;
 import edu.nighthawks.soundwave.soundwave.R;
 

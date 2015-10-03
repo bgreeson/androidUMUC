@@ -1,11 +1,11 @@
-package edu.nighthawks.soundwave;
+package edu.nighthawks.soundwave.app.Serializer;
 
-import java.io.IOException;
+import edu.nighthawks.soundwave.Contact;
 
 public class SerializationTest {
  
     public static void main(String[] args) {
-    	Contact contact = new Contact();
+    	edu.nighthawks.soundwave.Contact contact = new edu.nighthawks.soundwave.Contact();
         contact.setName("Steve");
         contact.setEmail("steve@gmail.com");
  
@@ -21,7 +21,7 @@ public class SerializationTest {
             Contact newContact = (Contact) SerializationUtility.deserialize("serialization.txt");
             System.out.println(newContact.toString());
  
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
