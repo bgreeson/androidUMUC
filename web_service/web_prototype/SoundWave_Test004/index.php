@@ -354,6 +354,44 @@ $upload_url = CloudStorageTools::createUploadUrl('/server?action=message_create'
 </form>
 </div>
 
+<!-- 7.5. GET -->
+
+<div id=main_get>
+<table>
+<tr>
+  <td align="right"><b>Action: </b></td>
+  <td>user_info_email</td>
+</tr><tr>
+  <td align="right"><b>Method: </b></td>
+  <td>GET</td>
+</tr><tr>
+  <td align="right"><b>Operation: </b></td>
+  <td>Retrieve user information for specific email from table: USER</td>
+</tr><tr>
+  <td align="right"><h2>URL: </h2></td>
+  <td>/server?action=user_info_email&email_addr=&lt;email_addr&gt;</td>
+</tr><tr>
+  <td align="right"><h2>Note: </h2></td>
+  <td></td>
+</tr>
+</table>
+<hr>
+<form action="/server" method="get">
+   <table>
+   <tr>
+    <td><b>Required:</b></td>
+   </tr><tr>
+    <td>email_addr:</td>
+   </tr><tr>
+    <td><input type="text" name="email_addr"></td>
+   <tr>
+    <td><input type="submit" value="Get User"></td>
+    <td><input type="hidden" name="action" value="user_info_email"/></td>
+   </tr>
+   </table>
+</form>
+</div>
+
 <!-- 8. GET -->
 
 <div id=main_get>

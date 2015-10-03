@@ -63,6 +63,19 @@ function tableSpew($table) {
 
     try {
       
+      /*
+      $dbh = dbConn();
+      $sql = "SELECT * FROM CONTACT WHERE USER_ID_OWNER = " . $user_id_owner;
+      //echo "sql: " . $sql;
+      
+      $qry = $dbh->prepare($sql);
+      $qry->execute();
+
+      $response = $qry->fetchAll( PDO::FETCH_ASSOC );
+      
+      return $response; //return(sendResponse($response));
+      */
+      
       $qry = $dbh->prepare($sql);
       $qry->execute();
 
@@ -77,8 +90,21 @@ function tableSpew($table) {
       
       foreach( $results as $row ) {
         print_r( $row );
+        echo '<br>';
       }
       
+      for($i = 1; $i < $columns; $i++) { 
+
+      //read field name
+        $fieldName = mysql_field_name($qry,$i);
+        while($row = mysql_fetch_assoc($qry,$i)){
+          foreach($row as $column=>$value) {
+            echo "$column = $value\n";
+          }
+          echo $fieldName."=".$row[$fieldName];   
+        }
+
+      }  
 
   } catch (PDOException $ex) {
     echo 'An error occurred.';
@@ -421,10 +447,34 @@ function user_info($user_id) {
 *
 * URL: /server?action=user_info&user_id=<user_id>
 */
-
+  
   $dbh = dbConn();
 
   $sql = "SELECT * FROM USER WHERE USER_ID = " . $user_id;
+  //echo "sql: " . $sql;
+  
+  $qry = $dbh->prepare($sql);
+  $qry->execute();
+  
+  $response = $qry->fetchAll( PDO::FETCH_ASSOC );
+  
+  dbClose($dbh);
+  
+  return $response; //return(sendResponse($response));
+
+}
+
+
+function user_info_email($email_addr) {
+/*
+* Retrieves user info from table USER
+*
+* URL: /server?action=user_info&user_id=<user_id>
+*/
+  
+  $dbh = dbConn();
+
+  $sql = "SELECT * FROM USER WHERE EMAIL_ADDR = '" . $email_addr . "'";
   //echo "sql: " . $sql;
   
   $qry = $dbh->prepare($sql);

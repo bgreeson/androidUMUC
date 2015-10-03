@@ -65,6 +65,9 @@ if(isset($_POST["action"])) {
       case 'user_info':
         $value = user_info($_GET['user_id']);
         break;
+      case 'user_info_email':
+        $value = user_info_email($_GET['email_addr']);
+        break;
       case 'contact_all':
         $value = contact_all($_GET['user_id_owner']);
         break;
