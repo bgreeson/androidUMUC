@@ -1,23 +1,21 @@
 package testharness;
 
 /*
- * FILE: StorageTool.java
- * Creates a storage tool object which can be used to 
- * perform actions on the SoundWave server cloud storage.
+ * FILE: DatabaseTool.java
+ * Creates a database tool object which can be used to 
+ * perform actions on the SoundWave server database.
  */
 
-import org.apache.commons.io.IOUtils;
-
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import org.apache.commons.io.IOUtils;
 
-public class StorageTool
+public class DatabaseTool
 {
+    
     private static URL url;  //Variable takes on the value of the URL and action to take place on server
     private static HttpURLConnection conn; //Variable takes on the value of the HTTP connection to the URL
     private static PrintStream ps; //Variable used to print a stream on the HTTP connection
@@ -26,71 +24,70 @@ public class StorageTool
     private static int serverResponseCode = 0;
     private static String serverResponseMessage = "";
     
-    public static String createMsg(String userID, String targetUserID, String sourceFileUri)
+    //Method used to create a new user
+    public static String createUser(String userName, String mailAddr, String password)
     {
-        HttpURLConnection conn = null;
-        DataOutputStream dos = null;
-        String lineEnd = "\r\n";
-        String twoHyphens = "--";
-        String boundary = "*****";
-        int bytesRead, bytesAvailable, bufferSize;
-        byte[] buffer;
-        int maxBufferSize = 1 * 1024 * 1024;
-        File sourceFile = new File(sourceFileUri);
-
         try
-        {
-            FileInputStream fileInputStream = new FileInputStream(sourceFile);
-            URL url = new URL("http://androidsoundappproject.appspot.com/server?action=upload_file");
-
+        {            
+            url = new URL("http://androidsoundappproject.appspot.com/server?action=user_create");
+            
             conn = (HttpURLConnection) url.openConnection();
             conn.setDoInput(true); // allow Inputs
             conn.setDoOutput(true); // allow Outputs
-            conn.setUseCaches(false); // don't use cached copy
             conn.setRequestMethod("POST");
-            conn.setRequestProperty("Connection", "Keep-Alive");
-            conn.setRequestProperty("ENCTYPE", "multipart/form-data");
-            conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
-            conn.setRequestProperty("userfile", sourceFile.getAbsolutePath());
-
-            dos = new DataOutputStream(conn.getOutputStream());
-            dos.writeBytes(twoHyphens + boundary + lineEnd);
-            dos.writeBytes("Content-Disposition: form-data; name=userfile; filename=" + sourceFile.getAbsolutePath() + "" + lineEnd);
-            dos.writeBytes(lineEnd);
-
-            // create a buffer of  maximum size
-            bytesAvailable = fileInputStream.available();
-
-            bufferSize = Math.min(bytesAvailable, maxBufferSize);
-            buffer = new byte[bufferSize];
-
-            // read file and write it into form
-            bytesRead = fileInputStream.read(buffer, 0, bufferSize);
-            while (bytesRead > 0)
-            {
-                dos.write(buffer, 0, bufferSize);
-                bytesAvailable = fileInputStream.available();
-                bufferSize = Math.min(bytesAvailable, maxBufferSize);
-                bytesRead = fileInputStream.read(buffer, 0, bufferSize);
-            }
-
-            // send multi-part form data necessary after file data
-            dos.writeBytes(lineEnd);
-            dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
-
-            // Responses from the server (code and message)
+            //conn.setRequestProperty("disp_nme", userName);
+            //conn.setRequestProperty("email_addr", mailAddr);
+            //conn.setRequestProperty("user_pw", password);
+            
+            //conn.getOutputStream();
+            
+            //serverResponseCode = conn.getResponseCode();
+            //serverResponseMessage = conn.getResponseMessage();
+            
+            
+            ps = new PrintStream(conn.getOutputStream());
+            ps.print("disp_nme=" + userName);
+            ps.print("&email_addr=" + mailAddr);
+            ps.print("&user_pw=" + password);
+            
+            conn.getInputStream();
+            
             serverResponseCode = conn.getResponseCode();
             serverResponseMessage = conn.getResponseMessage();
 
-            if (serverResponseCode == 200)
-            {
+            ps.close();
+            
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        
+        return serverResponseCode + " = " + serverResponseMessage + "\n";
+    }    
+    
+    //Method used to edit an existing user
+    public static String editUser(String userName, String newName, String newMail, String newPass)
+    {
+        try
+        {            
+            url = new URL("http://androidsoundappproject.appspot.com/server?action=user_edit&user_id=" + userName);
+            
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setDoInput(true); // allow Inputs
+            conn.setDoOutput(true); // allow Outputs
+            
+            ps = new PrintStream(conn.getOutputStream());
+            if (!newName.isEmpty()) ps.print("disp_nme=" + newName);
+            if (!newMail.isEmpty()) ps.print("&email_addr=" + newMail);
+            if (!newPass.isEmpty()) ps.print("&user_pw=" + newPass);
+            
+            conn.getInputStream();
+            
+            serverResponseCode = conn.getResponseCode();
+            serverResponseMessage = conn.getResponseMessage();
 
-            }
-
-            // close the streams
-            fileInputStream.close();
-            dos.flush();
-            dos.close();
+            ps.close();
         }
         catch (Exception e)
         {
@@ -100,27 +97,107 @@ public class StorageTool
         return serverResponseCode + " = " + serverResponseMessage + "\n";
     }
     
-    public static String downloadMsg(String msgID)
+    //Method used to disable an existing user
+    public static String disableUser(String userName)
     {
-        
+        try
+        {            
+            url = new URL("http://androidsoundappproject.appspot.com/server?action=user_disable&user_id=" + userName);
+            
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setDoInput(true); // allow Inputs
+            conn.setDoOutput(true); // allow Outputs
+
+            ps = new PrintStream(conn.getOutputStream());
+            //ps.print("user_id=" + userName);
+
+            conn.getInputStream();
+            
+            serverResponseCode = conn.getResponseCode();
+            serverResponseMessage = conn.getResponseMessage();
+
+            ps.close();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }  
         
         return serverResponseCode + " = " + serverResponseMessage + "\n";
     }
     
-    public static String deleteMsg(String targetUserID, String msgID)
+    //Method used to delete an existing user
+    public static String deleteUser(String userName)
     {
         try
         {            
-            url = new URL("http://androidsoundappproject.appspot.com/server?action=message_distro_delete");
+            url = new URL("http://androidsoundappproject.appspot.com/server?action=user_delete&user_id=" + userName);
+            
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setDoInput(true); // allow Inputs
+            conn.setDoOutput(true); // allow Outputs
+
+            ps = new PrintStream(conn.getOutputStream());
+            //ps.print("user_id=" + userName);
+
+            conn.getInputStream();
+            
+            serverResponseCode = conn.getResponseCode();
+            serverResponseMessage = conn.getResponseMessage();
+
+            ps.close();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }  
+        
+        return serverResponseCode + " = " + serverResponseMessage + "\n";
+    }
+    
+    //Method used to an existing user's meta info
+    public static String getUserInfo(String userID)
+    {
+        String userInfo = "User Info (User ID = " + userID + "):\n";
+        try
+        {            
+            url = new URL("http://androidsoundappproject.appspot.com/server?user_id=" + userID + "&action=user_info");
             
             conn = (HttpURLConnection) url.openConnection();
             conn.setDoInput(true); // allow Inputs
             conn.setDoOutput(true); // allow Outputs
             
-            ps = new PrintStream(conn.getOutputStream());
-            ps.print("&user_id_target=" + targetUserID);
-            ps.print("&msg_id=" + msgID);
+            InputStream is = conn.getInputStream();
+            userInfo += IOUtils.toString(is);
             
+            serverResponseCode = conn.getResponseCode();
+            serverResponseMessage = conn.getResponseMessage();
+
+            is.close();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }  
+        
+        return userInfo + "\n\n" + serverResponseCode + " = " + serverResponseMessage + "\n";
+    }
+    
+    //Method used to add an existing member to an existing user's contact list
+    public static String createContact(String userName, String memberName)
+    {
+        try
+        {            
+            url = new URL("http://androidsoundappproject.appspot.com/server?action=contact_create");
+            
+            conn = (HttpURLConnection) url.openConnection();
+            conn.setDoInput(true); // allow Inputs
+            conn.setDoOutput(true); // allow Outputs
+
+            ps = new PrintStream(conn.getOutputStream());
+            ps.print("user_id_owner=" + userName);
+            ps.print("user_id_member=" + memberName);
+
             conn.getInputStream();
             
             serverResponseCode = conn.getResponseCode();
@@ -136,30 +213,26 @@ public class StorageTool
         return serverResponseCode + " = " + serverResponseMessage + "\n";
     }
     
-    public static String getMsgCount(String targetUserID)
+    //Method used to delete a listed contact from an existing user's contact list
+    public static String deleteContact(String userName, String contactName)
     {
-        String messageCount = "Message Count = ";
         try
         {            
-            url = new URL("http://androidsoundappproject.appspot.com/server?action=message_count");
+            url = new URL("http://androidsoundappproject.appspot.com/server?action=contact_delete&contact_id=" + contactName);
             
             conn = (HttpURLConnection) url.openConnection();
             conn.setDoInput(true); // allow Inputs
             conn.setDoOutput(true); // allow Outputs
-            
+
             ps = new PrintStream(conn.getOutputStream());
-            ps.print("&user_id_target=" + targetUserID);
-            
+            //ps.print("user_id_owner=" + userName);
+            ps.print("contact_id=" + contactName);
+
             conn.getInputStream();
             
             serverResponseCode = conn.getResponseCode();
             serverResponseMessage = conn.getResponseMessage();
-            
-            InputStream is = conn.getInputStream();
-            String encoding = conn.getContentEncoding();
-            messageCount += IOUtils.toString(is, encoding);
 
-            is.close();
             ps.close();
         }
         catch (Exception e)
@@ -167,109 +240,6 @@ public class StorageTool
             e.printStackTrace();
         }
         
-        return messageCount + "\n\n" + serverResponseCode + " = " + serverResponseMessage + "\n";
-    }
-    
-    public static String getRcvdMsgList(String targetUserID, String newList)
-    {
-        String messageList = "--- Received Message List (New List = " + newList + ") ---\n";
-        try
-        {            
-            url = new URL("http://androidsoundappproject.appspot.com/server?action=message_list");
-            
-            conn = (HttpURLConnection) url.openConnection();
-            conn.setDoInput(true); // allow Inputs
-            conn.setDoOutput(true); // allow Outputs
-            
-            ps = new PrintStream(conn.getOutputStream());
-            ps.print("&user_id_target=" + targetUserID);
-            ps.print("&new=" + newList);
-            
-            conn.getInputStream();
-            
-            serverResponseCode = conn.getResponseCode();
-            serverResponseMessage = conn.getResponseMessage();
-            
-            InputStream is = conn.getInputStream();
-            String encoding = conn.getContentEncoding();
-            messageList += IOUtils.toString(is, encoding);
-
-            is.close();
-            ps.close();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        
-        return messageList + "\n\n" + serverResponseCode + " = " + serverResponseMessage + "\n";
-    }
-    
-    public static String getSentMsgList(String userID)
-    {
-        String messageList = "--- Sent Message List ---\n";
-        try
-        {            
-            url = new URL("http://androidsoundappproject.appspot.com/server?action=message_sent");
-            
-            conn = (HttpURLConnection) url.openConnection();
-            conn.setDoInput(true); // allow Inputs
-            conn.setDoOutput(true); // allow Outputs
-            
-            ps = new PrintStream(conn.getOutputStream());
-            ps.print("&user_id_sender=" + userID);
-            
-            conn.getInputStream();
-            
-            serverResponseCode = conn.getResponseCode();
-            serverResponseMessage = conn.getResponseMessage();
-            
-            InputStream is = conn.getInputStream();
-            String encoding = conn.getContentEncoding();
-            messageList += IOUtils.toString(is, encoding);
-
-            is.close();
-            ps.close();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        
-        return messageList + "\n\n" + serverResponseCode + " = " + serverResponseMessage + "\n";
-    }
-    
-    public static String getMsgInfo(String msgID)
-    {
-        String messageInfo = "--- Message Info (Message ID = " + msgID + ") ---\n";
-        try
-        {            
-            url = new URL("http://androidsoundappproject.appspot.com/server?action=message_info");
-            
-            conn = (HttpURLConnection) url.openConnection();
-            conn.setDoInput(true); // allow Inputs
-            conn.setDoOutput(true); // allow Outputs
-            
-            ps = new PrintStream(conn.getOutputStream());
-            ps.print("&msg_id=" + msgID);
-            
-            conn.getInputStream();
-            
-            serverResponseCode = conn.getResponseCode();
-            serverResponseMessage = conn.getResponseMessage();
-            
-            InputStream is = conn.getInputStream();
-            String encoding = conn.getContentEncoding();
-            messageInfo += IOUtils.toString(is, encoding);
-
-            is.close();
-            ps.close();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        
-        return messageInfo + "\n\n" + serverResponseCode + " = " + serverResponseMessage + "\n";
+        return serverResponseCode + " = " + serverResponseMessage + "\n";
     }
 }
