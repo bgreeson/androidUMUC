@@ -1,5 +1,11 @@
 package testharness;
 
+/*
+ * FILE: TestHarnessUI.java
+ * Main class that creates a graphical user interface 
+ * to be used with database tool and storage tool objects.
+ */
+
 import java.awt.Color;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -11,11 +17,11 @@ public class TestHarnessUI extends javax.swing.JFrame
     private StorageTool fileTool = new StorageTool();
     
     //Set defaults for each of the text fields
-    private String defaultUserIDTxt = "User ID...";
-    private String defaultTrgtIDTxt = "New / Target User ID...";
+    private String defaultUserIDTxt = "User Name / ID#...";
+    private String defaultTrgtIDTxt = "New User Name / Target User ID#...";
     private String defaultMailIDTxt = "eMail Address...";
     private String defaultPasswdTxt = "Password...";
-    private String defaultMesgIDTxt = "File Name or Message ID...";
+    private String defaultMesgIDTxt = "Message ID#...";
 
     /**
      * Creates new form TestHarnessUI
@@ -51,10 +57,12 @@ public class TestHarnessUI extends javax.swing.JFrame
         dBaseBtn_delCont = new javax.swing.JButton();
         storagePanel = new javax.swing.JPanel();
         storBtn_upload = new javax.swing.JButton();
+        storBtn_download = new javax.swing.JButton();
         storBtn_delete = new javax.swing.JButton();
         storBtn_msgInfo = new javax.swing.JButton();
         storBtn_msgCnt = new javax.swing.JButton();
-        storBtn_rxMsgs = new javax.swing.JButton();
+        storBtn_rxMLN = new javax.swing.JButton();
+        storBtn_rxMLF = new javax.swing.JButton();
         storBtn_txMsgs = new javax.swing.JButton();
         Output = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -99,13 +107,6 @@ public class TestHarnessUI extends javax.swing.JFrame
         txtField_mailID.setForeground(new java.awt.Color(192, 192, 192));
         txtField_mailID.setText(defaultMailIDTxt);
         txtField_mailID.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        txtField_mailID.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            public void mouseClicked(java.awt.event.MouseEvent evt)
-            {
-                txtField_mailIDMouseClicked(evt);
-            }
-        });
         txtField_mailID.addFocusListener(new java.awt.event.FocusAdapter()
         {
             public void focusGained(java.awt.event.FocusEvent evt)
@@ -259,6 +260,8 @@ public class TestHarnessUI extends javax.swing.JFrame
             }
         });
 
+        storBtn_download.setText("DOWNLOAD MSG");
+
         storBtn_delete.setText("DELETE MESSAGE");
         storBtn_delete.addMouseListener(new java.awt.event.MouseAdapter()
         {
@@ -286,19 +289,21 @@ public class TestHarnessUI extends javax.swing.JFrame
             }
         });
 
-        storBtn_rxMsgs.setText("RX MESSAGE LIST");
-        storBtn_rxMsgs.addMouseListener(new java.awt.event.MouseAdapter()
+        storBtn_rxMLN.setText("RX MSG LIST NEW");
+        storBtn_rxMLN.addMouseListener(new java.awt.event.MouseAdapter()
         {
             public void mouseClicked(java.awt.event.MouseEvent evt)
             {
-                storBtn_rxMsgsMouseClicked(evt);
+                storBtn_rxMLNMouseClicked(evt);
             }
         });
-        storBtn_rxMsgs.addActionListener(new java.awt.event.ActionListener()
+
+        storBtn_rxMLF.setText("RX MSG LIST FULL");
+        storBtn_rxMLF.addMouseListener(new java.awt.event.MouseAdapter()
         {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
+            public void mouseClicked(java.awt.event.MouseEvent evt)
             {
-                storBtn_rxMsgsActionPerformed(evt);
+                storBtn_rxMLFMouseClicked(evt);
             }
         });
 
@@ -319,12 +324,14 @@ public class TestHarnessUI extends javax.swing.JFrame
                 .addGroup(storagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(storBtn_upload, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(storBtn_delete, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(storBtn_msgCnt, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(storBtn_msgInfo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(storBtn_msgInfo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(storBtn_download, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(storagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(storBtn_rxMsgs, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(storBtn_txMsgs, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(storBtn_rxMLN, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(storBtn_txMsgs, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(storBtn_rxMLF, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(storBtn_msgCnt, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         storagePanelLayout.setVerticalGroup(
@@ -333,15 +340,19 @@ public class TestHarnessUI extends javax.swing.JFrame
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(storagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(storBtn_upload)
-                    .addComponent(storBtn_rxMsgs))
+                    .addComponent(storBtn_msgCnt))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(storagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(storBtn_delete)
-                    .addComponent(storBtn_txMsgs))
+                    .addComponent(storBtn_rxMLN)
+                    .addComponent(storBtn_download))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(storBtn_msgInfo)
+                .addGroup(storagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(storBtn_rxMLF)
+                    .addComponent(storBtn_delete))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(storBtn_msgCnt))
+                .addGroup(storagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(storBtn_txMsgs)
+                    .addComponent(storBtn_msgInfo)))
         );
 
         javax.swing.GroupLayout InputLayout = new javax.swing.GroupLayout(Input);
@@ -433,82 +444,103 @@ public class TestHarnessUI extends javax.swing.JFrame
 
     private void storBtn_uploadMouseClicked(java.awt.event.MouseEvent evt)                                            
     {                                                
-        //FileNameExtensionFilter filter = new FileNameExtensionFilter("Text files", "txt");
-        //jFileChooser1.setFileFilter(filter);
-        int returnVal = jFileChooser1.showOpenDialog(Input);
-        if (returnVal == JFileChooser.APPROVE_OPTION)
+        // TODO add your handling code here:
+        String userID = txtField_userID.getText();
+        String targetUserID = txtField_trgtID.getText();
+        
+        if ((userID.isEmpty() || userID.equals(defaultUserIDTxt)) ||
+                (targetUserID.isEmpty() || targetUserID.equals(defaultTrgtIDTxt)))
         {
-            //String fileName = jFileChooser1.getSelectedFile().getName();
-            String filePath = jFileChooser1.getSelectedFile().getPath();
-            String fileName = jFileChooser1.getSelectedFile().getName();
-            jTextArea1.setText("Uploading File: " + fileName + "\n");
-            jTextArea1.append("Path: " + filePath + "\n\n");
-            
-            StorageTool fileTool = new StorageTool();
-            String response = fileTool.uploadFile(filePath);
-            
-            jTextArea1.append("Server response: " + response);            
-            
-            /*
-            if (success == 200)
+            jTextArea1.setText("Please enter a User ID# and Taget User ID# and try again.");
+        }
+        else
+        {
+            int returnVal = jFileChooser1.showOpenDialog(Input);
+            if (returnVal == JFileChooser.APPROVE_OPTION)
             {
-                jTextArea1.append("\n" + fileName + " uploaded successfully!");
-            }
-            else jTextArea1.append("\n" + fileName + " upload FAILED!");
-            */
-        }        
-    }                                           
+                String filePath = jFileChooser1.getSelectedFile().getPath();
+                String fileName = jFileChooser1.getSelectedFile().getName();
+                jTextArea1.setText("Creating Message: " + fileName + "\n");
+                jTextArea1.append("Path: " + filePath + "\n\n");
 
-    private void txtField_mailIDMouseClicked(java.awt.event.MouseEvent evt)                                             
-    {                                                 
-        txtField_mailID.setText("");
-        txtField_mailID.setForeground(Color.BLACK);
-    }                                            
+                String response = fileTool.createMsg(userID, targetUserID, filePath);
+
+                jTextArea1.append("Server response:\n" + response);            
+            }
+        }           
+    }                                           
 
     private void storBtn_deleteMouseClicked(java.awt.event.MouseEvent evt)                                            
     {                                                
-        String fileName = txtField_mesgID.getText();
+        // TODO add your handling code here:
+        String targetUserID = txtField_trgtID.getText();
+        String msgID = txtField_mesgID.getText();
         
-        if (fileName.isEmpty() || fileName.equals(defaultMesgIDTxt))
+        if ((targetUserID.isEmpty() || targetUserID.equals(defaultTrgtIDTxt)) ||
+                (msgID.isEmpty() || msgID.equals(defaultMesgIDTxt)))
         {
-            //jTextArea1.setText("No file name given.  Please enter a file name and try your search again.");
+            jTextArea1.setText("Please enter a Target User ID# and Message ID# and try again.");
         }
         else
-        {            
-            //jTextArea1.setText("Searching for " + fileName + "...\n\n");
-            //Start search....       
+        {
+            jTextArea1.setText("Deleting Message (User ID, Message ID): " + targetUserID + ", " + msgID + "\n");
+            String response = fileTool.deleteMsg(targetUserID, msgID);
+            
+            jTextArea1.append("Server response: " + response);             
         }
     }                                           
 
     private void storBtn_msgCntMouseClicked(java.awt.event.MouseEvent evt)                                            
     {                                                
         // TODO add your handling code here:
-        String fileName = txtField_mesgID.getText();
+        String targetUserID = txtField_trgtID.getText();
         
-        if (fileName.isEmpty() || fileName.equals(defaultMesgIDTxt))
+        if ((targetUserID.isEmpty() || targetUserID.equals(defaultTrgtIDTxt)))
         {
-            //jTextArea1.setText("No file name given.  Please enter a file name and try again.");
+            jTextArea1.setText("Please enter a Target User ID# and try again.");
         }
         else
         {
-            //jTextArea1.setText("Deleting " + fileName + "...\n\n");
-            //Start storage file delete...            
+            jTextArea1.setText("Getting Message Count (Target User ID#): " + targetUserID + "\n");
+            String response = fileTool.getMsgCount(targetUserID);
+            
+            jTextArea1.append("Server response:\n" + response);             
         }
     }                                           
 
-    private void storBtn_rxMsgsMouseClicked(java.awt.event.MouseEvent evt)                                            
-    {                                                
-        // List the contents of the bucket.
-        //jTextArea1.setText("Retrieving contents of storage...\n\n");
-        //Get contents of storage...    
+    private void storBtn_rxMLNMouseClicked(java.awt.event.MouseEvent evt)                                           
+    {                                               
+        // TODO add your handling code here:
+        String targetUserID = txtField_trgtID.getText();
+        
+        if ((targetUserID.isEmpty() || targetUserID.equals(defaultTrgtIDTxt)))
+        {
+            jTextArea1.setText("Please enter a Target User ID# and try again.");
+        }
+        else
+        {
+            jTextArea1.setText("Getting NEW Received Messages List (Target User ID#): " + targetUserID + "\n");
+            String response = fileTool.getRcvdMsgList(targetUserID, "true");
             
-    }                                           
+            jTextArea1.append("Server response:\n" + response);             
+        }
+    }                                          
 
     private void storBtn_txMsgsMouseClicked(java.awt.event.MouseEvent evt)                                            
     {                                                
-        // TODO add your handling code here:
-        //jTextArea1.setText("Retrieving storage metadata information...\n\n");
-        //Get metadata of storage...   
+        String userID = txtField_userID.getText();
+        
+        if ((userID.isEmpty() || userID.equals(defaultUserIDTxt)))
+        {
+            jTextArea1.setText("Please enter a User ID# and try again.");
+        }
+        else
+        {
+            jTextArea1.setText("Getting Sent Messages List (User ID#): " + userID + "\n");
+            String response = fileTool.getSentMsgList(userID);
+            
+            jTextArea1.append("Server response:\n" + response);             
+        }
     }                                           
 
     private void dBaseBtn_regUserMouseClicked(java.awt.event.MouseEvent evt)                                              
@@ -529,7 +561,7 @@ public class TestHarnessUI extends javax.swing.JFrame
             jTextArea1.setText("Registering user " + userName + "...\n\n");
             String response = userTool.createUser(userName, mailAddr, password);
             
-            jTextArea1.append("Server response: " + response);                   
+            jTextArea1.append("Server response:\n" + response);                   
         }
     }                                             
 
@@ -587,6 +619,19 @@ public class TestHarnessUI extends javax.swing.JFrame
     private void storBtn_msgInfoMouseClicked(java.awt.event.MouseEvent evt)                                             
     {                                                 
         // TODO add your handling code here:
+        String msgID = txtField_mesgID.getText();
+        
+        if ((msgID.isEmpty() || msgID.equals(defaultMesgIDTxt)))
+        {
+            jTextArea1.setText("Please enter a Message ID# and try again.");
+        }
+        else
+        {
+            jTextArea1.setText("Getting Message Info (Message ID#): " + msgID + "\n");
+            String response = fileTool.getMsgInfo(msgID);
+            
+            jTextArea1.append("Server response:\n" + response);             
+        }
     }                                            
 
     private void dBaseBtn_edtUserMouseClicked(java.awt.event.MouseEvent evt)                                              
@@ -612,7 +657,7 @@ public class TestHarnessUI extends javax.swing.JFrame
             if (newPass.equals(defaultPasswdTxt)) newPass = "";
             String response = userTool.editUser(userName, newName, newMail, newPass);
             
-            jTextArea1.append("Server response: " + response);                   
+            jTextArea1.append("Server response:\n" + response);                   
         }
     }                                             
 
@@ -630,7 +675,7 @@ public class TestHarnessUI extends javax.swing.JFrame
             jTextArea1.setText("Disabling user " + userName + "...\n\n");
             String response = userTool.disableUser(userName);
             
-            jTextArea1.append("Server response: " + response);                   
+            jTextArea1.append("Server response:\n" + response);                   
         }
     }                                             
 
@@ -648,7 +693,7 @@ public class TestHarnessUI extends javax.swing.JFrame
             jTextArea1.setText("Deleting user " + userName + "...\n\n");
             String response = userTool.deleteUser(userName);
             
-            jTextArea1.append("Server response: " + response);                   
+            jTextArea1.append("Server response:\n" + response);                   
         }
     }                                             
 
@@ -668,7 +713,7 @@ public class TestHarnessUI extends javax.swing.JFrame
             jTextArea1.setText("Creating contact " + memberName + " for " + userName + "...\n\n");
             String response = userTool.createContact(userName, memberName);
             
-            jTextArea1.append("Server response: " + response);                   
+            jTextArea1.append("Server response:\n" + response);                   
         }
     }                                             
 
@@ -686,7 +731,7 @@ public class TestHarnessUI extends javax.swing.JFrame
             jTextArea1.setText("Getting user " + userName + "...\n\n");
             String response = userTool.getUserInfo(userName);
             
-            jTextArea1.append("Server response: " + response);                   
+            jTextArea1.append("Server response:\n" + response);                   
         }
     }                                             
 
@@ -706,14 +751,9 @@ public class TestHarnessUI extends javax.swing.JFrame
             jTextArea1.setText("Deleting contact " + contactName + " for " + userName + "...\n\n");
             String response = userTool.createContact(userName, contactName);
             
-            jTextArea1.append("Server response: " + response);                   
+            jTextArea1.append("Server response:\n" + response);                   
         }
     }                                             
-
-    private void storBtn_rxMsgsActionPerformed(java.awt.event.ActionEvent evt)                                               
-    {                                                   
-        // TODO add your handling code here:
-    }                                              
 
     private void txtField_userIDFocusGained(java.awt.event.FocusEvent evt)                                            
     {                                                
@@ -748,6 +788,24 @@ public class TestHarnessUI extends javax.swing.JFrame
             txtField_trgtID.setText(defaultTrgtIDTxt);
         }
     }                                         
+
+    private void storBtn_rxMLFMouseClicked(java.awt.event.MouseEvent evt)                                           
+    {                                               
+        // TODO add your handling code here:
+        String targetUserID = txtField_trgtID.getText();
+        
+        if ((targetUserID.isEmpty() || targetUserID.equals(defaultTrgtIDTxt)))
+        {
+            jTextArea1.setText("Please enter a Target User ID# and try again.");
+        }
+        else
+        {
+            jTextArea1.setText("Getting FULL Received Messages List (Target User ID#): " + targetUserID + "\n");
+            String response = fileTool.getRcvdMsgList(targetUserID, "false");
+            
+            jTextArea1.append("Server response:\n" + response);             
+        }
+    }                                          
 
     /**
      * @param args the command line arguments
@@ -808,9 +866,11 @@ public class TestHarnessUI extends javax.swing.JFrame
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JButton storBtn_delete;
+    private javax.swing.JButton storBtn_download;
     private javax.swing.JButton storBtn_msgCnt;
     private javax.swing.JButton storBtn_msgInfo;
-    private javax.swing.JButton storBtn_rxMsgs;
+    private javax.swing.JButton storBtn_rxMLF;
+    private javax.swing.JButton storBtn_rxMLN;
     private javax.swing.JButton storBtn_txMsgs;
     private javax.swing.JButton storBtn_upload;
     private javax.swing.JPanel storagePanel;

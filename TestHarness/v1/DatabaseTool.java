@@ -7,9 +7,11 @@ package testharness;
  */
 
 import java.io.InputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import org.apache.commons.io.IOUtils;
 
 public class DatabaseTool
 {
@@ -32,6 +34,16 @@ public class DatabaseTool
             conn = (HttpURLConnection) url.openConnection();
             conn.setDoInput(true); // allow Inputs
             conn.setDoOutput(true); // allow Outputs
+            conn.setRequestMethod("POST");
+            //conn.setRequestProperty("disp_nme", userName);
+            //conn.setRequestProperty("email_addr", mailAddr);
+            //conn.setRequestProperty("user_pw", password);
+            
+            //conn.getOutputStream();
+            
+            //serverResponseCode = conn.getResponseCode();
+            //serverResponseMessage = conn.getResponseMessage();
+            
             
             ps = new PrintStream(conn.getOutputStream());
             ps.print("disp_nme=" + userName);
@@ -44,6 +56,7 @@ public class DatabaseTool
             serverResponseMessage = conn.getResponseMessage();
 
             ps.close();
+            
         }
         catch (Exception e)
         {
@@ -143,32 +156,31 @@ public class DatabaseTool
     }
     
     //Method used to an existing user's meta info
-    public static String getUserInfo(String userName)
+    public static String getUserInfo(String userID)
     {
+        String userInfo = "User Info (User ID = " + userID + "):\n";
         try
         {            
-            url = new URL("http://androidsoundappproject.appspot.com/server?action=user_info&user_id=" + userName);
+            url = new URL("http://androidsoundappproject.appspot.com/server?user_id=" + userID + "&action=user_info");
             
             conn = (HttpURLConnection) url.openConnection();
             conn.setDoInput(true); // allow Inputs
             conn.setDoOutput(true); // allow Outputs
-
-            ps = new PrintStream(conn.getOutputStream());
-            //ps.print("user_id=" + userName);          
             
-            conn.getInputStream();
+            InputStream is = conn.getInputStream();
+            userInfo += IOUtils.toString(is);
             
             serverResponseCode = conn.getResponseCode();
             serverResponseMessage = conn.getResponseMessage();
 
-            ps.close();
+            is.close();
         }
         catch (Exception e)
         {
             e.printStackTrace();
         }  
         
-        return serverResponseCode + " = " + serverResponseMessage + "\n";
+        return userInfo + "\n\n" + serverResponseCode + " = " + serverResponseMessage + "\n";
     }
     
     //Method used to add an existing member to an existing user's contact list
