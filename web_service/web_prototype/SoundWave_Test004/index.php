@@ -14,7 +14,8 @@ require_once 'google/appengine/api/cloud_storage/CloudStorageTools.php';
 use google\appengine\api\cloud_storage\CloudStorageTools;
 
 $options = [ 'gs_bucket_name' => 'androidsoundappproject.appspot.com' ];
-$upload_url = CloudStorageTools::createUploadUrl('/server', $options)
+//$upload_url = CloudStorageTools::createUploadUrl('/server', $options)
+$upload_url = CloudStorageTools::createUploadUrl('/server?action=message_create', $options)
 
 ?>
 

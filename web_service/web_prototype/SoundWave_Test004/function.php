@@ -242,11 +242,11 @@ function message_create($user_id_sender, $user_id_target) { // upload_file
   }
   
   // save file
-  move_uploaded_file($gs_name, 'gs://androidsoundappproject.appspot.com/message/' . $user_id_sender . '/' . $file_name); // may need to rename file with unique name  
+  if (move_uploaded_file($gs_name, 'gs://androidsoundappproject.appspot.com/message/' . $user_id_sender . '/' . $file_name)) { // may need to rename file with unique name  
   $file_path = $user_id_sender . '/' . $file_name;
 
   // check to see if file uploaded successfully
-  if (is_uploaded_file($file_tmp_name)) {
+  //if (is_uploaded_file($_FILES['userfile']['tmp_name'])) {
     // upload success
 
     // add file metadata to database table MESSAGE
@@ -301,7 +301,7 @@ function message_create($user_id_sender, $user_id_target) { // upload_file
                     'FILE_PATH' => $file_path,  // DEV_NOTE: need to add a key to file names
                     'DATE_SENT' => $timestamp,
                     'USER_ID_TARGET' => $user_id_target,
-                    'tmp_name' => $file_tmp_name,
+                    'tmp_name' => $gs_name,
                     'error' => $file_error
                     );
   
