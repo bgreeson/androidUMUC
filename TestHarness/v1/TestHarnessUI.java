@@ -17,11 +17,11 @@ public class TestHarnessUI extends javax.swing.JFrame
     private StorageTool fileTool = new StorageTool();
     
     //Set defaults for each of the text fields
-    private String defaultUserIDTxt = "User ID...";
-    private String defaultTrgtIDTxt = "New / Target User ID...";
+    private String defaultUserIDTxt = "User Name / ID#...";
+    private String defaultTrgtIDTxt = "New User Name / Target User ID#...";
     private String defaultMailIDTxt = "eMail Address...";
     private String defaultPasswdTxt = "Password...";
-    private String defaultMesgIDTxt = "File Name or Message ID...";
+    private String defaultMesgIDTxt = "Message ID#...";
 
     /**
      * Creates new form TestHarnessUI
@@ -448,10 +448,10 @@ public class TestHarnessUI extends javax.swing.JFrame
         String userID = txtField_userID.getText();
         String targetUserID = txtField_trgtID.getText();
         
-        if ((userID.isEmpty() || userID.equals(defaultUserIDTxt)) &&
+        if ((userID.isEmpty() || userID.equals(defaultUserIDTxt)) ||
                 (targetUserID.isEmpty() || targetUserID.equals(defaultTrgtIDTxt)))
         {
-            jTextArea1.setText("Please enter a User ID and Taget User ID and try again.");
+            jTextArea1.setText("Please enter a User ID# and Taget User ID# and try again.");
         }
         else
         {
@@ -465,7 +465,7 @@ public class TestHarnessUI extends javax.swing.JFrame
 
                 String response = fileTool.createMsg(userID, targetUserID, filePath);
 
-                jTextArea1.append("Server response: " + response);            
+                jTextArea1.append("Server response:\n" + response);            
             }
         }           
     }                                           
@@ -476,10 +476,10 @@ public class TestHarnessUI extends javax.swing.JFrame
         String targetUserID = txtField_trgtID.getText();
         String msgID = txtField_mesgID.getText();
         
-        if ((targetUserID.isEmpty() || targetUserID.equals(defaultTrgtIDTxt)) &&
+        if ((targetUserID.isEmpty() || targetUserID.equals(defaultTrgtIDTxt)) ||
                 (msgID.isEmpty() || msgID.equals(defaultMesgIDTxt)))
         {
-            jTextArea1.setText("Please enter a Target User ID and Message ID and try again.");
+            jTextArea1.setText("Please enter a Target User ID# and Message ID# and try again.");
         }
         else
         {
@@ -497,14 +497,14 @@ public class TestHarnessUI extends javax.swing.JFrame
         
         if ((targetUserID.isEmpty() || targetUserID.equals(defaultTrgtIDTxt)))
         {
-            jTextArea1.setText("Please enter a Target User ID and try again.");
+            jTextArea1.setText("Please enter a Target User ID# and try again.");
         }
         else
         {
-            jTextArea1.setText("Getting Message Count (User ID): " + targetUserID + "\n");
+            jTextArea1.setText("Getting Message Count (Target User ID#): " + targetUserID + "\n");
             String response = fileTool.getMsgCount(targetUserID);
             
-            jTextArea1.append("Server response: " + response);             
+            jTextArea1.append("Server response:\n" + response);             
         }
     }                                           
 
@@ -515,14 +515,14 @@ public class TestHarnessUI extends javax.swing.JFrame
         
         if ((targetUserID.isEmpty() || targetUserID.equals(defaultTrgtIDTxt)))
         {
-            jTextArea1.setText("Please enter a Target User ID and try again.");
+            jTextArea1.setText("Please enter a Target User ID# and try again.");
         }
         else
         {
-            jTextArea1.setText("Getting NEW Received Messages List (User ID): " + targetUserID + "\n");
+            jTextArea1.setText("Getting NEW Received Messages List (Target User ID#): " + targetUserID + "\n");
             String response = fileTool.getRcvdMsgList(targetUserID, "true");
             
-            jTextArea1.append("Server response: " + response);             
+            jTextArea1.append("Server response:\n" + response);             
         }
     }                                          
 
@@ -532,14 +532,14 @@ public class TestHarnessUI extends javax.swing.JFrame
         
         if ((userID.isEmpty() || userID.equals(defaultUserIDTxt)))
         {
-            jTextArea1.setText("Please enter a User ID and try again.");
+            jTextArea1.setText("Please enter a User ID# and try again.");
         }
         else
         {
-            jTextArea1.setText("Getting Sent Messages List (User ID): " + userID + "\n");
+            jTextArea1.setText("Getting Sent Messages List (User ID#): " + userID + "\n");
             String response = fileTool.getSentMsgList(userID);
             
-            jTextArea1.append("Server response: " + response);             
+            jTextArea1.append("Server response:\n" + response);             
         }
     }                                           
 
@@ -561,7 +561,7 @@ public class TestHarnessUI extends javax.swing.JFrame
             jTextArea1.setText("Registering user " + userName + "...\n\n");
             String response = userTool.createUser(userName, mailAddr, password);
             
-            jTextArea1.append("Server response: " + response);                   
+            jTextArea1.append("Server response:\n" + response);                   
         }
     }                                             
 
@@ -623,14 +623,14 @@ public class TestHarnessUI extends javax.swing.JFrame
         
         if ((msgID.isEmpty() || msgID.equals(defaultMesgIDTxt)))
         {
-            jTextArea1.setText("Please enter a Message ID and try again.");
+            jTextArea1.setText("Please enter a Message ID# and try again.");
         }
         else
         {
-            jTextArea1.setText("Getting Message Info (Message ID): " + msgID + "\n");
+            jTextArea1.setText("Getting Message Info (Message ID#): " + msgID + "\n");
             String response = fileTool.getMsgInfo(msgID);
             
-            jTextArea1.append("Server response: " + response);             
+            jTextArea1.append("Server response:\n" + response);             
         }
     }                                            
 
@@ -657,7 +657,7 @@ public class TestHarnessUI extends javax.swing.JFrame
             if (newPass.equals(defaultPasswdTxt)) newPass = "";
             String response = userTool.editUser(userName, newName, newMail, newPass);
             
-            jTextArea1.append("Server response: " + response);                   
+            jTextArea1.append("Server response:\n" + response);                   
         }
     }                                             
 
@@ -675,7 +675,7 @@ public class TestHarnessUI extends javax.swing.JFrame
             jTextArea1.setText("Disabling user " + userName + "...\n\n");
             String response = userTool.disableUser(userName);
             
-            jTextArea1.append("Server response: " + response);                   
+            jTextArea1.append("Server response:\n" + response);                   
         }
     }                                             
 
@@ -693,7 +693,7 @@ public class TestHarnessUI extends javax.swing.JFrame
             jTextArea1.setText("Deleting user " + userName + "...\n\n");
             String response = userTool.deleteUser(userName);
             
-            jTextArea1.append("Server response: " + response);                   
+            jTextArea1.append("Server response:\n" + response);                   
         }
     }                                             
 
@@ -713,7 +713,7 @@ public class TestHarnessUI extends javax.swing.JFrame
             jTextArea1.setText("Creating contact " + memberName + " for " + userName + "...\n\n");
             String response = userTool.createContact(userName, memberName);
             
-            jTextArea1.append("Server response: " + response);                   
+            jTextArea1.append("Server response:\n" + response);                   
         }
     }                                             
 
@@ -731,7 +731,7 @@ public class TestHarnessUI extends javax.swing.JFrame
             jTextArea1.setText("Getting user " + userName + "...\n\n");
             String response = userTool.getUserInfo(userName);
             
-            jTextArea1.append("Server response: " + response);                   
+            jTextArea1.append("Server response:\n" + response);                   
         }
     }                                             
 
@@ -751,7 +751,7 @@ public class TestHarnessUI extends javax.swing.JFrame
             jTextArea1.setText("Deleting contact " + contactName + " for " + userName + "...\n\n");
             String response = userTool.createContact(userName, contactName);
             
-            jTextArea1.append("Server response: " + response);                   
+            jTextArea1.append("Server response:\n" + response);                   
         }
     }                                             
 
@@ -796,14 +796,14 @@ public class TestHarnessUI extends javax.swing.JFrame
         
         if ((targetUserID.isEmpty() || targetUserID.equals(defaultTrgtIDTxt)))
         {
-            jTextArea1.setText("Please enter a Target User ID and try again.");
+            jTextArea1.setText("Please enter a Target User ID# and try again.");
         }
         else
         {
-            jTextArea1.setText("Getting FULL Received Messages List (User ID): " + targetUserID + "\n");
+            jTextArea1.setText("Getting FULL Received Messages List (Target User ID#): " + targetUserID + "\n");
             String response = fileTool.getRcvdMsgList(targetUserID, "false");
             
-            jTextArea1.append("Server response: " + response);             
+            jTextArea1.append("Server response:\n" + response);             
         }
     }                                          
 
