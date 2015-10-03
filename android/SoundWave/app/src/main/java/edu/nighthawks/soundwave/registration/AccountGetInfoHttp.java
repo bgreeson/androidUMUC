@@ -1,4 +1,4 @@
-package edu.nighthawks.soundwave.contacts;
+package edu.nighthawks.soundwave.registration;
 
 import org.apache.commons.io.IOUtils;
 
@@ -11,10 +11,10 @@ import java.net.URL;
 /**
  * Created by joe.keefe on 9/27/2015.
  */
-public class ContactCreatorHttp
+public class AccountGetInfoHttp
 {
 
-    public static int createContact(String userIdOwner, String userIdMember)
+    public static int getAccountInfo(String emailAddress)
     {
         HttpURLConnection conn = null;
         DataOutputStream dos = null;
@@ -33,17 +33,17 @@ public class ContactCreatorHttp
             conn.setDoInput(true); // allow Inputs
             conn.setDoOutput(true); // allow Outputs
             PrintStream ps = new PrintStream(conn.getOutputStream());
-            ps.print("&user_id_owner=" + userIdOwner);
-            ps.print("&user_id_member=" + userIdMember);
-            ps.print("&action=contact_create");
+            ps.print("&email_addr=" + emailAddress);
+            ps.print("&action=user_info");
 
-
-            InputStream is = conn.getInputStream();
-            String encoding = conn.getContentEncoding();
-            String data = IOUtils.toString(is, encoding);
+            conn.getInputStream();
 
             serverResponseCode = conn.getResponseCode();
             serverResponseMessage = conn.getResponseMessage();
+
+            InputStream is = conn.getInputStream();
+            String encoding = conn.getContentEncoding();
+            String responseString = IOUtils.toString(is, encoding);
 
             is.close();
             ps.close();
