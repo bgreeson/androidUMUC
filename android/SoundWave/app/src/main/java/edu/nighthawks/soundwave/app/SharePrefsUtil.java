@@ -11,6 +11,7 @@ public class SharePrefsUtil
     public static String USER_ID = "USER_ID";
     public static String USER_NAME = "USER_NAME";
     public static String USER_EMAIL = "USER_EMAIL";
+    public static String CONTACTS = "CONTACTS";
 
     public static String PREF_FILE = "SoundWaveConfig";
 

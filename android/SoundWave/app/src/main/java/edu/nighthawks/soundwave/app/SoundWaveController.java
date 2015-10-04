@@ -110,6 +110,7 @@ public class SoundWaveController
 	{
 		contactCreator = new ContactCreatorThread();
 		contactCreator.createContact(userIdOwner, userIdMember);
+		SharePrefsUtil.setString(SoundWaveApplication.getApplicationObject().getBaseContext(), SharePrefsUtil.CONTACTS, userIdOwner);
 
 	}
 
