@@ -1,4 +1,4 @@
-package edu.nighthawks.soundwave.app.Serializer;
+package edu.nighthawks.soundwave;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -7,6 +7,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.List;
  
 /**
  * This is a utility class for performing serialization and.
@@ -18,25 +20,25 @@ public class SerializationUtility {
      * deserialize to Object from given file. Use the general Object so
      * that it can work for any Java Class.
      */
-    public static Object deserialize(String fileName) throws IOException,
+    public static List deserialize(String fileName) throws IOException,
             ClassNotFoundException {
         FileInputStream fis = new FileInputStream(fileName);
         BufferedInputStream bis = new BufferedInputStream(fis);
         ObjectInputStream ois = new ObjectInputStream(bis);
-        Object obj = ois.readObject();
+        List list = (ArrayList)ois.readObject();
         ois.close();
-        return obj;
+        return list;
     }
  
     /**
      * serialize the given object and save it to given file
      */
-    public static void serialize(Object obj, String fileName)
+    public static void serialize(List list, String fileName)
             throws IOException {
         FileOutputStream fos = new FileOutputStream(fileName);
         BufferedOutputStream bos = new BufferedOutputStream(fos);
         ObjectOutputStream oos = new ObjectOutputStream(bos);
-        oos.writeObject(obj);
+        oos.writeObject(list);
         oos.close();
     }
 }
