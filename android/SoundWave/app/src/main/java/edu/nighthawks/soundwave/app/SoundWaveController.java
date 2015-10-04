@@ -19,6 +19,7 @@ public class SoundWaveController
 	private boolean m_bTransmit = false;
 	private FileRecorder recorder;
 	private FileUploaderThread uploader;
+
 	private AccountCreatorThread accountCreator;
 	private ContactCreatorThread contactCreator;
 	private ContactsRetrieverThread contactsRetriever;

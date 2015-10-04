@@ -32,7 +32,8 @@ public class SoundWaveApplication extends Application
 		sApp = this;
 		soundWaveController = new SoundWaveController();
 		soundWaveConfig = new SoundWaveConfig();
-		soundWaveConfig.initFromSettings();
+		soundWaveConfig.saveToSharedPrefs(); // TODO remove after we hook up server settings
+		soundWaveConfig.initFromSharedPrefs();
 		soundWaveController.retrieveContactsStart(soundWaveConfig.getUserEmail());
 	}
 

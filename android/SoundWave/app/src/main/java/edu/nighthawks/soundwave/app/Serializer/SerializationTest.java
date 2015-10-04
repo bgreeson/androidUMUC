@@ -1,11 +1,9 @@
 package edu.nighthawks.soundwave.app.Serializer;
 
-import edu.nighthawks.soundwave.Contact;
-
 public class SerializationTest {
  
     public static void main(String[] args) {
-    	edu.nighthawks.soundwave.Contact contact = new edu.nighthawks.soundwave.Contact();
+    	Contact contact = new Contact();
         contact.setName("Steve");
         contact.setEmail("steve@gmail.com");
  
