@@ -24,7 +24,7 @@ if(isset($_POST["action"])) {
         $value = contact_create($_POST['user_id_owner'], $_POST['user_id_member']);
         break;
       case 'message_create':
-        $value = message_create($_POST['user_id_sender'], $_POST['user_id_target'], $_POST['upload_url']);
+        $value = message_create($_POST['user_id_sender'], $_POST['user_id_target']);
         break;
       //case 'user_auth':
       //  $value = user_auth($_POST['user_id'], $POST['email_addr']);
@@ -98,7 +98,7 @@ if(isset($_POST["action"])) {
         $value = user_delete($_DELETE['user_id']);
         break;
       case 'contact_delete':
-        $value = contact_delete($_DELETE['user_id_owner'], $_DELETE['user_id_member']);
+        $value = contact_delete($_POST['contact_id']);
         break;
       case 'message_distro_delete':
         $value = message_distro_delete($_DELETE['user_id_target'], $_DELETE['msg_id']);

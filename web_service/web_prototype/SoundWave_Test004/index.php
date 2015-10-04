@@ -170,7 +170,6 @@ $upload_url = CloudStorageTools::createUploadUrl('/server?action=message_create'
    </tr><tr>
     <td><input type="file" name="userfile"></td>
     <td><input type="submit" value="Create Message"></td>
-    <!--td><input type="hidden" name="upload_url" value="<?php echo $upload_url ?>"/></td-->
     <td><input type="hidden" name="action" value="message_create"/></td>
    </tr>
    </table>
