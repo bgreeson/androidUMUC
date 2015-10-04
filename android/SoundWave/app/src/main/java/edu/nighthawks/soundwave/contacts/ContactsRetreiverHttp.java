@@ -9,12 +9,12 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 /**
- * Created by joe.keefe on 9/27/2015.
+ * Created by joe.keefe on 9/30/2015.
  */
-public class CreateContact
+public class ContactsRetreiverHttp
 {
 
-    public static int createContact(String userIdOwner, String userIdMember)
+    public static String retrieveContacts(String userIdOwner)
     {
         HttpURLConnection conn = null;
         DataOutputStream dos = null;
@@ -23,25 +23,27 @@ public class CreateContact
         String boundary = "*****";
         int serverResponseCode = 0;
         String serverResponseMessage = "";
+        String stringOfContacts = "";
 
         try
         {
             // Use this for Google cloud hosted change ($upload_url = CloudStorageTools::createUploadUrl('/server?action=upload_file', $options)
-            URL url = new URL("http://androidsoundappproject.appspot.com/server?action=contact_create");
+            URL url = new URL("http://androidsoundappproject.appspot.com/server?action=user_info");
 
             conn = (HttpURLConnection) url.openConnection();
             conn.setDoInput(true); // allow Inputs
             conn.setDoOutput(true); // allow Outputs
             PrintStream ps = new PrintStream(conn.getOutputStream());
             ps.print("&user_id_owner=" + userIdOwner);
-            ps.print("&user_id_member=" + userIdMember);
 
-            InputStream is = conn.getInputStream();
-            String encoding = conn.getContentEncoding();
-            String data = IOUtils.toString(is, encoding);
+            conn.getInputStream();
 
             serverResponseCode = conn.getResponseCode();
             serverResponseMessage = conn.getResponseMessage();
+
+            InputStream is = conn.getInputStream();
+            String encoding = conn.getContentEncoding();
+            stringOfContacts = IOUtils.toString(is, encoding);
 
             is.close();
             ps.close();
@@ -53,7 +55,7 @@ public class CreateContact
         }
 
 
-        return serverResponseCode;
+        return stringOfContacts;
     }
 
 }

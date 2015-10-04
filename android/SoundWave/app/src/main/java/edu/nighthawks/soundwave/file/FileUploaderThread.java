@@ -4,11 +4,11 @@ import org.apache.http.client.methods.HttpPost;
 
 /**
  * This is a class for driving the file upload process
- * It uses the PostFile static utility method for HTTP file upload.
+ * It uses the FileUploaderHttp static utility method for HTTP file upload.
  *
  * This file runs a thread for file upload as not to hold up the UI.
  */
-public class FileUploader extends Thread
+public class FileUploaderThread extends Thread
 {
 	private HttpPost httpPost;
 	private String m_fileName;
@@ -25,7 +25,7 @@ public class FileUploader extends Thread
 	{
 		try
 		{
-			PostFile.uploadFile(m_fileName);
+			FileUploaderHttp.uploadFile(m_fileName);
 		}
 		catch (Exception e)
 		{

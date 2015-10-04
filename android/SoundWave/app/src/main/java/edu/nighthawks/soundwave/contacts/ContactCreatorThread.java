@@ -3,7 +3,7 @@ package edu.nighthawks.soundwave.contacts;
 /**
  * This class encapsulates account creation (registration)
  */
-public class ContactCreator extends Thread
+public class ContactCreatorThread extends Thread
 {
     private String mUserIdOwner;
     private String mUserIdMember;
@@ -22,7 +22,7 @@ public class ContactCreator extends Thread
     {
         try
         {
-            CreateContact.createContact(mUserIdOwner, mUserIdMember);
+            ContactCreatorHttp.createContact(mUserIdOwner, mUserIdMember);
         }
         catch (Exception e)
         {

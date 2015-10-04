@@ -11,10 +11,10 @@ import java.net.URL;
 /**
  * Created by joe.keefe on 9/27/2015.
  */
-public class CreateAccount
+public class AccountGetInfoHttp
 {
 
-    public static int createAccount(String displayName, String password, String emailAddress)
+    public static int getAccountInfo(String emailAddress)
     {
         HttpURLConnection conn = null;
         DataOutputStream dos = null;
@@ -27,15 +27,14 @@ public class CreateAccount
         try
         {
             // Use this for Google cloud hosted change ($upload_url = CloudStorageTools::createUploadUrl('/server?action=upload_file', $options)
-            URL url = new URL("http://androidsoundappproject.appspot.com/server?action=user_create");
+            URL url = new URL("http://androidsoundappproject.appspot.com/server");
 
             conn = (HttpURLConnection) url.openConnection();
             conn.setDoInput(true); // allow Inputs
             conn.setDoOutput(true); // allow Outputs
             PrintStream ps = new PrintStream(conn.getOutputStream());
-            ps.print("disp_nme=" + displayName);
             ps.print("&email_addr=" + emailAddress);
-            ps.print("&user_pw=" + password);
+            ps.print("&action=user_info");
 
             conn.getInputStream();
 

@@ -1,4 +1,4 @@
-package edu.nighthawks.soundwave.contacts;
+package edu.nighthawks.soundwave.registration;
 
 import org.apache.commons.io.IOUtils;
 
@@ -9,12 +9,12 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 /**
- * Created by joe.keefe on 9/30/2015.
+ * Created by joe.keefe on 9/27/2015.
  */
-public class RetrieveContacts
+public class AccountCreatorHttp
 {
 
-    public static String retrieveContacts(String userIdOwner)
+    public static int createAccount(String displayName, String password, String emailAddress)
     {
         HttpURLConnection conn = null;
         DataOutputStream dos = null;
@@ -23,18 +23,20 @@ public class RetrieveContacts
         String boundary = "*****";
         int serverResponseCode = 0;
         String serverResponseMessage = "";
-        String stringOfContacts = "";
 
         try
         {
             // Use this for Google cloud hosted change ($upload_url = CloudStorageTools::createUploadUrl('/server?action=upload_file', $options)
-            URL url = new URL("http://androidsoundappproject.appspot.com/server?action=user_info");
+            URL url = new URL("http://androidsoundappproject.appspot.com/server");
 
             conn = (HttpURLConnection) url.openConnection();
             conn.setDoInput(true); // allow Inputs
             conn.setDoOutput(true); // allow Outputs
             PrintStream ps = new PrintStream(conn.getOutputStream());
-            ps.print("&user_id_owner=" + userIdOwner);
+            ps.print("disp_nme=" + displayName);
+            ps.print("&email_addr=" + emailAddress);
+            ps.print("&user_pw=" + password);
+            ps.print("&action=user_create");
 
             conn.getInputStream();
 
@@ -43,7 +45,7 @@ public class RetrieveContacts
 
             InputStream is = conn.getInputStream();
             String encoding = conn.getContentEncoding();
-            stringOfContacts = IOUtils.toString(is, encoding);
+            String responseString = IOUtils.toString(is, encoding);
 
             is.close();
             ps.close();
@@ -55,7 +57,7 @@ public class RetrieveContacts
         }
 
 
-        return stringOfContacts;
+        return serverResponseCode;
     }
 
 }
