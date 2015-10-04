@@ -17,7 +17,7 @@ public class TestHarnessUI extends javax.swing.JFrame
     private StorageTool fileTool = new StorageTool();
     
     //Set defaults for each of the text fields
-    private String defaultUserIDTxt = "User Name / ID#...";
+    private String defaultUserIDTxt = "User Name / ID# or Contact ID#...";
     private String defaultTrgtIDTxt = "New User Name / Target User ID#...";
     private String defaultMailIDTxt = "eMail Address...";
     private String defaultPasswdTxt = "Password...";
@@ -54,6 +54,7 @@ public class TestHarnessUI extends javax.swing.JFrame
         dBaseBtn_delUser = new javax.swing.JButton();
         dBaseBtn_getUser = new javax.swing.JButton();
         dBaseBtn_addCont = new javax.swing.JButton();
+        dBaseBtn_getCont = new javax.swing.JButton();
         dBaseBtn_delCont = new javax.swing.JButton();
         storagePanel = new javax.swing.JPanel();
         storBtn_upload = new javax.swing.JButton();
@@ -205,6 +206,15 @@ public class TestHarnessUI extends javax.swing.JFrame
             }
         });
 
+        dBaseBtn_getCont.setText("GET CONT LIST");
+        dBaseBtn_getCont.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
+                dBaseBtn_getContMouseClicked(evt);
+            }
+        });
+
         dBaseBtn_delCont.setText("DEL CONTACT");
         dBaseBtn_delCont.addMouseListener(new java.awt.event.MouseAdapter()
         {
@@ -228,7 +238,8 @@ public class TestHarnessUI extends javax.swing.JFrame
                 .addGroup(databasePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(dBaseBtn_getUser, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
                     .addComponent(dBaseBtn_delCont, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(dBaseBtn_addCont, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(dBaseBtn_addCont, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(dBaseBtn_getCont, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
         databasePanelLayout.setVerticalGroup(
             databasePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -244,9 +255,11 @@ public class TestHarnessUI extends javax.swing.JFrame
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(databasePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(dBaseBtn_disUser)
-                    .addComponent(dBaseBtn_delCont))
+                    .addComponent(dBaseBtn_getCont))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(dBaseBtn_delUser))
+                .addGroup(databasePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(dBaseBtn_delUser)
+                    .addComponent(dBaseBtn_delCont)))
         );
 
         storagePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "STORAGE CONTROLS", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
@@ -463,7 +476,7 @@ public class TestHarnessUI extends javax.swing.JFrame
                 jTextArea1.setText("Creating Message: " + fileName + "\n");
                 jTextArea1.append("Path: " + filePath + "\n\n");
 
-                String response = fileTool.createMsg(userID, targetUserID, filePath);
+                String response = fileTool.createMsg(userID, targetUserID, fileName, filePath);
 
                 jTextArea1.append("Server response:\n" + response);            
             }
@@ -700,18 +713,18 @@ public class TestHarnessUI extends javax.swing.JFrame
     private void dBaseBtn_addContMouseClicked(java.awt.event.MouseEvent evt)                                              
     {                                                  
         // TODO add your handling code here:
-        String userName = txtField_userID.getText();
-        String memberName = txtField_trgtID.getText();
+        String userID = txtField_userID.getText();
+        String memberID = txtField_trgtID.getText();
         
-        if ((userName.isEmpty() || userName.equals(defaultUserIDTxt)) && (
-                (memberName.isEmpty() || memberName.equals(defaultTrgtIDTxt))))
+        if (userID.isEmpty() || userID.equals(defaultUserIDTxt) || 
+                memberID.isEmpty() || memberID.equals(defaultTrgtIDTxt))
         {
-            jTextArea1.setText("Please enter a User ID and a Member User ID and try again.");
+            jTextArea1.setText("Please enter a User ID# and a Member User ID# and try again.");
         }
         else
         {            
-            jTextArea1.setText("Creating contact " + memberName + " for " + userName + "...\n\n");
-            String response = userTool.createContact(userName, memberName);
+            jTextArea1.setText("Creating contact " + memberID + " for User ID " + userID + "...\n\n");
+            String response = userTool.createContact(userID, memberID);
             
             jTextArea1.append("Server response:\n" + response);                   
         }
@@ -720,16 +733,27 @@ public class TestHarnessUI extends javax.swing.JFrame
     private void dBaseBtn_getUserMouseClicked(java.awt.event.MouseEvent evt)                                              
     {                                                  
         // TODO add your handling code here:
-        String userName = txtField_userID.getText();
+        String userID = txtField_userID.getText();
+        String mailID = txtField_mailID.getText();
         
-        if (userName.isEmpty() || userName.equals(defaultUserIDTxt))
+        if ((userID.isEmpty() || userID.equals(defaultUserIDTxt)) && (mailID.isEmpty() || mailID.equals(defaultMailIDTxt)))
         {
-            jTextArea1.setText("Please enter a User ID and try again.");
+            jTextArea1.setText("Please enter a User ID# or an Email Address and try again.");
         }
         else
         {            
-            jTextArea1.setText("Getting user " + userName + "...\n\n");
-            String response = userTool.getUserInfo(userName);
+            String response = "";
+            
+            if (mailID.isEmpty() || mailID.equals(defaultMailIDTxt))
+            {
+                jTextArea1.setText("Getting info for User ID " + userID + "...\n\n");
+                response = userTool.getUserInfo(userID, 0);
+            }
+            else
+            {
+                jTextArea1.setText("Getting info for " + mailID + "...\n\n");
+                response = userTool.getUserInfo(mailID, 1);
+            }
             
             jTextArea1.append("Server response:\n" + response);                   
         }
@@ -738,18 +762,16 @@ public class TestHarnessUI extends javax.swing.JFrame
     private void dBaseBtn_delContMouseClicked(java.awt.event.MouseEvent evt)                                              
     {                                                  
         // TODO add your handling code here:
-        String userName = txtField_userID.getText();
-        String contactName = txtField_trgtID.getText();
+        String contID = txtField_userID.getText();
         
-        if ((userName.isEmpty() || userName.equals(defaultUserIDTxt)) && (
-                (contactName.isEmpty() || contactName.equals(defaultTrgtIDTxt))))
+        if (contID.isEmpty() || contID.equals(defaultUserIDTxt))
         {
-            jTextArea1.setText("Please enter a User ID and a Contact User ID and try again.");
+            jTextArea1.setText("Please enter a Contact ID# and try again.");
         }
         else
         {            
-            jTextArea1.setText("Deleting contact " + contactName + " for " + userName + "...\n\n");
-            String response = userTool.createContact(userName, contactName);
+            jTextArea1.setText("Deleting Contact ID# " + contID + "...\n\n");
+            String response = userTool.deleteContact(contID);
             
             jTextArea1.append("Server response:\n" + response);                   
         }
@@ -807,6 +829,24 @@ public class TestHarnessUI extends javax.swing.JFrame
         }
     }                                          
 
+    private void dBaseBtn_getContMouseClicked(java.awt.event.MouseEvent evt)                                              
+    {                                                  
+        // TODO add your handling code here:
+        String userID = txtField_userID.getText();
+        
+        if ((userID.isEmpty() || userID.equals(defaultUserIDTxt)))
+        {
+            jTextArea1.setText("Please enter a User ID# and try again.");
+        }
+        else
+        {            
+            jTextArea1.setText("Retrieving contact list for User ID " + userID + "...\n\n");
+            String response = userTool.getContList(userID);
+            
+            jTextArea1.append("Server response:\n" + response);                   
+        }
+    }                                             
+
     /**
      * @param args the command line arguments
      */
@@ -859,6 +899,7 @@ public class TestHarnessUI extends javax.swing.JFrame
     private javax.swing.JButton dBaseBtn_delUser;
     private javax.swing.JButton dBaseBtn_disUser;
     private javax.swing.JButton dBaseBtn_edtUser;
+    private javax.swing.JButton dBaseBtn_getCont;
     private javax.swing.JButton dBaseBtn_getUser;
     private javax.swing.JButton dBaseBtn_regUser;
     private javax.swing.JPanel databasePanel;
