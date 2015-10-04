@@ -1,10 +1,10 @@
-package edu.nighthawks.soundwave.app.Serializer;
+package edu.nighthawks.soundwave;
 
 import java.io.Serializable;
 
 public class Contact implements Serializable 
 {
-	/**
+    /**
      * Generated Serial version Id
      */
     private static final long serialVersionUID = -55857686305273843L;
@@ -14,9 +14,10 @@ public class Contact implements Serializable
     @Override
     public String toString() {
         // TODO Auto-generated method stub
-        String value = "name : " + _name + "\nemail : " + _email;
+        String value = "name : " + _name + "\nemail : " + _email + "\n";
         return value;
     }
+    
 
     /**
      * Setters and getters methods.
@@ -30,7 +31,7 @@ public class Contact implements Serializable
         _email = email;
     }
 
-
+    
    public String getName()
     {
         return _name;
