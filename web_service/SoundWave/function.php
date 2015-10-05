@@ -115,7 +115,6 @@ function tableSpew($table) {
 } 
 
 
-
 // ***** USER FUNCTIONS *****
 
 
@@ -269,11 +268,10 @@ function message_create($user_id_sender, $user_id_target) { // upload_file
   
   // save file
   if (move_uploaded_file($gs_name, 'gs://androidsoundappproject.appspot.com/message/' . $user_id_sender . '/' . $file_name)) { // may need to rename file with unique name  
-  $file_path = $user_id_sender . '/' . $file_name;
-
-  // check to see if file uploaded successfully
-  //if (is_uploaded_file($_FILES['userfile']['tmp_name'])) {
     // upload success
+    $status = 201;
+    header('Created', true, $status);
+    $file_path = $user_id_sender . '/' . $file_name;
 
     // add file metadata to database table MESSAGE
     $dbh = dbConn();
@@ -314,9 +312,141 @@ function message_create($user_id_sender, $user_id_target) { // upload_file
    
   } else {
     // upload fail
+    $status = 501;
+    header('Method Not Implemented', true, $status);
     $msg_id = null;
     
   }
+  
+  // build response array
+  $response = array('MSG_ID' => $msg_id,
+                    'USER_ID_SENDER' => $user_id_sender,
+                    'FILE_NAME' => $file_name,
+                    'FILE_TYPE' => $file_type,
+                    'FILE_SIZE' => $file_size,
+                    'FILE_PATH' => $file_path,  // DEV_NOTE: need to add a key to file names
+                    'DATE_SENT' => $timestamp,
+                    'USER_ID_TARGET' => $user_id_target,
+                    'tmp_name' => $gs_name,
+                    'status' => $status,
+                    'error' => $file_error
+                    );
+  
+  return $response; //return(sendResponse($response));
+  
+}
+
+
+function message_upload() { // upload_file
+/*
+* Uploads file to the server and places it in the correct directory
+*
+* URL: /server?action=message_upload
+*/
+
+  // get file meta data to insert into database and for response body
+  $file_name = $_FILES['userfile']['name'];
+  $file_type = $_FILES['userfile']['type'];	
+  $file_size = $_FILES['userfile']['size'];
+   
+  // get current timestamp
+  $date = date_create();
+  $timestamp = date_format($date, 'Y-m-d H:i:s');
+  
+  // get error and temp info
+  //$file_tmp_name = $_FILES['userfile']['tmp_name'];
+  $file_error = $_FILES['userfile']['error'];
+  $gs_name = $_FILES['userfile']['tmp_name'];
+  
+  $user_id_sender = 9000;
+  
+  // create user directory if it does not exist
+  if (!file_exists('gs://androidsoundappproject.appspot.com/message/' . $user_id_sender)) {
+    // create dir
+    mkdir('gs://androidsoundappproject.appspot.com/message/' . $user_id_sender);
+  }
+  
+  // save file
+  if (move_uploaded_file($gs_name, 'gs://androidsoundappproject.appspot.com/message/' . $user_id_sender . '/' . $file_name)) { // may need to rename file with unique name  
+    $status = 201;
+    header('Created', true, $status);
+    $file_path = $user_id_sender . '/' . $file_name;
+   
+  } else {
+    // upload fail
+    $status = 501;
+    header('Method Not Implemented', true, $status);
+    
+  }
+  
+  // build response array
+  $response = array('FILE_NAME' => $file_name,
+                    'FILE_TYPE' => $file_type,
+                    'FILE_SIZE' => $file_size,
+                    'FILE_PATH' => $file_path,  // DEV_NOTE: need to add a key to file names
+                    'DATE_SENT' => $timestamp,
+                    'tmp_name' => $gs_name,
+                    'status' => $status,
+                    'error' => $file_error
+                    );
+  
+  return $response; //return(sendResponse($response));
+  
+}
+
+
+function message_insert($user_id_sender, $user_id_target) { // update database with sender, target and file path info
+/*
+* Adds record to table MESSAGE
+* Adds file metadata into table MESSAGE
+* Adds a record to table MESSAGE_DISTO for each target (recipient) // DEV_NOTE: currently only supports one recipient
+*
+* URL: /server?action=message_insert
+*/
+
+  // parse filemeta data // DEV_NOTE: add param $filemeta
+  $file_name = 'static_name_test';    //$filemeta['FILE_NAME'];
+  $file_type = 'static_type_test';    //$filemeta['FILE_TYPE'];	
+  $file_size = 9000;                  //$filemeta['FILE_SIZE'];
+  $file_path = 'static_path_test';    //$filemeta['FILE_PATH'];
+  $timestamp = '9999-12-31T23:59:59'; //$filemeta['DATE_SENT'];
+  
+  // add file metadata to database table MESSAGE
+  $dbh = dbConn();
+  
+  $sql = 'INSERT INTO MESSAGE (USER_ID_SENDER, FILE_NAME, FILE_TYPE, FILE_SIZE, FILE_PATH, DATE_SENT) 
+                  VALUES (:USER_ID_SENDER, :FILE_NAME, :FILE_TYPE, :FILE_SIZE, :FILE_PATH, :DATE_SENT)';
+  
+  $qry = $dbh->prepare($sql);
+  
+  // parameter array
+  $file_meta = array(':USER_ID_SENDER' => $user_id_sender,
+                     ':FILE_NAME' => $file_name,
+                     ':FILE_TYPE' => $file_type,
+                     ':FILE_SIZE' => $file_size,
+                     ':FILE_PATH' => $file_path,  // need to add a key to file names
+                     ':DATE_SENT' => $timestamp
+                    );
+  
+  $qry->execute($file_meta);
+  $msg_id = $dbh->lastInsertId();
+  
+  // add recipients to database table MESSAGE_DISTRO // DEV_NOTE: add loop if we allow multiple recipients
+  $sql = 'INSERT INTO MESSAGE_DISTRO (MSG_ID, USER_ID_SENDER, USER_ID_TARGET) 
+                              VALUES (:MSG_ID, :USER_ID_SENDER, :USER_ID_TARGET)';
+  
+  $qry = $dbh->prepare($sql);
+  
+  // parameter array
+  $distro = array(':MSG_ID' => $msg_id,
+                  ':USER_ID_SENDER' => $user_id_sender,
+                  ':USER_ID_TARGET' => $user_id_target
+                 );
+  
+  $qry->execute($distro);
+  
+  dbClose($dbh);
+
   
   // build response array
   $response = array('MSG_ID' => $msg_id,
@@ -333,6 +463,73 @@ function message_create($user_id_sender, $user_id_target) { // upload_file
   
   return $response; //return(sendResponse($response));
   
+}
+
+
+
+function upload_file() {
+  
+   //require_once 'google/appengine/api/cloud_storage/CloudStorageTools.php';
+   //use google\appengine\api\cloud_storage\CloudStorageTools;
+   //
+   //$options = [ 'gs_bucket_name' => 'androidsoundappproject.appspot.com' ];
+   //$upload_url = CloudStorageTools::createUploadUrl('/server', $options)
+   
+   // get file meta data for response body
+   $file_name = $_FILES['userfile']['name'];
+   //$file_name_tmp = $_FILES['userfile']['tmp_name'];
+
+   $file_type = $_FILES['userfile']['type'];	
+   $file_size = $_FILES['userfile']['size'];
+   
+   // get current timestamp and timezone
+   // **this may need to be handled differently in live**
+   $date = date_create();
+   $tz = $date -> getTimezone();
+   $timestamp = date_format($date, 'Y-m-d H:i:s');
+   $timezone = $tz -> getName(); // time zone will have to be generated by android app
+   
+   // get temp and error info
+   $file_tmp_name = $_FILES['userfile']['tmp_name'];	
+   $file_error = $_FILES['userfile']['error'];
+   
+   // build response array
+   $file_meta = array(
+     //'USER_ID_SENDER' => $user_id,
+     'FILE_NAME' => $file_name,
+     'FILE_TYPE' => $file_type,
+     'FILE_SIZE' => $file_size,
+     //'FILE_PATH' => $file_path,
+     'DATE_SENT' => $timestamp,
+     'TIMEZONE' => $timezone,
+     'tmp_name' => $file_tmp_name,
+     'error' => $file_error
+     );
+   
+
+   $gs_name = $_FILES['userfile']['tmp_name'];
+   move_uploaded_file($gs_name, 'gs://androidsoundappproject.appspot.com/message/' . $file_name.''); // may need to rename file with unique name 
+   //move_uploaded_file($file_name_tmp, __dir__ . '\user_docs\\\'' . $file_name.'');
+
+   
+   if (is_uploaded_file($file_tmp_name)) {
+   //if ($_FILES['userfile']['error'] !== UPLOAD_ERR_OK) {
+      // upload success
+      //die("Upload failed with error code " . $_FILES['userfile']['error']);
+      return $file_meta;
+   
+   } else {
+      // upload failed
+      //header("HTTP/1.1 $status $status_message");
+     
+      //$json_response = json_encode($file_meta);
+      return $file_meta;
+    
+      //$user_info = array("first_name" => "Chad", "last_name" => "Calkins", "address" => "1 Main St. Ann Arbor, MI");
+      //return $user_info;
+
+   }
+
 }
 
 
