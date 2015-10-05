@@ -1,9 +1,6 @@
-package edu.nighthawks.soundwave;
+package edu.nighthawks.soundwave.app.Serializer;
 
-import java.io.IOException;
-import static java.rmi.Naming.list;
 import java.util.ArrayList;
-import static java.util.Collections.list;
 import java.util.List;
 
 public class SerializationTest {
@@ -23,7 +20,7 @@ public class SerializationTest {
         contacts[1]=contact2;
         contacts[2]=contact3;
         
-        List <Contact> con = new ArrayList<>();
+        List <Contact> con = new ArrayList<Contact>();
         for (int i = 0; i < contacts.length; i++) {
 			con.add(contacts[i]);
 		}
@@ -42,7 +39,7 @@ public class SerializationTest {
             newCon = SerializationUtility.deserialize("serialization.txt");
             System.out.println(newCon.toString());
  
-        } catch (IOException | ClassNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

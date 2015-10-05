@@ -1,4 +1,4 @@
-package edu.nighthawks.soundwave;
+package edu.nighthawks.soundwave.app.Serializer;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;

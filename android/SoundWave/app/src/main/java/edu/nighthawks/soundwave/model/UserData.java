@@ -1,17 +1,13 @@
 package edu.nighthawks.soundwave.model;
 
 
-import java.io.IOException;
-
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.cfg.MapperConfig;
-import com.fasterxml.jackson.databind.introspect.AnnotatedField;
-import com.fasterxml.jackson.databind.introspect.AnnotatedMethod;
+
+import java.io.IOException;
+
+//import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 public class UserData {
 
