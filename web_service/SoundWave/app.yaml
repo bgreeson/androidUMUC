@@ -20,3 +20,6 @@ handlers:
 
 - url: /server
   script: server.php
+  
+- url: /upload
+  script: upload.php
