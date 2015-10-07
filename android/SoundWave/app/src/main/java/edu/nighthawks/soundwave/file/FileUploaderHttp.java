@@ -2,10 +2,13 @@ package edu.nighthawks.soundwave.file;
 
 import org.apache.commons.io.IOUtils;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -15,7 +18,102 @@ import java.net.URL;
  */
 public class FileUploaderHttp
 {
-	public static int uploadFile(String sourceFileUri)
+	private static final String LINE_FEED = "\r\n";
+
+
+	public static String createMsg(String senderUserID, String targetUserID, String fileName, String filePath) throws Exception
+	{
+		String srvrResponse = "";
+
+
+		try
+		{
+			String crlf = "\r\n";
+			String twoHyphens = "--";
+			String boundary =  "*****";
+
+			HttpURLConnection httpUrlConnection = null;
+			URL url = new URL("http://androidsoundappproject.appspot.com/server");
+			httpUrlConnection = (HttpURLConnection) url.openConnection();
+			httpUrlConnection.setUseCaches(false);
+			httpUrlConnection.setDoOutput(true);
+
+			httpUrlConnection.setRequestMethod("POST");
+			httpUrlConnection.setRequestProperty("Connection", "Keep-Alive");
+			httpUrlConnection.setRequestProperty("Cache-Control", "no-cache");
+			httpUrlConnection.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
+
+			DataOutputStream request = new DataOutputStream(httpUrlConnection.getOutputStream());
+
+			request.writeBytes(twoHyphens + boundary + crlf);
+			request.writeBytes("Content-Disposition: form-data; name=\"" + "userfile" + "\";filename=\"" + fileName + "\"" + crlf);
+			request.writeBytes(crlf);
+
+
+			// write file data
+			FileInputStream inputStream = new FileInputStream(filePath);
+			byte[] buffer = new byte[4096];
+			int bytesRead = -1;
+			while ((bytesRead = inputStream.read(buffer)) != -1)
+			{
+				request.write(buffer, 0, bytesRead);
+			}
+
+
+			inputStream.close();
+
+			request.writeBytes(crlf);
+			request.writeBytes(twoHyphens + boundary + twoHyphens + crlf);
+
+			// try to add multiple parts here
+
+			request.writeBytes("--" + boundary + LINE_FEED);
+			request.writeBytes("Content-Disposition: form-data; name=\"" + "user_id_sender" + "\"" + LINE_FEED);
+			request.writeBytes("Content-Type: text/plain; charset=" + "UTF-8" + LINE_FEED);
+			request.writeBytes(LINE_FEED);
+			request.writeBytes(senderUserID + LINE_FEED);
+
+			request.writeBytes("--" + boundary + LINE_FEED);
+			request.writeBytes("Content-Disposition: form-data; name=\"" + "user_id_target" + "\"" + LINE_FEED);
+			request.writeBytes("Content-Type: text/plain; charset=" + "UTF-8" + LINE_FEED);
+			request.writeBytes(LINE_FEED);
+			request.writeBytes(targetUserID + LINE_FEED);
+
+			request.writeBytes("--" + boundary + LINE_FEED);
+			request.writeBytes("Content-Disposition: form-data; name=\"" + "action" + "\"" + LINE_FEED);
+			request.writeBytes("Content-Type: text/plain; charset=" + "UTF-8" + LINE_FEED);
+			request.writeBytes(LINE_FEED);
+			request.writeBytes("message_create" + LINE_FEED);
+
+			request.flush();
+
+			// read response
+
+			InputStream responseStream = new BufferedInputStream(httpUrlConnection.getInputStream());
+
+			BufferedReader responseStreamReader = new BufferedReader(new InputStreamReader(responseStream));
+			String line = "";
+			StringBuilder stringBuilder = new StringBuilder();
+			while ((line = responseStreamReader.readLine()) != null)
+			{
+				stringBuilder.append(line).append("\n");
+			}
+			responseStreamReader.close();
+
+			srvrResponse = stringBuilder.toString();
+
+
+		}
+		catch (Exception ex)
+		{
+			srvrResponse = ex.getMessage();
+		}
+
+
+		return srvrResponse; //+ "\n\n" + serverResponseCode + " = " + serverResponseMessage + "\n";
+	}
+
+	public static int uploadFile1(String sourceFileUri)
 	{
 		HttpURLConnection conn = null;
 		DataOutputStream dos = null;

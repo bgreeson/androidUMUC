@@ -1,6 +1,5 @@
 package edu.nighthawks.soundwave.file;
 
-import org.apache.http.client.methods.HttpPost;
 
 /**
  * This is a class for driving the file upload process
@@ -10,7 +9,6 @@ import org.apache.http.client.methods.HttpPost;
  */
 public class FileUploaderThread extends Thread
 {
-	private HttpPost httpPost;
 	private String m_fileName;
 	
 	
@@ -25,7 +23,7 @@ public class FileUploaderThread extends Thread
 	{
 		try
 		{
-			FileUploaderHttp.uploadFile(m_fileName);
+			FileUploaderHttp.createMsg("22", "22", m_fileName, m_fileName);
 		}
 		catch (Exception e)
 		{
