@@ -1,11 +1,13 @@
 package edu.nighthawks.soundwave.display;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -24,8 +26,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.nighthawks.soundwave.contacts.Contact;
 import edu.nighthawks.soundwave.app.SoundWaveApplication;
+import edu.nighthawks.soundwave.contacts.Contact;
 import edu.nighthawks.soundwave.soundwave.R;
 
 /**
@@ -48,14 +50,30 @@ public class SwMainActivity extends AppCompatActivity
         super.onResume();
         String rawList = SoundWaveApplication.getApplicationObject().soundWaveController.retrieveContactsAfterStart();
 
+
         if (rawList.contentEquals(""))
             SoundWaveApplication.getApplicationObject().soundWaveController.retrieveContactsStart(SoundWaveApplication.getApplicationObject().soundWaveConfig.getmUserId());
+    }
+
+    private void setTitle()
+    {
+        try
+        {
+            PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            this.setTitle(this.getTitle().toString() + " " + pInfo.versionName);
+        }
+        catch (Exception ex)
+        {
+            Log.i(SwMainActivity.class.toString(), "Failed to get version.");
+        }
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        setTitle();
 
         contactNameTxt = (EditText) findViewById(R.id.txtName);
         contactEmailTxt = (EditText) findViewById(R.id.txtEmail);
