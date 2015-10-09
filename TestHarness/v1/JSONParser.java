@@ -22,7 +22,7 @@ public class JSONParser
         int index = 0, begIndex = 0, endIndex = 0;
         String jKey = "", jValue = "";
         boolean aKey = true, aValue = false;
-        
+
         while (jsonString.charAt(index) != ']')
         {
             //System.out.println("Indices: begIndex = " + begIndex + " endIndex = " + endIndex);
@@ -35,7 +35,7 @@ public class JSONParser
                 //begIndex = 0;
                 //endIndex = 0;
             }
-            
+
             if (begIndex != 0 && endIndex != 0)
             {
                 if (aKey) 
@@ -67,7 +67,7 @@ public class JSONParser
                 endIndex = 0;
             }
             index++;
-        }
+        }    
     }
     
     public String getValue(String jKey)
