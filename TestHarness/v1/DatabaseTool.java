@@ -27,6 +27,7 @@ public class DatabaseTool
     //Method used to create a new user
     public static String createUser(String dispName, String mailAddr, String password)
     {
+        String actResp = ""; //String variable used for the response from the server for this action
         try
         {            
             url = new URL("http://androidsoundappproject.appspot.com/server");
@@ -41,11 +42,15 @@ public class DatabaseTool
             ps.print("&user_pw=" + password);
             ps.print("&action=user_create");
             
-            conn.getInputStream();
+            InputStream is = conn.getInputStream();
+            actResp += IOUtils.toString(is);
+            
+            //conn.getInputStream();
             
             serverResponseCode = conn.getResponseCode();
             serverResponseMessage = conn.getResponseMessage();
 
+            is.close();
             ps.close();            
         }
         catch (Exception e)
@@ -53,23 +58,24 @@ public class DatabaseTool
             e.printStackTrace();
         }
         
-        return serverResponseCode + " = " + serverResponseMessage + "\n";
+        return actResp + "\n\n"  + serverResponseCode + " = " + serverResponseMessage + "\n";
     }
     
     //Method used to get an existing user's meta info via 0 = User ID# or 1 = eMail address
     public static String getUserInfo(String input, int type)
     {
-        String urlString = "", userInfo = "";
+        String urlString = ""; //Variable used for the URL that's based on the type of this action 
+        String actResp = ""; //Variable used for the response from the server for this action        
         
         if (type == 0)
         {
             urlString = "http://androidsoundappproject.appspot.com/server?user_id=" + input + "&action=user_info";
-            userInfo = "User Info (User ID = " + input + "):\n";
+            actResp = "User Info (User ID = " + input + "):\n";
         }
         else
         {
             urlString = "http://androidsoundappproject.appspot.com/server?email_addr=" + input + "&action=user_info_email";
-            userInfo = "User Info (eMail Address = " + input + "):\n";
+            actResp = "User Info (eMail Address = " + input + "):\n";
         }
 
         try
@@ -81,7 +87,7 @@ public class DatabaseTool
             conn.setDoOutput(true); // allow Outputs
             
             InputStream is = conn.getInputStream();
-            userInfo += IOUtils.toString(is);
+            actResp += IOUtils.toString(is);
             
             serverResponseCode = conn.getResponseCode();
             serverResponseMessage = conn.getResponseMessage();
@@ -93,12 +99,14 @@ public class DatabaseTool
             e.printStackTrace();
         }  
         
-        return userInfo + "\n\n" + serverResponseCode + " = " + serverResponseMessage + "\n";
+        return actResp + "\n\n" + serverResponseCode + " = " + serverResponseMessage + "\n";
     }
             
     //Method used to add an existing member to an existing user's contact list
     public static String createContact(String userID, String memberID)
     {
+        String actResp = ""; //Variable used for the response from the server for this action
+        
         try
         {            
             url = new URL("http://androidsoundappproject.appspot.com/server");
@@ -112,11 +120,14 @@ public class DatabaseTool
             ps.print("&user_id_member=" + memberID);
             ps.printf("&action=contact_create");
 
-            conn.getInputStream();
+            InputStream is = conn.getInputStream();
+            actResp += IOUtils.toString(is);
+            //conn.getInputStream();
             
             serverResponseCode = conn.getResponseCode();
             serverResponseMessage = conn.getResponseMessage();
 
+            is.close();
             ps.close();
         }
         catch (Exception e)
@@ -124,13 +135,14 @@ public class DatabaseTool
             e.printStackTrace();
         }
                
-        return serverResponseCode + " = " + serverResponseMessage + "\n";
+        return actResp + "\n\n" + serverResponseCode + " = " + serverResponseMessage + "\n";
     }
     
     //Method used to get the contact list of the specified user ID #
     public static String getContList(String userID)
     {
-        String response = "";
+        String actResp = ""; //Variable used for the response from the server for this action
+        
         try
         {            
             url = new URL("http://androidsoundappproject.appspot.com/server?user_id_owner=" + userID + "&action=contact_all");
@@ -145,7 +157,7 @@ public class DatabaseTool
             //conn.getInputStream();
             
             InputStream is = conn.getInputStream();
-            response += IOUtils.toString(is);
+            actResp += IOUtils.toString(is);
             
             serverResponseCode = conn.getResponseCode();
             serverResponseMessage = conn.getResponseMessage();
@@ -158,12 +170,14 @@ public class DatabaseTool
             e.printStackTrace();
         }
                 
-        return response + "\n\n" + serverResponseCode + " = " + serverResponseMessage + "\n";
+        return actResp + "\n\n" + serverResponseCode + " = " + serverResponseMessage + "\n";
     }
     
     //Method used to delete a listed contact using a contact ID#
     public static String deleteContact(String contactID)
     {
+        String actResp = ""; //Variable used for the response from the server for this action
+        
         try
         {            
             url = new URL("http://androidsoundappproject.appspot.com/server");
@@ -176,11 +190,14 @@ public class DatabaseTool
             ps.print("contact_id=" + contactID);
             ps.print("&action=contact_delete");
 
-            conn.getInputStream();
+            InputStream is = conn.getInputStream();
+            actResp += IOUtils.toString(is);
+            //conn.getInputStream();
             
             serverResponseCode = conn.getResponseCode();
             serverResponseMessage = conn.getResponseMessage();
 
+            is.close();
             ps.close();
         }
         catch (Exception e)
@@ -188,12 +205,14 @@ public class DatabaseTool
             e.printStackTrace();
         }
         
-        return serverResponseCode + " = " + serverResponseMessage + "\n";
+        return actResp + "\n\n" + serverResponseCode + " = " + serverResponseMessage + "\n";
     }
     
     //Method used to edit an existing user
     public static String editUser(String userID, String newName, String newMail, String newPass)
     {
+        String actResp = ""; //Variable used for the response from the server for this action
+        
         try
         {            
             url = new URL("http://androidsoundappproject.appspot.com/server");
@@ -209,11 +228,14 @@ public class DatabaseTool
             ps.print("&user_pw=" + newPass);
             ps.print("&action=user_edit");
             
-            conn.getInputStream();
+            InputStream is = conn.getInputStream();
+            actResp += IOUtils.toString(is);
+            //conn.getInputStream();
             
             serverResponseCode = conn.getResponseCode();
             serverResponseMessage = conn.getResponseMessage();
 
+            is.close();
             ps.close();
         }
         catch (Exception e)
@@ -221,12 +243,14 @@ public class DatabaseTool
             e.printStackTrace();
         }        
         
-        return serverResponseCode + " = " + serverResponseMessage + "\n";
+        return actResp + "\n\n" + serverResponseCode + " = " + serverResponseMessage + "\n";
     }
     
     //Method used to disable an existing user
     public static String disableUser(String userID)
     {
+        String actResp = ""; //Variable used for the response from the server for this action
+        
         try
         {            
             url = new URL("http://androidsoundappproject.appspot.com/server");
@@ -239,11 +263,14 @@ public class DatabaseTool
             ps.print("user_id=" + userID);
             ps.print("&action=user_disable");
 
-            conn.getInputStream();
+            InputStream is = conn.getInputStream();
+            actResp += IOUtils.toString(is);
+            //conn.getInputStream();
             
             serverResponseCode = conn.getResponseCode();
             serverResponseMessage = conn.getResponseMessage();
 
+            is.close();
             ps.close();
         }
         catch (Exception e)
@@ -251,12 +278,14 @@ public class DatabaseTool
             e.printStackTrace();
         }  
         
-        return serverResponseCode + " = " + serverResponseMessage + "\n";
+        return actResp + "\n\n" + serverResponseCode + " = " + serverResponseMessage + "\n";
     }
     
     //Method used to delete an existing user
     public static String deleteUser(String userID)
     {
+        String actResp = ""; //Variable used for the response from the server for this action
+        
         try
         {            
             url = new URL("http://androidsoundappproject.appspot.com/server");
@@ -269,11 +298,14 @@ public class DatabaseTool
             ps.print("user_id=" + userID);
             ps.print("&action=user_delete");
 
-            conn.getInputStream();
+            InputStream is = conn.getInputStream();
+            actResp += IOUtils.toString(is);
+            //conn.getInputStream();
             
             serverResponseCode = conn.getResponseCode();
             serverResponseMessage = conn.getResponseMessage();
 
+            is.close();
             ps.close();
         }
         catch (Exception e)
@@ -281,6 +313,6 @@ public class DatabaseTool
             e.printStackTrace();
         }  
         
-        return serverResponseCode + " = " + serverResponseMessage + "\n";
+        return actResp + "\n\n" + serverResponseCode + " = " + serverResponseMessage + "\n";
     }
 }
