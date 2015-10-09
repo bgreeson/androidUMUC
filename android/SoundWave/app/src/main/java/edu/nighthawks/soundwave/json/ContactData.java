@@ -49,6 +49,7 @@ public class ContactData
         //call copy  constructor
         this.user_id = mContctData.user_id;
         this.name = mContctData.name;
+        this.lastname = mContctData.lastname;
         this.email_addr = mContctData.email_addr;
         this.user_type = mContctData.user_type;
         this.user_pw = mContctData.user_pw;
@@ -63,6 +64,7 @@ public class ContactData
                         + mContctData.getDate_modified()
                         + mContctData.getEmail_addr()
                         + mContctData.getName()
+                        + mContctData.getLname()
                         + mContctData.getUser_id()
                         + mContctData.getUser_pw()
                         + mContctData.getUser_type()
@@ -86,6 +88,12 @@ public class ContactData
     }
     public void setName(String name) {
         this.name = name;
+    }
+    public String getLname() {
+        return lastname;
+    }
+    public void setLname(String lastname) {
+        this.lastname = lastname;
     }
     public String getEmail_addr() {
         return email_addr;
