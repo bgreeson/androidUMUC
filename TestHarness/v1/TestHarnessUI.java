@@ -274,6 +274,13 @@ public class TestHarnessUI extends javax.swing.JFrame
         });
 
         storBtn_download.setText("DOWNLOAD MSG");
+        storBtn_download.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
+                storBtn_downloadMouseClicked(evt);
+            }
+        });
 
         storBtn_delete.setText("DELETE MESSAGE");
         storBtn_delete.addMouseListener(new java.awt.event.MouseAdapter()
@@ -476,9 +483,15 @@ public class TestHarnessUI extends javax.swing.JFrame
                 jTextArea1.setText("Creating Message: " + fileName + "\n");
                 jTextArea1.append("Path: " + filePath + "\n\n");
 
-                String response = fileTool.createMsg(userID, targetUserID, fileName, filePath);
+                try
+                {
+                    String response = fileTool.createMsg(userID, targetUserID, filePath);
+                    jTextArea1.append("Server response:\n" + response);  
+                }
+                catch (Exception e)
+                {
 
-                jTextArea1.append("Server response:\n" + response);            
+                }                          
             }
         }           
     }                                           
@@ -844,6 +857,24 @@ public class TestHarnessUI extends javax.swing.JFrame
             String response = userTool.getContList(userID);
             
             jTextArea1.append("Server response:\n" + response);                   
+        }
+    }                                             
+
+    private void storBtn_downloadMouseClicked(java.awt.event.MouseEvent evt)                                              
+    {                                                  
+        // TODO add your handling code here:
+        String msgID = txtField_mesgID.getText();
+        
+        if ((msgID.isEmpty() || msgID.equals(defaultMesgIDTxt)))
+        {
+            jTextArea1.setText("Please enter a Message ID# and try again.");
+        }
+        else
+        {
+            jTextArea1.setText("Getting Message (Message ID#): " + msgID + "\n");
+            String response = fileTool.getMsg(msgID);
+            
+            jTextArea1.append("Server response:\n" + response);             
         }
     }                                             
 
