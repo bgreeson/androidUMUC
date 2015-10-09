@@ -126,6 +126,7 @@ public class ContactData
 
     public static void main(String[] args) throws Exception
     {
+        // This is Array?
         String json = "[{\"USER_ID\":\"22\",\"FRST_NME\":\"joe9\",\"LAST_NME\":\"\",\"EMAIL_ADDR\":\"joe.keefe@gmail.com\",\"USER_TYPE\":\"basic\",\"USER_PW\":\"pass\",\"DATE_MODIFIED\":\"2015-10-01 04:32:57\",\"DATE_EFFECTIVE\":\"2015-10-01 04:32:57\",\"DATE_EXPIRED\":\"9999-12-31 23:59:59\"}]";
         new ContactData(json);
     }
