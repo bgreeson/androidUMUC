@@ -41,19 +41,19 @@ public class SoundWaveConfig
     }
 */
 
-    public String getmUserName()
+    public String getUserName()
     {
         return mUserName;
     }
 
-    public void setmUserName(String mUserName)
+    public void setUserName(String mUserName)
     {
         this.mUserName = mUserName;
         Context context = SoundWaveApplication.getApplicationObject().getApplicationContext();
         SharePrefsUtil.setString(context, SharePrefsUtil.USER_NAME, mUserName);
     }
 
-    public String getmUserEmail()
+    public String getUserEmail()
     {
         return mUserEmail;
     }
@@ -65,34 +65,34 @@ public class SoundWaveConfig
         SharePrefsUtil.setString(context, SharePrefsUtil.USER_EMAIL, mUserEmail);
     }
 
-    public String getmRawContactsString()
+    public String getRawContactsString()
     {
         return mRawContactsString;
     }
 
-    public void setmRawContactsString(String mRawContactsString)
+    public void setRawContactsString(String mRawContactsString)
     {
         this.mRawContactsString = mRawContactsString;
     }
 
-    public int getmUserId()
+    public int getUserId()
     {
         return mUserId;
     }
 
-    public void setmUserId(int mUserId)
+    public void setUserId(int mUserId)
     {
         this.mUserId = mUserId;
         Context context = SoundWaveApplication.getApplicationObject().getApplicationContext();
         SharePrefsUtil.setInt(context, SharePrefsUtil.USER_ID, mUserId);
     }
 
-    public boolean ismRegistered()
+    public boolean isRegistered()
     {
         return mRegistered;
     }
 
-    public void setmRegistered(boolean mRegistered)
+    public void setRegistered(boolean mRegistered)
     {
         this.mRegistered = mRegistered;
     }

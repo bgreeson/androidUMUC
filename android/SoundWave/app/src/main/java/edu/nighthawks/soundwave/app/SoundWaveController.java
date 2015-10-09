@@ -86,7 +86,7 @@ public class SoundWaveController
 		System.out.println(dateFormat.format(date));
 
 		fileName = String.format("%s-%s",
-				SoundWaveApplication.getApplicationObject().soundWaveConfig.getmUserName(),
+				SoundWaveApplication.getApplicationObject().soundWaveConfig.getUserName(),
 				dateFormat.format(date));
 
 		return fileName;
@@ -110,24 +110,26 @@ public class SoundWaveController
 		{}
 
 		UserData data = new UserData(accountCreator.getmRawResponseBodyJson());
-		SoundWaveApplication.getApplicationObject().soundWaveConfig.setmUserId(data.getUser_id());
+		SoundWaveApplication.getApplicationObject().soundWaveConfig.setUserId(data.getUser_id());
 		SoundWaveApplication.getApplicationObject().soundWaveConfig.setmUserEmail(data.getEmail_addr());
-		SoundWaveApplication.getApplicationObject().soundWaveConfig.setmUserName(data.getName());
+		SoundWaveApplication.getApplicationObject().soundWaveConfig.setUserName(data.getName());
 	}
 
 	/**
 	 * Create a new contact
 	 */
-	public void createContact(String name, String emailAddress)
+	public void createContact(String name, String emailAddress) throws IOException
 	{
 		HttpServerGetAccountInfoByEmail getAccountInfoByEmail = new HttpServerGetAccountInfoByEmail(emailAddress);
 		getAccountInfoByEmail.start();
 
+		// This needs to be switched to async call with Android Handler for callback
 		while (getAccountInfoByEmail.isDone() == false)
 		{}
 
-		getAccountInfoByEmail.getmRawResponseBodyJson();
-		int userIdMember = 22; // TODO get this from parsered repsonse above
+
+		UserData data = new UserData(getAccountInfoByEmail.getmRawResponseBodyJson());
+		int userIdMember = data.getUser_id(); // TODO get this from parsered repsonse above
 
 		// get member ID from call above
 

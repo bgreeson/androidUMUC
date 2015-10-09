@@ -23,6 +23,7 @@ import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,7 +53,7 @@ public class SwMainActivity extends AppCompatActivity
 
 
         if (rawList.contentEquals(""))
-            SoundWaveApplication.getApplicationObject().soundWaveController.retrieveContactsStart(SoundWaveApplication.getApplicationObject().soundWaveConfig.getmUserId());
+            SoundWaveApplication.getApplicationObject().soundWaveController.retrieveContactsStart(SoundWaveApplication.getApplicationObject().soundWaveConfig.getUserId());
     }
 
     private void setTitle()
@@ -83,10 +84,10 @@ public class SwMainActivity extends AppCompatActivity
         passwordTxt = (EditText) findViewById(R.id.editTextPassword);
         accountEmailTxt = (EditText) findViewById(R.id.editTextEmailAddress);
 
-        if (SoundWaveApplication.getApplicationObject().soundWaveConfig.getmUserEmail().isEmpty() == false)
-            accountEmailTxt.setText(SoundWaveApplication.getApplicationObject().soundWaveConfig.getmUserEmail());
-        if (SoundWaveApplication.getApplicationObject().soundWaveConfig.getmUserName().isEmpty() == false)
-            displayNameTxt.setText((SoundWaveApplication.getApplicationObject().soundWaveConfig.getmUserName()));
+        if (SoundWaveApplication.getApplicationObject().soundWaveConfig.getUserEmail().isEmpty() == false)
+            accountEmailTxt.setText(SoundWaveApplication.getApplicationObject().soundWaveConfig.getUserEmail());
+        if (SoundWaveApplication.getApplicationObject().soundWaveConfig.getUserName().isEmpty() == false)
+            displayNameTxt.setText((SoundWaveApplication.getApplicationObject().soundWaveConfig.getUserName()));
 
 
 
@@ -244,8 +245,15 @@ public class SwMainActivity extends AppCompatActivity
 
     private void  addContact(String name, String email)
     {
-        Contacts.add(new Contact(name, email));
-        SoundWaveApplication.getApplicationObject().soundWaveController.createContact(name, email);
+        try
+        {
+            Contacts.add(new Contact(name, email));
+            SoundWaveApplication.getApplicationObject().soundWaveController.createContact(name, email);
+        }
+        catch (IOException ex)
+        {
+            Toast.makeText(SwMainActivity.this, "Failed to add contact: " + ex.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void registerAccount(String displayName, String accountEmail, String password)
@@ -254,7 +262,7 @@ public class SwMainActivity extends AppCompatActivity
         {
             SoundWaveApplication.getApplicationObject().soundWaveController.createAccount(displayName, password, accountEmail);
         }
-        catch (Exception ex)
+        catch (IOException ex)
         {
             Toast.makeText(SwMainActivity.this, "Failed to create account: " + ex.getMessage(), Toast.LENGTH_SHORT).show();
         }

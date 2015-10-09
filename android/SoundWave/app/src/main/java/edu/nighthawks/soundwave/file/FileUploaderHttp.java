@@ -145,18 +145,18 @@ public class FileUploaderHttp extends Thread implements IGetUserInfo
 	@Override
 	public String getUserEmail()
 	{
-		return SoundWaveApplication.getApplicationObject().soundWaveConfig.getmUserEmail();
+		return SoundWaveApplication.getApplicationObject().soundWaveConfig.getUserEmail();
 	}
 
 	@Override
 	public String getUserDiplayName()
 	{
-		return SoundWaveApplication.getApplicationObject().soundWaveConfig.getmUserName();
+		return SoundWaveApplication.getApplicationObject().soundWaveConfig.getUserName();
 	}
 
 	@Override
 	public int getUserId()
 	{
-		return SoundWaveApplication.getApplicationObject().soundWaveConfig.getmUserId();
+		return SoundWaveApplication.getApplicationObject().soundWaveConfig.getUserId();
 	}
 }

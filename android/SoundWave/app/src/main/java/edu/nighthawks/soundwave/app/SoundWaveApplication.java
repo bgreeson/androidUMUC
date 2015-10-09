@@ -33,7 +33,7 @@ public class SoundWaveApplication extends Application
 		soundWaveController = new SoundWaveController();
 		soundWaveConfig = new SoundWaveConfig();
 		soundWaveConfig.initFromSharedPrefs();
-		soundWaveController.retrieveContactsStart(soundWaveConfig.getmUserId());
+		soundWaveController.retrieveContactsStart(soundWaveConfig.getUserId());
 	}
 
 }

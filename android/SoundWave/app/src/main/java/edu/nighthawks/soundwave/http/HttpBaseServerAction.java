@@ -55,39 +55,40 @@ public abstract class HttpBaseServerAction extends Thread implements IGetUserInf
         HttpURLConnection conn = null;
         DataOutputStream dos = null;
 
-            //URL url = new URL("http://androidsoundappproject.appspot.com/server");
-            URL url = new URL(mUrl);
+        //URL url = new URL("http://androidsoundappproject.appspot.com/server");
+        URL url = new URL(mUrl);
 
-            conn = (HttpURLConnection) url.openConnection();
-            conn.setDoInput(true); // allow Inputs
-            conn.setDoOutput(true); // allow Outputs
-            PrintStream ps = new PrintStream(conn.getOutputStream());
+        conn = (HttpURLConnection) url.openConnection();
+        conn.setDoInput(true); // allow Inputs
+        conn.setDoOutput(true); // allow Outputs
+        PrintStream ps = new PrintStream(conn.getOutputStream());
 
-            // add all name/values
-            Set<String> keys = variables.keySet();
-            for (String key : keys)
-            {
-                String name = key;
-                String value = variables.get(key);
-                ps.print("&" + name + "=" + value);
-            }
+        // add all name/values
+        Set<String> keys = variables.keySet();
+        for (String key : keys)
+        {
+            String name = key;
+            String value = variables.get(key);
+            ps.print("&" + name + "=" + value);
+        }
 
-            // Add Action
+        // Add Action
+        if (mAction != null && !mAction.isEmpty())
             ps.print("&action=" + mAction);
 
 
-            // Read back server response
-            InputStream is = conn.getInputStream();
-            String encoding = conn.getContentEncoding();
-            this.mRawResponseBodyJson = IOUtils.toString(is, encoding);
+        // Read back server response
+        InputStream is = conn.getInputStream();
+        String encoding = conn.getContentEncoding();
+        this.mRawResponseBodyJson = IOUtils.toString(is, encoding);
 
-            // Get HTTP return code and message
-            mHttpResponseCode = conn.getResponseCode();
-            mHttpResponseMessage = conn.getResponseMessage();
+        // Get HTTP return code and message
+        mHttpResponseCode = conn.getResponseCode();
+        mHttpResponseMessage = conn.getResponseMessage();
 
-            // Close Streams
-            is.close();
-            ps.close();
+        // Close Streams
+        is.close();
+        ps.close();
     }
 
     @Override
@@ -117,22 +118,19 @@ public abstract class HttpBaseServerAction extends Thread implements IGetUserInf
     }
 
 
-    @Override
     public String getUserEmail()
     {
-        return SoundWaveApplication.getApplicationObject().soundWaveConfig.getmUserEmail();
+        return SoundWaveApplication.getApplicationObject().soundWaveConfig.getUserEmail();
     }
 
-    @Override
     public String getUserDiplayName()
     {
-        return SoundWaveApplication.getApplicationObject().soundWaveConfig.getmUserName();
+        return SoundWaveApplication.getApplicationObject().soundWaveConfig.getUserName();
     }
 
-    @Override
     public int getUserId()
     {
-        return SoundWaveApplication.getApplicationObject().soundWaveConfig.getmUserId();
+        return SoundWaveApplication.getApplicationObject().soundWaveConfig.getUserId();
     }
 
     public int getmHttpResponseCode()
