@@ -87,7 +87,9 @@ public class DatabaseTool
             conn.setDoOutput(true); // allow Outputs
             
             InputStream is = conn.getInputStream();
-            actResp += IOUtils.toString(is);
+            JSONParser myParse = new JSONParser(IOUtils.toString(is));
+            actResp += myParse.getParse(true);            
+            //actResp += IOUtils.toString(is);
             
             serverResponseCode = conn.getResponseCode();
             serverResponseMessage = conn.getResponseMessage();
