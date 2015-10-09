@@ -8,9 +8,22 @@ package testharness;
 
 import org.apache.commons.io.IOUtils;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
+
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -20,6 +33,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.file.Files;
+import java.util.Base64;
 
 public class StorageTool
 {
@@ -31,38 +45,169 @@ public class StorageTool
     private static int serverResponseCode = 0;
     private static String serverResponseMessage = "";
     
-    
-    
-    public static String downloadMsg(String msgID)
+    public static String createMsg(String senderUserID, String targetUserID, String filePath) throws Exception
     {
+        CloseableHttpClient httpclient = HttpClients.createDefault();
+        String actResp = ""; //String variable used for the response from the server for this action
         
+        try 
+        {
+            HttpPost httppost = new HttpPost("http://androidsoundappproject.appspot.com/server");
+
+            FileBody bin = new FileBody(new File(filePath));
+            //StringBody comment = new StringBody("A binary file of some kind", ContentType.TEXT_PLAIN);
+
+            HttpEntity reqEntity = MultipartEntityBuilder.create()
+                    .addPart("action", new StringBody("message_create", ContentType.TEXT_PLAIN))
+                    .addPart("user_id_sender", new StringBody(senderUserID, ContentType.TEXT_PLAIN))
+                    .addPart("user_id_target", new StringBody(targetUserID, ContentType.TEXT_PLAIN))
+                    .addPart("userfile", bin)
+                    .build();
+
+
+            httppost.setEntity(reqEntity);
+
+            //System.out.println("executing request " + httppost.getRequestLine());
+            CloseableHttpResponse httpResp = httpclient.execute(httppost);
+            try 
+            {
+                
+                //System.out.println("----------------------------------------");
+                //System.out.println(response.getStatusLine());
+                HttpEntity resEntity = httpResp.getEntity();
+                //if (resEntity != null) 
+                //{
+                //    System.out.println("Response content length: " + resEntity.getContentLength());
+                //}
+                EntityUtils.consume(resEntity);
+            } 
+            finally 
+            {
+                //serverResponseCode = conn.getResponseCode();
+                //serverResponseMessage = conn.getResponseMessage();
+                actResp = httpResp.toString();
+                httpResp.close();                
+            }
+        } 
+        finally 
+        {
+            httpclient.close();
+        }
         
-        return serverResponseCode + " = " + serverResponseMessage + "\n";
+        return actResp + "\n";
+    }
+    
+    public static String getMsg(String msgID)
+    {
+        //String urlString = "http://androidsoundappproject.appspot.com/server?msg_id=" + msgID 
+        //            + "&action=message_get";
+        //String urlString = "http://androidsoundappproject.appspot.com/server?action=message_get&msg_id=" + msgID; 
+        
+        String msgInfo = getMsgInfo(msgID);
+        //String urlFilePath = "http://androidsoundappproject.appspot.com/";
+        //String urlFilePath = "https://androidsoundappproject.appspot.com/message/";
+        String urlFilePath = "http://storage.cloud.google.com/androidsoundappproject.appspot.com/message/";        
+        //String urlFilePath = "http://androidsoundappproject.appspot.com.storage.cloud.google.com/message/";
+        //String urlFilePath = "https://console.developers.google.com/m/cloudstorage/b/androidsoundappproject.appspot.com/o/message/";
+        
+        int begIndex = msgInfo.indexOf("USER_ID_SENDER");
+        int endIndex = msgInfo.indexOf("FILE_NAME");
+        
+        urlFilePath += msgInfo.subSequence(begIndex + 17, endIndex - 3);
+        
+        begIndex = endIndex;
+        endIndex = msgInfo.indexOf("FILE_TYPE");
+        
+        String fileName = msgInfo.substring(begIndex + 12, endIndex - 3);
+        urlFilePath += "/" + fileName;
+        
+        File file = new File("C:\\Users\\J H Copeland\\Downloads\\SWMessages\\" + fileName);
+        
+        if (!file.exists())
+        {
+            try
+            {
+                System.out.println("Create file...");
+                file.createNewFile();
+                
+                FileOutputStream fileOutputStream = new FileOutputStream(file);
+                //CloseableHttpClient httpclient = HttpClients.custom().build();
+                CloseableHttpClient httpclient = HttpClients.createDefault();
+                try 
+                {
+                    System.out.println("Open input...");
+                    //String userCredentials = "username:password";
+                    //String basicAuth = "Basic " + new String(new Base64().encode(userCredentials.getBytes()));
+                    HttpGet httpget = new HttpGet(urlFilePath);
+                    //httpget.setHeader("Authorization", basicAuth);
+                    //httpget.setHeader("Content-Type", "text/html");
+                    CloseableHttpResponse response = httpclient.execute(httpget);
+                    System.out.println("Status: " + response.getStatusLine());
+                        try 
+                        {
+                            System.out.println("Download...");
+                            fileOutputStream.write(EntityUtils.toByteArray(response.getEntity()));
+                            fileOutputStream.close();
+                        } 
+                        finally
+                        {
+                            response.close();
+                        }
+                    } 
+                finally 
+                {
+                        httpclient.close();
+                }
+                
+            }
+            catch (Exception ex)
+            {
+                System.out.println("ERROR!!!");
+            }
+            String message = "--- Get Message (Message ID = " + msgID + ") ---\n";
+            return message + urlFilePath + "\nDownload Successful\n\n";
+        }
+        
+        String message = "--- Get Message (Message ID = " + msgID + ") ---\n";
+        return message + urlFilePath + "\nDownload Error\n\n";
     }
     
     public static String deleteMsg(String targetUserID, String msgID)
     {
+        String actResp = ""; //String variable used for the response from the server for this action
+        
         try
         {            
-            url = new URL("http://androidsoundappproject.appspot.com/server?user_id_target=" + targetUserID 
-                    + "&msg_id=" + msgID + "&action=message_distro_delete");
+            //url = new URL("http://androidsoundappproject.appspot.com/server?user_id_target=" + targetUserID 
+            //        + "&msg_id=" + msgID + "&action=message_distro_delete");
+            
+            url = new URL("http://androidsoundappproject.appspot.com/server");
             
             conn = (HttpURLConnection) url.openConnection();
             conn.setDoInput(true); // allow Inputs
             conn.setDoOutput(true); // allow Outputs
-
-            conn.getInputStream();
+            
+            ps = new PrintStream(conn.getOutputStream());            
+            ps.print("user_id_target=" + targetUserID);
+            ps.print("&msg_id=" + msgID);
+            ps.print("&action=message_distro_delete");
+            //conn.getInputStream();
+            
+            InputStream is = conn.getInputStream();
+            actResp += IOUtils.toString(is);
             
             serverResponseCode = conn.getResponseCode();
             serverResponseMessage = conn.getResponseMessage();
-
+            
+            is.close();
+            ps.close();
         }
         catch (Exception e)
         {
             e.printStackTrace();
         }
         
-        return serverResponseCode + " = " + serverResponseMessage + "\n";
+        return actResp + "\n\n" + serverResponseCode + " = " + serverResponseMessage + "\n";
     }
     
     public static String getMsgCount(String targetUserID)
@@ -103,7 +248,8 @@ public class StorageTool
     
     private static String accessServer(String urlString, String message)
     {
-        String response = message;
+        String actResp = message; //String variable used for the response from the server for this action
+        
         try
         {            
             url = new URL(urlString);
@@ -114,7 +260,7 @@ public class StorageTool
             //conn.getInputStream();
             
             InputStream is = conn.getInputStream();
-            response += IOUtils.toString(is);
+            actResp += IOUtils.toString(is);
             
             serverResponseCode = conn.getResponseCode();
             serverResponseMessage = conn.getResponseMessage();
@@ -126,7 +272,7 @@ public class StorageTool
             e.printStackTrace();
         }
         
-        return response + "\n\n" + serverResponseCode + " = " + serverResponseMessage + "\n";
+        return actResp + "\n\n" + serverResponseCode + " = " + serverResponseMessage + "\n";
     }
     
     public static String createMsgA(String userID, String targetUserID, String fileName, String sourceFileUri)
@@ -236,11 +382,11 @@ public class StorageTool
     
     public static String createMsgB(String userID, String targetUserID, String fileName, String sourceFileUri)
     {
-        HttpURLConnection conn = null;
         DataOutputStream dos = null;
+        String charset = "UTF-8";
         String lineEnd = "\r\n";
         String twoHyphens = "--";
-        String boundary = "*****";
+        String boundary = Long.toHexString(System.currentTimeMillis()); // Just generate some unique random value.
         int bytesRead, bytesAvailable, bufferSize;
         byte[] buffer;
         int maxBufferSize = 1 * 1024 * 1024;
@@ -249,12 +395,12 @@ public class StorageTool
 
         try
         {
-            String query1 = String.format("user_id_sender=%s", URLEncoder.encode(userID, "UTF-8"));
+            String query1 = String.format("&user_id_sender=%s", URLEncoder.encode(userID, "UTF-8"));
             //+ userID)"user_id_sender=" + userID + "&user_id_target=" + targetUserID + "&file_name=" + fileName + "&action=message_create";
             String query2 = String.format("&user_id_target=%s", URLEncoder.encode(targetUserID, "UTF-8"));
             String query3 = String.format("&userfile=%s", URLEncoder.encode(fileName, "UTF-8"));
-            String query4 = String.format("&action=", URLEncoder.encode("message_create", "UTF-8"));
-            
+            String query4 = String.format("action=", URLEncoder.encode("message_create", "UTF-8"));
+            String query = String.format("action=message_create&user_id_sender=%s&user_id_target=%s", URLEncoder.encode(userID, charset), URLEncoder.encode(targetUserID, charset));
             
             FileInputStream fileInputStream = new FileInputStream(sourceFile);
             //URL url = new URL("http://androidsoundappproject.appspot.com/server2?user_id_sender=" + userID +
@@ -263,27 +409,30 @@ public class StorageTool
             //        "&user_id_target=" + targetUserID);
             //URL url = new URL("http://androidsoundappproject.appspot.com/server?action=message_create_dev");
             //URL url = new URL("http://androidsoundappproject.appspot.com/server2?action=upload_file");
-            URL url = new URL("http://androidsoundappproject.appspot.com/server");
+            url = new URL("http://androidsoundappproject.appspot.com/server");
 
             conn = (HttpURLConnection) url.openConnection();
             conn.setDoInput(true); // allow Inputs
             conn.setDoOutput(true); // allow Outputs
-            conn.setUseCaches(false); // don't use cached copy
-            conn.setRequestMethod("POST");
+            //conn.setUseCaches(false); // don't use cached copy
+            //conn.setRequestMethod("POST");
             //conn.setRequestProperty("Connection", "Keep-Alive");
             //conn.setRequestProperty("ENCTYPE", "multipart/form-data");
-            //conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
-            conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+            //conn.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
+            conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=" + charset);
+            //conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
             //conn.setRequestProperty("action", "upload_file");
             //conn.setRequestProperty("userfile", sourceFile.getAbsolutePath());
 
             dos = new DataOutputStream(conn.getOutputStream());
             //dos.writeBytes("user_id_sender=" + userID + "&user_id_target=" + targetUserID + "&action=message_create");
-            dos.writeBytes(query1 + query2 + query4);
+            //dos.writeBytes(query4 + query1 + query2);
+            dos.write(query.getBytes("UTF-8"));
+            
             //dos.writeBytes("action=upload_file");
             
             dos.writeBytes(twoHyphens + boundary + lineEnd);
-            dos.writeBytes("Content-Disposition: form-data; name=userfile; filename=" + sourceFile.getAbsolutePath() + "" + lineEnd);
+            dos.writeBytes("Content-Disposition: form-data; name=userfile; filename=" + sourceFile.getName() + "" + lineEnd);
             //dos.writeBytes("Content-Disposition: form-data; name=userfile; filename=" + fileName + "" + lineEnd);
             dos.writeBytes(lineEnd);
 
@@ -307,10 +456,10 @@ public class StorageTool
             dos.writeBytes(lineEnd);
             dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
             
-            //InputStream is = conn.getInputStream();
-            //response += IOUtils.toString(is);
+            InputStream is = conn.getInputStream();
+            response += IOUtils.toString(is);
 
-            //is.close();
+            is.close();
 
             // Responses from the server (code and message)
             serverResponseCode = conn.getResponseCode();
@@ -330,12 +479,9 @@ public class StorageTool
         return response + "\n\n" + serverResponseCode + " = " + serverResponseMessage + "\n";
     }
     
-    public static String createMsg(String userID, String targetUserID, String fileName, String sourceFileUri)
+    public static String createMsgC(String userID, String targetUserID, String fileName, String sourceFileUri)
     {
         String charset = "UTF-8";
-        //String param1 = "value";
-        //String param2 = "";
-        //String param3 = "";            
         //File textFile = new File(sourceFileUri);
         File binaryFile = new File(sourceFileUri);
         String boundary = Long.toHexString(System.currentTimeMillis()); // Just generate some unique random value.
@@ -350,28 +496,34 @@ public class StorageTool
 
         try
         {
-            String query = String.format("user_id_sender=%s&user_id_target=%s&action=message_create", 
-                    URLEncoder.encode(userID, charset), URLEncoder.encode(targetUserID, charset));
-            
-            url = new URL("http://androidsoundappproject.appspot.com/server?" + query);
+            String query = String.format("action=message_create&user_id_sender=%s&user_id_target=%s", URLEncoder.encode(userID, charset), URLEncoder.encode(targetUserID, charset));
+
+            url = new URL("http://androidsoundappproject.appspot.com/server");
             conn = (HttpURLConnection) url.openConnection();
+            conn.setDoInput(true);
             conn.setDoOutput(true);
-            conn.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
+            //conn.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
+            conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=" + charset);
             
             OutputStream output = conn.getOutputStream();
+            output.write(query.getBytes(charset));
+            
             PrintWriter writer = new PrintWriter(new OutputStreamWriter(output, charset), true);
             
-            /*
             // Send normal param.
-            writer.append("--" + boundary).append(CRLF);
-            writer.append("Content-Disposition: form-data; name=\"param\"").append(CRLF);
-            writer.append("Content-Type: text/plain; charset=" + charset).append(CRLF);
-            writer.append(CRLF).append(query).append(CRLF).flush();
-
+            //writer.append("--" + boundary).append(CRLF);
+            //writer.append("Content-Disposition: form-data; name=\"param\"").append(CRLF);
+            //writer.append("Content-Type: text/plain; charset=" + charset).append(CRLF);
+            //writer.append(CRLF).append(query).append(CRLF).flush();
+            //writer.append(CRLF).append(userID).append(CRLF);
+            //writer.append(CRLF).append(targetUserID).append(CRLF);
+            //writer.append("action=message_create").append(CRLF).flush();
             
+
+            /*
             // Send text file.
             writer.append("--" + boundary).append(CRLF);
-            writer.append("Content-Disposition: form-data; name=\"textFile\"; filename=\"" + textFile.getName() + "\"").append(CRLF);
+            writer.append("Content-Disposition: form-data; name=\"userfile\"; filename=\"" + textFile.getName() + "\"").append(CRLF);
             writer.append("Content-Type: text/plain; charset=" + charset).append(CRLF); // Text file itself must be saved in this charset!
             writer.append(CRLF).flush();
             Files.copy(textFile.toPath(), output);
@@ -382,7 +534,8 @@ public class StorageTool
             
             // Send binary file.
             writer.append("--" + boundary).append(CRLF);
-            writer.append("Content-Disposition: form-data; name=\"binaryFile\"; filename=\"" + binaryFile.getName() + "\"").append(CRLF);
+            writer.append("Content-Disposition: form-data; name=\"userfile\"; filename=\"" + binaryFile.getName() + "\"").append(CRLF);
+            //writer.append("Content-Disposition: form-data; name=binaryfile; filename=" + binaryFile.getName() + "").append(CRLF);
             writer.append("Content-Type: " + HttpURLConnection.guessContentTypeFromName(binaryFile.getName())).append(CRLF);
             writer.append("Content-Transfer-Encoding: binary").append(CRLF);
             writer.append(CRLF).flush();
@@ -393,6 +546,16 @@ public class StorageTool
             
             // End of multipart/form-data.
             writer.append("--" + boundary + "--").append(CRLF).flush();
+            
+            InputStream is = conn.getInputStream();
+            response += IOUtils.toString(is);
+
+            is.close();
+            
+            // Responses from the server (code and message)
+            serverResponseCode = conn.getResponseCode();
+            serverResponseMessage = conn.getResponseMessage();
+            
         }
         catch (Exception e)
         {
