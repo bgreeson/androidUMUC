@@ -11,6 +11,7 @@ import edu.nighthawks.soundwave.http.HttpServerCreateContact;
 import edu.nighthawks.soundwave.http.HttpServerGetAccountInfoByEmail;
 import edu.nighthawks.soundwave.http.HttpServerGetContactsList;
 import edu.nighthawks.soundwave.http.HttpServerRegisterAccount;
+import edu.nighthawks.soundwave.json.ContactData;
 import edu.nighthawks.soundwave.json.UserData;
 
 /**
@@ -128,7 +129,7 @@ public class SoundWaveController
 		{}
 
 
-		UserData data = new UserData(getAccountInfoByEmail.getmRawResponseBodyJson());
+		ContactData data = new ContactData(getAccountInfoByEmail.getmRawResponseBodyJson());
 		int userIdMember = data.getUser_id(); // TODO get this from parsered repsonse above
 
 		// get member ID from call above
