@@ -153,6 +153,15 @@ public class SoundWaveController
 
 	}
 
+	/**
+	 * Play messages from contact ID specified
+	 * @param contactId
+	 */
+	public void playMessage(String contactId)
+	{
+		// TODO add playback here
+	}
+
 
 	/**
 	 * Create a new contact

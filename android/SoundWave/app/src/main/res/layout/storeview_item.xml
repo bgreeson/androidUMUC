@@ -1,22 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:weightSum="1">
 
-    <TextView
-        android:layout_width="173dp"
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Contact Name"
-        android:id="@+id/contactName"
-        android:layout_weight="0.04" />
+        android:layout_weight=".5"
+        android:id="@+id/layoutRecord">
 
-    <TextView
-        android:layout_width="173dp"
+        <TextView
+            android:layout_width="173dp"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Contact Name"
+            android:id="@+id/contactName"
+            android:layout_weight="0.04" />
+
+        <TextView
+            android:layout_width="173dp"
+            android:layout_height="wrap_content"
+            android:text="Email"
+            android:id="@+id/emailAddress"
+            android:layout_weight="0.04" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Email"
-        android:id="@+id/emailAddress"
-        android:layout_weight="0.04" />
+        android:layout_weight=".5"
+        android:id="@+id/layoutPlay">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Play Messae"
+            android:id="@+id/textViewPlay"/>
+
+    </LinearLayout>
 
 </LinearLayout>

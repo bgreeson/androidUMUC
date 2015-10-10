@@ -17,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
@@ -256,8 +257,19 @@ public class SwMainActivity extends AppCompatActivity
             name.setText(currentContact.getName());
             TextView email = (TextView) view.findViewById(R.id.emailAddress);
             email.setText(currentContact.getEmail());
+            LinearLayout layoutRecord = (LinearLayout) view.findViewById(R.id.layoutRecord);
+            LinearLayout layoutPlay = (LinearLayout) view.findViewById(R.id.layoutPlay);
 
-            view.setOnTouchListener(new View.OnTouchListener()
+            layoutPlay.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    SoundWaveApplication.getApplicationObject().soundWaveController.playMessage(currentContact.getmCountactId());
+                }
+            });
+
+            layoutRecord.setOnTouchListener(new View.OnTouchListener()
             {
                 @Override
                 public boolean onTouch(View v, MotionEvent event)
