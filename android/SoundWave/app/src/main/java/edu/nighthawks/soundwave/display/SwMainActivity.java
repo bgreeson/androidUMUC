@@ -43,6 +43,7 @@ public class SwMainActivity extends AppCompatActivity
     //List<Contact> Contacts = new ArrayList<Contact>();
     ListView contactListView;
     ArrayAdapter<Contact> adapter;
+    TabHost tabHost;
 
     @Override
     protected void onResume()
@@ -51,6 +52,12 @@ public class SwMainActivity extends AppCompatActivity
 
         if (adapter != null)
             adapter.notifyDataSetChanged();
+
+        if (tabHost != null && tabHost.getCurrentTab() == 0)
+        {
+            Toast.makeText(getApplicationContext(), "Long hold on contact record button to send message. Single tap play button to play messages",
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void setTitle()
@@ -91,7 +98,7 @@ public class SwMainActivity extends AppCompatActivity
         contactListView.setAdapter(adapter);
 
 
-        TabHost tabHost = (TabHost) findViewById(R.id.tabHost);
+        tabHost = (TabHost) findViewById(R.id.tabHost);
 
 
         tabHost.setup();
