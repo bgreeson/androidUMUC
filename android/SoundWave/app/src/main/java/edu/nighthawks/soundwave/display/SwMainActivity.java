@@ -251,6 +251,8 @@ public class SwMainActivity extends AppCompatActivity
             if (view ==null)
                 view = getLayoutInflater().inflate(R.layout.storeview_item, parent, false);
 
+            view.setBackgroundColor(Color.LTGRAY);
+
             final Contact currentContact = SoundWaveApplication.getApplicationObject().soundWaveConfig.mContactList.get(position);
 
             TextView name = (TextView) view.findViewById(R.id.contactName);
