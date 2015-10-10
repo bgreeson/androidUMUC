@@ -156,7 +156,13 @@ public class SoundWaveController
 		mContactListRetriever = new HttpServerGetContactsList(userIdOwner);
 		mContactListRetriever.start();
 
+		while (!mContactListRetriever.isDone())
+		{}
+
 		JSONParser parser = new JSONParser(mContactListRetriever.getmRawResponseBodyJson());
+		String val = parser.getValue("USER_ID");
+
+
 
 		// TODO handle list of items here, adding each to list view in main page
 
