@@ -129,7 +129,6 @@ public class UserData
 	public static void main(String[] args) throws Exception
 	{
 		String json = "{\"USER_ID\":\"22\",\"FRST_NME\":\"gg\",\"EMAIL_ADDR\":\"hv\",\"USER_PW\":\"gv\",\"USER_TYPE\":\"basic\",\"DATE_EFFECTIVE\":\"2015-10-08 04:07:27\",\"DATE_MODIFIED\":\"2015-10-08 04:07:27\",\"DATE_EXPIRED\":\"9999-12-31T23:59:59\"}";
-		//String json =        "{\"USER_ID\":\"34\",\"FRST_NME\":\"temp1\",\"LAST_NME\":\"\",\"EMAIL_ADDR\":\"temp1@gmail.com\",\"USER_TYPE\":\"basic\",\"USER_PW\":\"password\",\"DATE_MODIFIED\":\"2015-10-03 17:15:02\",\"DATE_EFFECTIVE\":\"2015-10-03 17:15:02\",\"DATE_EXPIRED\":\"9999-12-31 23:59:59\"}" ;
 		new UserData(json);
 	}
 	

@@ -150,5 +150,12 @@ public abstract class HttpBaseServerAction extends Thread implements IGetUserInf
         return mRawResponseBodyJson;
     }
 
+    public String getmRawResponseBodyJsonWithoutBrackets()
+    {
+        return mRawResponseBodyJson.substring(1, mRawResponseBodyJson.length() -1);
+    }
+
+
+
 
 }

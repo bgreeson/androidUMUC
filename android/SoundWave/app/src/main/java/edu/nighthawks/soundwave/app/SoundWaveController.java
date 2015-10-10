@@ -113,7 +113,8 @@ public class SoundWaveController
 		while (accountCreator.isDone() == false)
 		{}
 
-		UserData data = new UserData(accountCreator.getmRawResponseBodyJson());
+
+		UserData data = new UserData(accountCreator.getmRawResponseBodyJsonWithoutBrackets());
 		SoundWaveApplication.getApplicationObject().soundWaveConfig.setUserId(data.getUser_id());
 		SoundWaveApplication.getApplicationObject().soundWaveConfig.setmUserEmail(data.getEmail_addr());
 		SoundWaveApplication.getApplicationObject().soundWaveConfig.setUserName(data.getName());
@@ -173,8 +174,7 @@ public class SoundWaveController
 			while (!getInfo.isDone())
 			{}
 
-			UserData data = new UserData(getInfo.getmRawResponseBodyJson());
-
+			UserData data = new UserData(getInfo.getmRawResponseBodyJsonWithoutBrackets());
 
 			contact.setEmail(data.getEmail_addr());
 			contact.setName(data.getName());
@@ -188,7 +188,7 @@ public class SoundWaveController
 
 	}
 
-	public String retrieveContactsAfterStart()
+/*	public String retrieveContactsAfterStart()
 	{
 		if (mContactListRetriever != null)
 		{
@@ -206,6 +206,6 @@ public class SoundWaveController
 			return "";
 		}
 
-	}
+	}*/
 
 }
