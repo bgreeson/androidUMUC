@@ -28,12 +28,12 @@ public class FileUploaderHttp extends Thread implements IGetUserInfo
 	private String mFileName;
 	private String mFilePath;
 
-	public FileUploaderHttp(String targetId, String filePathIn)
+	public FileUploaderHttp(String targetContactId, String filePathIn)
 	{
 		mDone = false;
 
 		mSenderUserID = Integer.toString(getUserId());
-		mTargetUserID = targetId;
+		mTargetUserID = targetContactId;
 		mFileName = filePathIn;
 		mFilePath = filePathIn;
 	}

@@ -73,11 +73,11 @@ public class SoundWaveController
 	/**
 	 * Upload file to server
 	 */
-	public void send()
+	public void send(String contactId)
 	{
 		// Send the recorded file
 		// TODO This should be on a worker thread. We get away with it for short files
-		FileUploaderHttp fileUploader = new FileUploaderHttp("22",recorder.getRecordedFileName());
+		FileUploaderHttp fileUploader = new FileUploaderHttp(contactId,recorder.getRecordedFileName());
 		fileUploader.start();
 	}
 

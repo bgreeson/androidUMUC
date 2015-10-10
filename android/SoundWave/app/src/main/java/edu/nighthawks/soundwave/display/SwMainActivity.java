@@ -13,7 +13,6 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -168,37 +167,14 @@ public class SwMainActivity extends AppCompatActivity
             }
         });
 
-        contactListView.setOnTouchListener(new View.OnTouchListener()
-        {
-            @Override
-            public boolean onTouch(View v, MotionEvent event)
-            {
-                if (event.getActionMasked() == MotionEvent.ACTION_DOWN)
-                {
-                    SoundWaveApplication.getApplicationObject().soundWaveController.setTransmit(true);
-                    v.setBackgroundColor(Color.BLUE);
-                }
-                else if (event.getActionMasked() == MotionEvent.ACTION_UP)
-                {
-                    SoundWaveApplication.getApplicationObject().soundWaveController.setTransmit(false);
-                    SoundWaveApplication.getApplicationObject().soundWaveController.send();
-                    v.setBackgroundColor(Color.LTGRAY);
-                }
-
-
-                //textViewTransmitStatus.setText(SoundWaveApplication.getApplicationObject().soundWaveController.getStatusString());
-                return false;
-            }
-        });
-
-        contactListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+/*        contactListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
 
             }
-        });
+        });*/
 
     }
 
@@ -265,7 +241,7 @@ public class SwMainActivity extends AppCompatActivity
     {
         public ContactListAdapter()
         {
-            super (SwMainActivity.this, R.layout.storeview_item, SoundWaveApplication.getApplicationObject().soundWaveConfig.mContactList);
+            super(SwMainActivity.this, R.layout.storeview_item, SoundWaveApplication.getApplicationObject().soundWaveConfig.mContactList);
         }
 
         @Override
@@ -274,12 +250,38 @@ public class SwMainActivity extends AppCompatActivity
             if (view ==null)
                 view = getLayoutInflater().inflate(R.layout.storeview_item, parent, false);
 
-            Contact currentContact = SoundWaveApplication.getApplicationObject().soundWaveConfig.mContactList.get(position);
+            final Contact currentContact = SoundWaveApplication.getApplicationObject().soundWaveConfig.mContactList.get(position);
 
             TextView name = (TextView) view.findViewById(R.id.contactName);
             name.setText(currentContact.getName());
             TextView email = (TextView) view.findViewById(R.id.emailAddress);
             email.setText(currentContact.getEmail());
+
+            view.setOnTouchListener(new View.OnTouchListener()
+            {
+                @Override
+                public boolean onTouch(View v, MotionEvent event)
+                {
+                    boolean ret = false;
+                    switch (event.getActionMasked())
+                    {
+                        case MotionEvent.ACTION_DOWN:
+                            if (SoundWaveApplication.getApplicationObject().soundWaveController.getTransmit() == false)
+                                SoundWaveApplication.getApplicationObject().soundWaveController.setTransmit(true);
+
+                            v.setBackgroundColor(Color.BLUE);
+                            ret = true;
+                            break;
+                        case MotionEvent.ACTION_UP:
+                            SoundWaveApplication.getApplicationObject().soundWaveController.setTransmit(false);
+                            SoundWaveApplication.getApplicationObject().soundWaveController.send(currentContact.getmCountactId());
+                            v.setBackgroundColor(Color.LTGRAY);
+                            break;
+                    }
+
+                    return ret;
+                }
+            });
 
             return view;
         }
