@@ -8,20 +8,19 @@ package testharness;
 
 import java.awt.Color;
 import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class TestHarnessUI extends javax.swing.JFrame
 {
     //Create a database tool object and a storage tool object    
-    private DatabaseTool userTool = new DatabaseTool();
-    private StorageTool fileTool = new StorageTool();
+    private final DatabaseTool userTool = new DatabaseTool();
+    private final StorageTool fileTool = new StorageTool();
     
     //Set defaults for each of the text fields
-    private String defaultUserIDTxt = "User Name / ID# or Contact ID#...";
-    private String defaultTrgtIDTxt = "New User Name / Target User ID#...";
-    private String defaultMailIDTxt = "eMail Address...";
-    private String defaultPasswdTxt = "Password...";
-    private String defaultMesgIDTxt = "Message ID#...";
+    private final String defaultUserIDTxt = "User Name / ID# or Contact ID#...";
+    private final String defaultTrgtIDTxt = "New User Name / Target User ID#...";
+    private final String defaultMailIDTxt = "eMail Address...";
+    private final String defaultPasswdTxt = "Password...";
+    private final String defaultMesgIDTxt = "Message ID#...";
 
     /**
      * Creates new form TestHarnessUI
