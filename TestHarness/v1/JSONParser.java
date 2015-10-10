@@ -6,7 +6,6 @@ package testharness;
  * have been parsed into a linkedhashmap for retrieval.
  */
 
-import java.awt.List;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
