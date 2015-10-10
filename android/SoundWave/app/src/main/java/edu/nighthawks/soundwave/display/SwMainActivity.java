@@ -24,8 +24,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import edu.nighthawks.soundwave.app.SoundWaveApplication;
 import edu.nighthawks.soundwave.contacts.Contact;
@@ -42,14 +40,17 @@ public class SwMainActivity extends AppCompatActivity
 {
     EditText contactNameTxt, contactEmailTxt, contactAddressTxt, displayNameTxt, passwordTxt, accountEmailTxt;
     ImageView contactImageimgView;
-    List<Contact> Contacts = new ArrayList<Contact>();
+    //List<Contact> Contacts = new ArrayList<Contact>();
     ListView contactListView;
+    ArrayAdapter<Contact> adapter;
 
     @Override
     protected void onResume()
     {
         super.onResume();
-        String rawList = SoundWaveApplication.getApplicationObject().soundWaveController.retrieveContactsAfterStart();
+
+        if (adapter != null)
+            adapter.notifyDataSetChanged();
     }
 
     private void setTitle()
@@ -86,6 +87,8 @@ public class SwMainActivity extends AppCompatActivity
             displayNameTxt.setText((SoundWaveApplication.getApplicationObject().soundWaveConfig.getUserName()));
 
 
+        adapter = new ContactListAdapter();
+        contactListView.setAdapter(adapter);
 
 
         TabHost tabHost = (TabHost) findViewById(R.id.tabHost);
@@ -115,7 +118,7 @@ public class SwMainActivity extends AppCompatActivity
             public void onClick(View view)
             {
                 addContact(contactNameTxt.getText().toString(), contactEmailTxt.getText().toString());
-                populateList();
+                //populateList();
                 Toast.makeText(getApplicationContext(), contactNameTxt.getText().toString() + " has been added to your contacts!", Toast.LENGTH_SHORT).show();
             }
         });
@@ -208,11 +211,6 @@ public class SwMainActivity extends AppCompatActivity
        }
     }
 
-    private void populateList()
-    {
-        ArrayAdapter<Contact> adapter = new ContactListAdapter();
-        contactListView.setAdapter(adapter);
-    }
 
 /*    contactListView.setOnItemClickListener(new OnItemClickListener() {
     @Override
@@ -243,7 +241,6 @@ public class SwMainActivity extends AppCompatActivity
     {
         try
         {
-            Contacts.add(new Contact(name, email));
             SoundWaveApplication.getApplicationObject().soundWaveController.createContact(name, email);
         }
         catch (IOException ex)
@@ -268,7 +265,7 @@ public class SwMainActivity extends AppCompatActivity
     {
         public ContactListAdapter()
         {
-            super (SwMainActivity.this, R.layout.storeview_item, Contacts);
+            super (SwMainActivity.this, R.layout.storeview_item, SoundWaveApplication.getApplicationObject().soundWaveConfig.mContactList);
         }
 
         @Override
@@ -277,7 +274,7 @@ public class SwMainActivity extends AppCompatActivity
             if (view ==null)
                 view = getLayoutInflater().inflate(R.layout.storeview_item, parent, false);
 
-            Contact currentContact = Contacts.get(position);
+            Contact currentContact = SoundWaveApplication.getApplicationObject().soundWaveConfig.mContactList.get(position);
 
             TextView name = (TextView) view.findViewById(R.id.contactName);
             name.setText(currentContact.getName());

@@ -146,6 +146,8 @@ public class SoundWaveController
 		while (contactCreator.isDone() == false)
 		{}
 
+		// TODO May need to add full contact info here.
+		SoundWaveApplication.getApplicationObject().soundWaveConfig.mContactList.add(new Contact(name, emailAddress));
 		// add contact to shared prefs list
 		//SharePrefsUtil.setString(SoundWaveApplication.getApplicationObject().getBaseContext(), SharePrefsUtil.CONTACTS, userIdOwner);
 
