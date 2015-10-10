@@ -572,7 +572,7 @@ $upload_url = CloudStorageTools::createUploadUrl('/server?action=message_create'
    <tr>
     <td><b>Required:</b></td>
    </tr><tr>
-    <td>user_id_sender:</td>
+    <td>msg_id:</td>
    </tr><tr>
     <td><input type="number" name="msg_id"></td>
    </tr><tr>
