@@ -1,14 +1,24 @@
 package testharness;
 
+/*
+ * FILE: JSONParser.java
+ * Creates an object from a JSON string whose value pairs
+ * have been parsed into a linkedhashmap for retrieval.
+ */
+
+import java.awt.List;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 public class JSONParser
 {
-    private Map<String, String> parsedMap = new LinkedHashMap();
+    private LinkedHashMap<String, String> parsedMap = new LinkedHashMap();
     private String jsonString = "";
+    private LinkedList<LinkedHashMap> parseList = new LinkedList();
     
+    //Constructor
     public JSONParser(String json)
     {
         //System.out.println("Initializing....");
@@ -17,6 +27,7 @@ public class JSONParser
         //System.out.println("Initialized!!");
     }
     
+    //Method used to parse a JSON string
     private void parseString()
     {
         int index = 0, begIndex = 0, endIndex = 0;
@@ -60,6 +71,11 @@ public class JSONParser
             if (aKey && !aValue && !jKey.isEmpty())
             {
                 //System.out.println("Setting Map: Key = " + jKey + " Value = " + jValue);
+                if (parsedMap.containsKey(jKey)) 
+                {
+                    parseList.add(parsedMap);
+                    parsedMap = new LinkedHashMap();
+                }
                 parsedMap.put(jKey, jValue);
                 jKey = "";
                 jValue = "";
@@ -67,30 +83,40 @@ public class JSONParser
                 endIndex = 0;
             }
             index++;
-        }    
+        }
+        parseList.add(parsedMap);
     }
     
-    public String getValue(String jKey)
+    //Method used to get a value based on a key
+    public String getValue(int listIndex, String jKey)
     {
-        return parsedMap.get(jKey);
+        if (listIndex >= parseList.size()) return "Index and Value does not exist!";
+        return parseList.get(listIndex).get(jKey).toString();
+        //return parsedMap.get(jKey);
     }
     
+    //Method used to return the key value pairs in a string
     public String getParse(boolean lineBreaks)
     {
         if (!lineBreaks)
         {
             //System.out.println(parsedMap.toString());
-            return parsedMap.toString();
+            return parseList.toString();
         }
         String parseValues = "";
-        Iterator i = parsedMap.entrySet().iterator();
-        
-        while (i.hasNext())
+        for (int i = 0; i < parseList.size(); i++)
         {
-            Map.Entry pair = (Map.Entry)i.next();
-            parseValues += pair.getKey() + " = " + pair.getValue() + "\n";
-            i.remove();
-        }
+            //Iterator it = parsedMap.entrySet().iterator();
+            Iterator it = parseList.get(i).entrySet().iterator();
+
+            while (it.hasNext())
+            {
+                Map.Entry pair = (Map.Entry)it.next();
+                parseValues += pair.getKey() + " = " + pair.getValue() + "\n";
+                it.remove();
+            }
+            parseValues += "\n";
+        }            
         return parseValues;        
     }
 }
