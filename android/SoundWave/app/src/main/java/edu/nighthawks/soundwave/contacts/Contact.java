@@ -27,6 +27,12 @@ public class Contact implements Serializable
         return mUserIdOwner;
     }
 
+    public String getUserIdContact()
+    {
+        return mUserIdMember;
+    }
+
+
     public static long getSerialVersionUID()
     {
         return serialVersionUID;

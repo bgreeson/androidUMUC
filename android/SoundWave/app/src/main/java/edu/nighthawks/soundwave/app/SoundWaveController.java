@@ -179,7 +179,7 @@ public class SoundWaveController
 
 		for (Contact contact : SoundWaveApplication.getApplicationObject().soundWaveConfig.mContactList)
 		{
-			HttpServerGetAccountInfo getInfo = new HttpServerGetAccountInfo(contact.getmUserIdOwner());
+			HttpServerGetAccountInfo getInfo = new HttpServerGetAccountInfo(contact.getUserIdContact());
 			getInfo.start();
 
 			while (!getInfo.isDone())
