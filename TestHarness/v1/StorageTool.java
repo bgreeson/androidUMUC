@@ -48,7 +48,6 @@ public class StorageTool
             HttpPost httppost = new HttpPost("http://androidsoundappproject.appspot.com/server");
 
             FileBody bin = new FileBody(new File(filePath));
-            //StringBody comment = new StringBody("A binary file of some kind", ContentType.TEXT_PLAIN);
 
             HttpEntity reqEntity = MultipartEntityBuilder.create()
                     .addPart("action", new StringBody("message_create", ContentType.TEXT_PLAIN))
@@ -57,27 +56,16 @@ public class StorageTool
                     .addPart("userfile", bin)
                     .build();
 
-
             httppost.setEntity(reqEntity);
 
-            //System.out.println("executing request " + httppost.getRequestLine());
             CloseableHttpResponse httpResp = httpclient.execute(httppost);
             try 
             {
-                
-                //System.out.println("----------------------------------------");
-                //System.out.println(response.getStatusLine());
                 HttpEntity resEntity = httpResp.getEntity();
-                //if (resEntity != null) 
-                //{
-                //    System.out.println("Response content length: " + resEntity.getContentLength());
-                //}
                 EntityUtils.consume(resEntity);
             } 
             finally 
             {
-                //serverResponseCode = conn.getResponseCode();
-                //serverResponseMessage = conn.getResponseMessage();
                 actResp = httpResp.toString();
                 httpResp.close();                
             }
@@ -85,12 +73,11 @@ public class StorageTool
         finally 
         {
             httpclient.close();
-        }
-        
+        }        
         return actResp + "\n";
     }
     
-    //Method used to get a file from the server
+    //Method used to get an audio file from the server
     public static String getMsg(String msgID)
     {
         String msgInfo = getMsgInfo(msgID);
@@ -119,16 +106,11 @@ public class StorageTool
                 file.createNewFile();
                 
                 FileOutputStream fileOutputStream = new FileOutputStream(file);
-                //CloseableHttpClient httpclient = HttpClients.custom().build();
                 CloseableHttpClient httpclient = HttpClients.createDefault();
                 try 
                 {
                     System.out.println("Open input...");
-                    //String userCredentials = "username:password";
-                    //String basicAuth = "Basic " + new String(new Base64().encode(userCredentials.getBytes()));
                     HttpGet httpget = new HttpGet(urlFilePath);
-                    //httpget.setHeader("Authorization", basicAuth);
-                    //httpget.setHeader("Content-Type", "text/html");
                     CloseableHttpResponse response = httpclient.execute(httpget);
                     System.out.println("Status: " + response.getStatusLine());
                         try 
@@ -146,7 +128,6 @@ public class StorageTool
                 {
                         httpclient.close();
                 }
-                
             }
             catch (Exception ex)
             {
@@ -154,8 +135,7 @@ public class StorageTool
             }
             String message = "--- Get Message (Message ID = " + msgID + ") ---\n";
             return message + urlFilePath + "\nDownload Successful\n\n";
-        }
-        
+        }        
         String message = "--- Get Message (Message ID = " + msgID + ") ---\n";
         return message + urlFilePath + "\nDownload Error\n\n";
     }
@@ -167,9 +147,6 @@ public class StorageTool
         
         try
         {            
-            //url = new URL("http://androidsoundappproject.appspot.com/server?user_id_target=" + targetUserID 
-            //        + "&msg_id=" + msgID + "&action=message_distro_delete");
-            
             url = new URL("http://androidsoundappproject.appspot.com/server");
             
             conn = (HttpURLConnection) url.openConnection();
@@ -180,7 +157,6 @@ public class StorageTool
             ps.print("user_id_target=" + targetUserID);
             ps.print("&msg_id=" + msgID);
             ps.print("&action=message_distro_delete");
-            //conn.getInputStream();
             
             InputStream is = conn.getInputStream();
             actResp += IOUtils.toString(is);
@@ -194,8 +170,7 @@ public class StorageTool
         catch (Exception e)
         {
             e.printStackTrace();
-        }
-        
+        }        
         return actResp + "\n\n" + serverResponseCode + " = " + serverResponseMessage + "\n";
     }
     
@@ -251,14 +226,11 @@ public class StorageTool
             conn = (HttpURLConnection) url.openConnection();
             conn.setDoInput(true); // allow Inputs
             conn.setDoOutput(true); // allow Outputs            
-            //conn.getInputStream();
             
             InputStream is = conn.getInputStream();
             String servResp = IOUtils.toString(is);
-            //System.out.println(servResp);
             if (servResp.length() > 1)
             {
-                //System.out.println(servResp.substring(0, 3));
                 if ((servResp.charAt(0) == '[' && servResp.charAt(1) == '{') || servResp.substring(0, 4).equals("sql:"))
                 {
                     JSONParser myParse = new JSONParser(servResp);
@@ -275,8 +247,7 @@ public class StorageTool
         catch (Exception e)
         {
             e.printStackTrace();
-        }
-        
+        }        
         return actResp + "\n" + serverResponseCode + " = " + serverResponseMessage + "\n";
     }
 }
