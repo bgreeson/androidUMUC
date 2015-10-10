@@ -171,7 +171,7 @@ function user_create($disp_nme, $email_addr, $user_pw) {
   
   dbClose($dbh);
   
-  /*
+  /* DEV_NOTE: Removed to make response consistent  
   // build response array
   $response = array('USER_ID'=>$user_id, 
                     'FRST_NME'=>$disp_nme,  
@@ -249,9 +249,6 @@ function message_create($user_id_sender, $user_id_target) { // upload_file
 * URL: /server?action=message_create
 */
   
-  //require_once 'google/appengine/api/cloud_storage/CloudStorageTools.php';
-  //use google\appengine\api\cloud_storage\CloudStorageTools;
-  
   // get file meta data to insert into database and for response body
   $file_name = $_FILES['userfile']['name'];
   $file_type = $_FILES['userfile']['type'];	
@@ -281,6 +278,7 @@ function message_create($user_id_sender, $user_id_target) { // upload_file
   $options = array('gs'=>array('acl'=>'public-read','Content-Type' => $_FILES['userfile']['type']));
   $ctx = stream_context_create($options);
   
+  // place file into storage and give it public access
   if (true == rename($_FILES['userfile']['tmp_name'], $object_url, $ctx)) {
   //if (move_uploaded_file($gs_name, $object_url)) { // may need to rename file with unique name  
  
@@ -288,13 +286,7 @@ function message_create($user_id_sender, $user_id_target) { // upload_file
     $status = 201;
     header('Created', true, $status);
     
-    //$options = array('gs'=>array('acl'=>'public-read','Content-Type' => $_FILES['userfile']['type']));
-    //$ctx = stream_context_create($options);
-    
-    //$options = stream_context_create(['gs'=>['acl'=>'public-read']]);
-    //$my_file = fopen($object_url, 'r+', false, $options);
-    //fclose($my_file);
-    
+
     $file_path = $user_id_sender . '/' . $file_name;
     $file_public_url = CloudStorageTools::getPublicUrl($object_url, false);
     
