@@ -130,7 +130,7 @@ public class SoundWaveController
 
 
 		JSONParser parser = new JSONParser(getAccountInfoByEmail.getmRawResponseBodyJson());
-		String userIdStr = parser.getValue("USER_ID"); // TODO get this from parsered repsonse above
+		String userIdStr = parser.getValue("USER_ID");
 		int userIdMember = Integer.parseInt(userIdStr);
 
 		// get member ID from call above
@@ -155,6 +155,11 @@ public class SoundWaveController
 	{
 		mContactListRetriever = new HttpServerGetContactsList(userIdOwner);
 		mContactListRetriever.start();
+
+		JSONParser parser = new JSONParser(mContactListRetriever.getmRawResponseBodyJson());
+
+		// TODO handle list of items here, adding each to list view in main page
+
 	}
 
 	public String retrieveContactsAfterStart()

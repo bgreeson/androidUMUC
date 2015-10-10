@@ -45,7 +45,7 @@ public class ContactData
         mContctData = new ContactData();
         ObjectMapper mapper = new ObjectMapper();
         mContctData = mapper.readValue(jsonString, ContactData.class);
-        //TODO
+
         //call copy  constructor
         this.user_id = mContctData.user_id;
         this.name = mContctData.name;

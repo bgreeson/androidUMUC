@@ -47,7 +47,7 @@ public class UserData
 		mUserData = new UserData();
 		ObjectMapper mapper = new ObjectMapper();
 		mUserData = mapper.readValue(jsonString, UserData.class);
-		//TODO
+
 		//call copy  constructor
 		this.user_id = mUserData.user_id;
 		this.name = mUserData.name;

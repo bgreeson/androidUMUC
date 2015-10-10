@@ -12,8 +12,8 @@ public class Contact implements Serializable
     private String _name, _email;
 
     @Override
-    public String toString() {
-        // TODO Auto-generated method stub
+    public String toString()
+    {
         String value = "name : " + _name + "\nemail : " + _email + "\n";
         return value;
     }
