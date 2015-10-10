@@ -1,6 +1,9 @@
 package edu.nighthawks.soundwave.app;
 
 import android.app.Application;
+import android.widget.Toast;
+
+import java.io.IOException;
 
 /**
  * This class holds all the main SoundWave applicaiton objects.
@@ -33,7 +36,15 @@ public class SoundWaveApplication extends Application
 		soundWaveController = new SoundWaveController();
 		soundWaveConfig = new SoundWaveConfig();
 		soundWaveConfig.initFromSharedPrefs();
-		soundWaveController.retrieveContactsStart(soundWaveConfig.getUserId());
+
+		try
+		{
+			soundWaveController.retrieveContactsStart(soundWaveConfig.getUserId());
+		}
+		catch (IOException ex)
+		{
+			Toast.makeText(this, "Failed to initilize contact list from server: " + ex.getMessage(), Toast.LENGTH_SHORT).show();
+		}
 	}
 
 }

@@ -50,10 +50,6 @@ public class SwMainActivity extends AppCompatActivity
     {
         super.onResume();
         String rawList = SoundWaveApplication.getApplicationObject().soundWaveController.retrieveContactsAfterStart();
-
-
-        if (rawList.contentEquals(""))
-            SoundWaveApplication.getApplicationObject().soundWaveController.retrieveContactsStart(SoundWaveApplication.getApplicationObject().soundWaveConfig.getUserId());
     }
 
     private void setTitle()

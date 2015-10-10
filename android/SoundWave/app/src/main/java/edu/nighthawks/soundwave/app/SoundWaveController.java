@@ -5,13 +5,16 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import edu.nighthawks.soundwave.contacts.Contact;
 import edu.nighthawks.soundwave.file.FileRecorder;
 import edu.nighthawks.soundwave.file.FileUploaderHttp;
 import edu.nighthawks.soundwave.http.HttpServerCreateContact;
+import edu.nighthawks.soundwave.http.HttpServerGetAccountInfo;
 import edu.nighthawks.soundwave.http.HttpServerGetAccountInfoByEmail;
 import edu.nighthawks.soundwave.http.HttpServerGetContactsList;
 import edu.nighthawks.soundwave.http.HttpServerRegisterAccount;
 import edu.nighthawks.soundwave.json.JSONParser;
+import edu.nighthawks.soundwave.json.JsonArrayParser;
 import edu.nighthawks.soundwave.json.UserData;
 
 /**
@@ -151,7 +154,7 @@ public class SoundWaveController
 	/**
 	 * Create a new contact
 	 */
-	public void retrieveContactsStart(int userIdOwner)
+	public void retrieveContactsStart(int userIdOwner) throws IOException
 	{
 		mContactListRetriever = new HttpServerGetContactsList(userIdOwner);
 		mContactListRetriever.start();
@@ -159,8 +162,25 @@ public class SoundWaveController
 		while (!mContactListRetriever.isDone())
 		{}
 
-		JSONParser parser = new JSONParser(mContactListRetriever.getmRawResponseBodyJson());
-		String val = parser.getValue("USER_ID");
+		SoundWaveApplication.getApplicationObject().soundWaveConfig.mContactList =
+				JsonArrayParser.parseArray(mContactListRetriever.getmRawResponseBodyJson());
+
+		for (Contact contact : SoundWaveApplication.getApplicationObject().soundWaveConfig.mContactList)
+		{
+			HttpServerGetAccountInfo getInfo = new HttpServerGetAccountInfo(contact.getmUserIdOwner());
+			getInfo.start();
+
+			while (!getInfo.isDone())
+			{}
+
+			UserData data = new UserData(getInfo.getmRawResponseBodyJson());
+
+
+			contact.setEmail(data.getEmail_addr());
+			contact.setName(data.getName());
+		}
+		//JSONParser parser = new JSONParser(mContactListRetriever.getmRawResponseBodyJson());
+		//String val = parser.getValue("USER_ID");
 
 
 

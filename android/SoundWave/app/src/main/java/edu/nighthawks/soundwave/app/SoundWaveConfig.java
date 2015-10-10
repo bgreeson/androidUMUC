@@ -2,6 +2,10 @@ package edu.nighthawks.soundwave.app;
 
 import android.content.Context;
 
+import java.util.ArrayList;
+
+import edu.nighthawks.soundwave.contacts.Contact;
+
 /**
  * Created by joe.keefe on 9/26/2015.
  *
@@ -15,6 +19,8 @@ public class SoundWaveConfig
     private String mUserName = "";
     private String mUserEmail = "";
     private String mRawContactsString;
+
+    public ArrayList<Contact> mContactList;
 
     private boolean mRegistered;
 
