@@ -7,7 +7,6 @@ package testharness;
  */
 
 import java.io.InputStream;
-import java.io.ObjectOutputStream;
 import java.io.PrintStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -45,8 +44,6 @@ public class DatabaseTool
             InputStream is = conn.getInputStream();
             actResp += IOUtils.toString(is);
             
-            //conn.getInputStream();
-            
             serverResponseCode = conn.getResponseCode();
             serverResponseMessage = conn.getResponseMessage();
 
@@ -56,9 +53,8 @@ public class DatabaseTool
         catch (Exception e)
         {
             e.printStackTrace();
-        }
-        
-        return actResp + "\n\n"  + serverResponseCode + " = " + serverResponseMessage + "\n";
+        }        
+        return actResp + "\n"  + serverResponseCode + " = " + serverResponseMessage + "\n";
     }
     
     //Method used to get an existing user's meta info via 0 = User ID# or 1 = eMail address
@@ -89,7 +85,6 @@ public class DatabaseTool
             InputStream is = conn.getInputStream();
             JSONParser myParse = new JSONParser(IOUtils.toString(is));
             actResp += myParse.getParse(true);            
-            //actResp += IOUtils.toString(is);
             
             serverResponseCode = conn.getResponseCode();
             serverResponseMessage = conn.getResponseMessage();
@@ -99,9 +94,8 @@ public class DatabaseTool
         catch (Exception e)
         {
             e.printStackTrace();
-        }  
-        
-        return actResp + "\n\n" + serverResponseCode + " = " + serverResponseMessage + "\n";
+        }          
+        return actResp + "\n" + serverResponseCode + " = " + serverResponseMessage + "\n";
     }
             
     //Method used to add an existing member to an existing user's contact list
@@ -124,7 +118,6 @@ public class DatabaseTool
 
             InputStream is = conn.getInputStream();
             actResp += IOUtils.toString(is);
-            //conn.getInputStream();
             
             serverResponseCode = conn.getResponseCode();
             serverResponseMessage = conn.getResponseMessage();
@@ -135,8 +128,7 @@ public class DatabaseTool
         catch (Exception e)
         {
             e.printStackTrace();
-        }
-               
+        }               
         return actResp + "\n\n" + serverResponseCode + " = " + serverResponseMessage + "\n";
     }
     
@@ -152,29 +144,21 @@ public class DatabaseTool
             conn = (HttpURLConnection) url.openConnection();
             conn.setDoInput(true); // allow Inputs
             conn.setDoOutput(true); // allow Outputs
-
-            //ps = new PrintStream(conn.getOutputStream());
-            //ps.print("user_id_owner=" + userName);
-            //ps.print("user_id_member=" + memberName);
-            //conn.getInputStream();
             
             InputStream is = conn.getInputStream();
             JSONParser myParse = new JSONParser(IOUtils.toString(is));
             actResp += myParse.getParse(true);  
-            //actResp += IOUtils.toString(is);
             
             serverResponseCode = conn.getResponseCode();
             serverResponseMessage = conn.getResponseMessage();
 
             is.close();
-            //ps.close();
         }
         catch (Exception e)
         {
             e.printStackTrace();
-        }
-                
-        return actResp + "\n\n" + serverResponseCode + " = " + serverResponseMessage + "\n";
+        }                
+        return actResp + "\n" + serverResponseCode + " = " + serverResponseMessage + "\n";
     }
     
     //Method used to delete a listed contact using a contact ID#
@@ -196,7 +180,6 @@ public class DatabaseTool
 
             InputStream is = conn.getInputStream();
             actResp += IOUtils.toString(is);
-            //conn.getInputStream();
             
             serverResponseCode = conn.getResponseCode();
             serverResponseMessage = conn.getResponseMessage();
@@ -209,7 +192,7 @@ public class DatabaseTool
             e.printStackTrace();
         }
         
-        return actResp + "\n\n" + serverResponseCode + " = " + serverResponseMessage + "\n";
+        return actResp + "\n" + serverResponseCode + " = " + serverResponseMessage + "\n";
     }
     
     //Method used to edit an existing user
@@ -234,7 +217,6 @@ public class DatabaseTool
             
             InputStream is = conn.getInputStream();
             actResp += IOUtils.toString(is);
-            //conn.getInputStream();
             
             serverResponseCode = conn.getResponseCode();
             serverResponseMessage = conn.getResponseMessage();
@@ -245,9 +227,8 @@ public class DatabaseTool
         catch (Exception e)
         {
             e.printStackTrace();
-        }        
-        
-        return actResp + "\n\n" + serverResponseCode + " = " + serverResponseMessage + "\n";
+        }                
+        return actResp + "\n" + serverResponseCode + " = " + serverResponseMessage + "\n";
     }
     
     //Method used to disable an existing user
@@ -269,7 +250,6 @@ public class DatabaseTool
 
             InputStream is = conn.getInputStream();
             actResp += IOUtils.toString(is);
-            //conn.getInputStream();
             
             serverResponseCode = conn.getResponseCode();
             serverResponseMessage = conn.getResponseMessage();
@@ -280,9 +260,8 @@ public class DatabaseTool
         catch (Exception e)
         {
             e.printStackTrace();
-        }  
-        
-        return actResp + "\n\n" + serverResponseCode + " = " + serverResponseMessage + "\n";
+        }          
+        return actResp + "\n" + serverResponseCode + " = " + serverResponseMessage + "\n";
     }
     
     //Method used to delete an existing user
@@ -304,7 +283,6 @@ public class DatabaseTool
 
             InputStream is = conn.getInputStream();
             actResp += IOUtils.toString(is);
-            //conn.getInputStream();
             
             serverResponseCode = conn.getResponseCode();
             serverResponseMessage = conn.getResponseMessage();
@@ -315,8 +293,7 @@ public class DatabaseTool
         catch (Exception e)
         {
             e.printStackTrace();
-        }  
-        
-        return actResp + "\n\n" + serverResponseCode + " = " + serverResponseMessage + "\n";
+        }          
+        return actResp + "\n" + serverResponseCode + " = " + serverResponseMessage + "\n";
     }
 }
