@@ -20,20 +20,12 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
-import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.PrintStream;
-import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
-import java.nio.file.Files;
-import java.util.Base64;
 
 public class StorageTool
 {
@@ -45,6 +37,7 @@ public class StorageTool
     private static int serverResponseCode = 0;
     private static String serverResponseMessage = "";
     
+    //Method used to upload a file to the server
     public static String createMsg(String senderUserID, String targetUserID, String filePath) throws Exception
     {
         CloseableHttpClient httpclient = HttpClients.createDefault();
@@ -97,30 +90,25 @@ public class StorageTool
         return actResp + "\n";
     }
     
+    //Method used to get a file from the server
     public static String getMsg(String msgID)
     {
-        //String urlString = "http://androidsoundappproject.appspot.com/server?msg_id=" + msgID 
-        //            + "&action=message_get";
-        //String urlString = "http://androidsoundappproject.appspot.com/server?action=message_get&msg_id=" + msgID; 
-        
         String msgInfo = getMsgInfo(msgID);
-        //String urlFilePath = "http://androidsoundappproject.appspot.com/";
-        //String urlFilePath = "https://androidsoundappproject.appspot.com/message/";
-        String urlFilePath = "http://storage.cloud.google.com/androidsoundappproject.appspot.com/message/";        
-        //String urlFilePath = "http://androidsoundappproject.appspot.com.storage.cloud.google.com/message/";
-        //String urlFilePath = "https://console.developers.google.com/m/cloudstorage/b/androidsoundappproject.appspot.com/o/message/";
+        String urlFilePath = "http://androidsoundappproject.appspot.com.storage.googleapis.com/message/";        
         
         int begIndex = msgInfo.indexOf("USER_ID_SENDER");
         int endIndex = msgInfo.indexOf("FILE_NAME");
         
-        urlFilePath += msgInfo.subSequence(begIndex + 17, endIndex - 3);
+        urlFilePath += msgInfo.subSequence(begIndex + 17, endIndex - 1);
         
         begIndex = endIndex;
         endIndex = msgInfo.indexOf("FILE_TYPE");
         
-        String fileName = msgInfo.substring(begIndex + 12, endIndex - 3);
+        String fileName = msgInfo.substring(begIndex + 12, endIndex - 1);
         urlFilePath += "/" + fileName;
         
+        System.out.println(urlFilePath);
+
         File file = new File("C:\\Users\\J H Copeland\\Downloads\\SWMessages\\" + fileName);
         
         if (!file.exists())
@@ -172,6 +160,7 @@ public class StorageTool
         return message + urlFilePath + "\nDownload Error\n\n";
     }
     
+    //Method used to delete a message list entry from a users message list
     public static String deleteMsg(String targetUserID, String msgID)
     {
         String actResp = ""; //String variable used for the response from the server for this action
@@ -210,6 +199,7 @@ public class StorageTool
         return actResp + "\n\n" + serverResponseCode + " = " + serverResponseMessage + "\n";
     }
     
+    //Method used to get the number of messages available to a user
     public static String getMsgCount(String targetUserID)
     {
         String urlString = "http://androidsoundappproject.appspot.com/server?user_id_target=" + targetUserID 
@@ -219,6 +209,7 @@ public class StorageTool
         return response;        
     }
     
+    //Method used to the list of messages available to a user
     public static String getRcvdMsgList(String targetUserID, String newList)
     {
         String urlString = "http://androidsoundappproject.appspot.com/server?user_id_target=" + targetUserID
@@ -228,6 +219,7 @@ public class StorageTool
         return response;        
     }
     
+    //Method used to get the list of messages sent by a user
     public static String getSentMsgList(String userID)
     {
         String urlString = "http://androidsoundappproject.appspot.com/server?user_id_sender=" + userID 
@@ -237,6 +229,7 @@ public class StorageTool
         return response;
     }
     
+    //Method used to get the meta info available for a specific message
     public static String getMsgInfo(String msgID)
     {        
         String urlString = "http://androidsoundappproject.appspot.com/server?msg_id=" + msgID 
@@ -246,6 +239,7 @@ public class StorageTool
         return response;
     }
     
+    //Method used to access the server and issue the specific action based url and retrieve the server's response
     private static String accessServer(String urlString, String message)
     {
         String actResp = message; //String variable used for the response from the server for this action
@@ -283,6 +277,6 @@ public class StorageTool
             e.printStackTrace();
         }
         
-        return actResp + "\n\n" + serverResponseCode + " = " + serverResponseMessage + "\n";
+        return actResp + "\n" + serverResponseCode + " = " + serverResponseMessage + "\n";
     }
 }
