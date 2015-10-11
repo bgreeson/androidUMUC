@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import edu.nighthawks.soundwave.contacts.Contact;
+import edu.nighthawks.soundwave.file.FileDownloader;
 import edu.nighthawks.soundwave.file.FileRecorder;
 import edu.nighthawks.soundwave.file.FileUploaderHttp;
 import edu.nighthawks.soundwave.http.HttpServerCreateContact;
@@ -182,7 +183,10 @@ public class SoundWaveController
 	 */
 	public void playMessage(String contactId)
 	{
+		// Get message list
+
 		// TODO add playback here
+		FileDownloader downloader = new FileDownloader("22", "phoneb-20151010212812", );
 	}
 
 

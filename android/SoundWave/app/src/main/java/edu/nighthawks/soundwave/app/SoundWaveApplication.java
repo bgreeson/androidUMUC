@@ -41,7 +41,7 @@ public class SoundWaveApplication extends Application
 		try
 		{
 			soundWaveController.retrieveContactsStart(soundWaveConfig.getUserId());
-			soundWaveConfig.setPollServerForMessages(false);
+			soundWaveConfig.setPollServerForMessages(true);
 			mServerPoller = new SoundWaveMessagePoller();
 			mServerPoller.start();
 		}

@@ -292,12 +292,12 @@ public class SwMainActivity extends AppCompatActivity
             email.setText(currentContact.getEmail());
             LinearLayout layoutRecord = (LinearLayout) view.findViewById(R.id.layoutRecord);
             LinearLayout layoutPlay = (LinearLayout) view.findViewById(R.id.layoutPlay);
-            /*TextView txtViewPlay = (TextView) findViewById(R.id.textViewPlay);
+            TextView txtViewPlay = (TextView) view.findViewById(R.id.textViewPlay);
 
             if (currentContact != null)
                 txtViewPlay.setText("Messages: " + currentContact.getmMessageCount());
             else
-                txtViewPlay.setText("Messages: 0");*/
+                txtViewPlay.setText("Messages: 0");
 
             layoutPlay.setOnClickListener(new View.OnClickListener()
             {
