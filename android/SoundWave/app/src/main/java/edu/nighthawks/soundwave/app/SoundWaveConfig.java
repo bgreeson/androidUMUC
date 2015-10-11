@@ -3,6 +3,8 @@ package edu.nighthawks.soundwave.app;
 import android.content.Context;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import edu.nighthawks.soundwave.contacts.Contact;
 
@@ -19,10 +21,21 @@ public class SoundWaveConfig
     private String mUserName = "";
     private String mUserEmail = "";
     private String mRawContactsString;
-
-    public ArrayList<Contact> mContactList;
-
+    public List<Contact> mContactList = Collections.synchronizedList(new ArrayList<Contact>());
+    public Object mContactListLock = new Object();
     private boolean mRegistered;
+    private boolean bPollServerForMessages;
+
+    public boolean isPollingServerForMessages()
+    {
+        return bPollServerForMessages;
+    }
+
+    public void setPollServerForMessages(boolean bPollServerForMessages)
+    {
+        this.bPollServerForMessages = bPollServerForMessages;
+    }
+
 
     /**
      * This method must deserialize settings from (server/local shared prefs) and load them

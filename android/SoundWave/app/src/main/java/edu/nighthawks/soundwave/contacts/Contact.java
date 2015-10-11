@@ -21,6 +21,19 @@ public class Contact implements Serializable
     private String mUserIdOwner;
     @JsonProperty("USER_ID_MEMBER")
     private String mUserIdMember;
+    private int mMessageCount = 0;
+
+    public void setmMessageCount(int mMessageCount)
+    {
+        this.mMessageCount = mMessageCount;
+    }
+
+    public int getmMessageCount()
+    {
+        return mMessageCount;
+    }
+
+
 
     public String getmUserIdOwner()
     {

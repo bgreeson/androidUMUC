@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -44,11 +46,26 @@ public class SwMainActivity extends AppCompatActivity
     ListView contactListView;
     ArrayAdapter<Contact> adapter;
     TabHost tabHost;
+    private Handler mMessageHandler;
+
+
 
     @Override
     protected void onResume()
     {
         super.onResume();
+
+        mMessageHandler = new Handler()
+        {
+            public void handleMessage(Message msg)
+            {
+                if (adapter != null)
+                    adapter.notifyDataSetChanged();
+            }
+        };
+
+        // Allow access to message handler from message poller thread
+        SoundWaveApplication.getApplicationObject().soundWaveController.mHandler = mMessageHandler;
 
         if (adapter != null)
             adapter.notifyDataSetChanged();
@@ -58,6 +75,13 @@ public class SwMainActivity extends AppCompatActivity
             Toast.makeText(getApplicationContext(), "Long hold on contact record button to send message. Single tap play button to play messages",
                     Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    protected void onPause()
+    {
+        SoundWaveApplication.getApplicationObject().soundWaveController.mHandler = null;
+        super.onPause();
     }
 
     private void setTitle()
@@ -268,6 +292,12 @@ public class SwMainActivity extends AppCompatActivity
             email.setText(currentContact.getEmail());
             LinearLayout layoutRecord = (LinearLayout) view.findViewById(R.id.layoutRecord);
             LinearLayout layoutPlay = (LinearLayout) view.findViewById(R.id.layoutPlay);
+            /*TextView txtViewPlay = (TextView) findViewById(R.id.textViewPlay);
+
+            if (currentContact != null)
+                txtViewPlay.setText("Messages: " + currentContact.getmMessageCount());
+            else
+                txtViewPlay.setText("Messages: 0");*/
 
             layoutPlay.setOnClickListener(new View.OnClickListener()
             {

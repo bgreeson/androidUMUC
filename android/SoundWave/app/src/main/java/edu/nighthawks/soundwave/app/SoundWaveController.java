@@ -1,5 +1,7 @@
 package edu.nighthawks.soundwave.app;
 
+import android.os.Handler;
+
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -26,6 +28,9 @@ public class SoundWaveController
 	private boolean m_bTransmit = false;
 	private FileRecorder recorder;
 	HttpServerGetContactsList  mContactListRetriever;
+
+	public Handler mHandler;
+
 
 
 	/***
@@ -114,10 +119,27 @@ public class SoundWaveController
 		{}
 
 
-		UserData data = new UserData(accountCreator.getmRawResponseBodyJsonWithoutBrackets());
-		SoundWaveApplication.getApplicationObject().soundWaveConfig.setUserId(data.getUser_id());
-		SoundWaveApplication.getApplicationObject().soundWaveConfig.setmUserEmail(data.getEmail_addr());
-		SoundWaveApplication.getApplicationObject().soundWaveConfig.setUserName(data.getName());
+		try
+		{
+			UserData data = new UserData(accountCreator.getmRawResponseBodyJsonWithoutBrackets());
+			SoundWaveApplication.getApplicationObject().soundWaveConfig.setUserId(data.getUser_id());
+			SoundWaveApplication.getApplicationObject().soundWaveConfig.setmUserEmail(data.getEmail_addr());
+			SoundWaveApplication.getApplicationObject().soundWaveConfig.setUserName(data.getName());
+		}
+		catch (Exception ex)
+		{
+			HttpServerGetAccountInfoByEmail getByEmail = new HttpServerGetAccountInfoByEmail(emailAddress);
+			getByEmail.start();
+
+			while (getByEmail.isDone() == false)
+			{}
+
+			JSONParser parser = new JSONParser(getByEmail.getmRawResponseBodyJson());
+
+			SoundWaveApplication.getApplicationObject().soundWaveConfig.setUserId(Integer.parseInt(parser.getValue("USER_ID")));
+			SoundWaveApplication.getApplicationObject().soundWaveConfig.setmUserEmail(emailAddress);
+			SoundWaveApplication.getApplicationObject().soundWaveConfig.setUserName(dispName);
+		}
 	}
 
 	/**
@@ -147,6 +169,7 @@ public class SoundWaveController
 		{}
 
 		// TODO May need to add full contact info here.
+
 		SoundWaveApplication.getApplicationObject().soundWaveConfig.mContactList.add(new Contact(name, emailAddress));
 		// add contact to shared prefs list
 		//SharePrefsUtil.setString(SoundWaveApplication.getApplicationObject().getBaseContext(), SharePrefsUtil.CONTACTS, userIdOwner);

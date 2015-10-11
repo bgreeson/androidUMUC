@@ -22,6 +22,7 @@ public class SoundWaveApplication extends Application
 	public SoundWaveController soundWaveController;
 	public SoundWaveConfig soundWaveConfig;
 	public String soundWaveSerializedContactsList;
+	SoundWaveMessagePoller mServerPoller;
 
 	@Override
 	public void onCreate()
@@ -40,10 +41,24 @@ public class SoundWaveApplication extends Application
 		try
 		{
 			soundWaveController.retrieveContactsStart(soundWaveConfig.getUserId());
+			soundWaveConfig.setPollServerForMessages(false);
+			mServerPoller = new SoundWaveMessagePoller();
+			mServerPoller.start();
 		}
 		catch (IOException ex)
 		{
 			Toast.makeText(this, "Failed to initilize contact list from server: " + ex.getMessage(), Toast.LENGTH_SHORT).show();
+		}
+	}
+
+	public void sleep(int milliseconds)
+	{
+		try
+		{
+			Thread.sleep(milliseconds);
+		} catch (InterruptedException e)
+		{
+			e.printStackTrace();
 		}
 	}
 
