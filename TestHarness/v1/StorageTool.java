@@ -229,7 +229,8 @@ public class StorageTool
             
             InputStream is = conn.getInputStream();
             String servResp = IOUtils.toString(is);
-            if (servResp.length() > 1)
+            //System.out.println(servResp);
+            if (servResp.length() > 4)
             {
                 if ((servResp.charAt(0) == '[' && servResp.charAt(1) == '{') || servResp.substring(0, 4).equals("sql:"))
                 {
