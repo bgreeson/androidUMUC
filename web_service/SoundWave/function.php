@@ -275,17 +275,18 @@ function message_create($user_id_sender, $user_id_target) { // upload_file
   $object_url = 'gs://androidsoundappproject.appspot.com/message/' . $user_id_sender . '/' . $file_name;
   //$options = stream_context_create(['gs'=>['acl'=>'public-read']]);
   
+  $file = file_get_contents($gs_name);
   $options = array('gs'=>array('acl'=>'public-read','Content-Type' => $_FILES['userfile']['type']));
   $ctx = stream_context_create($options);
   
   // place file into storage and give it public access
-  if (true == rename($_FILES['userfile']['tmp_name'], $object_url, $ctx)) {
+  if (true == file_put_contents($object_url, $file, 0, $ctx)){
+  //if (true == rename($_FILES['userfile']['tmp_name'], $object_url, $ctx)) {
   //if (move_uploaded_file($gs_name, $object_url)) { // may need to rename file with unique name  
  
     // upload success
     $status = 201;
     header('Created', true, $status);
-    
 
     $file_path = $user_id_sender . '/' . $file_name;
     $file_public_url = CloudStorageTools::getPublicUrl($object_url, false);
